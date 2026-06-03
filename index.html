@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromoPro Matrix</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        #root { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
+        .rt-top-nav-wrapper { background-color: #0a192f; border-bottom: 1px solid #1e293b; }
+        .rt-top-nav { display: flex; justify-content: center; align-items: center; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .rt-logo-container { display: flex; flex-direction: column; align-items: center; z-index: 10; }
+        .rt-logo { font-size: 38px; font-weight: 900; letter-spacing: 4px; line-height: 1; text-transform: uppercase; font-family: monospace; color: #ffffff; text-shadow: 0 2px 15px rgba(249, 115, 22, 0.4); }
+        .rt-logo span { color: #f97316; }
+        .ai-badge { color: #f97316; font-size: 13px; font-weight: 800; letter-spacing: 8px; margin-top: 10px; border: 1px solid rgba(249, 115, 22, 0.5); padding: 6px 16px; border-radius: 4px; background: rgba(249, 115, 22, 0.1); text-transform: uppercase; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
+        .pill-container { display: flex; gap: 15px; padding: 25px; width: 100%; justify-content: center; background: #050b14; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
+        .pill { background: #0a192f; color: #f97316; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid #f97316; transition: 0.3s; text-align: center; white-space: nowrap; }
+        .pill:hover { background: #f97316; color: #050b14; transform: translateY(-3px); }
+        .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 0 10px 0; }
+        .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
+        .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); }
+        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 14px; outline: none; }
+        .verify-input::placeholder { color: #64748b; }
+        .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; }
+        .verify-btn:hover { background-color: #ffffff; color: #f97316; }
+        .verify-status { margin-top: 12px; font-family: monospace; font-size: 12px; color: #40e0d0; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; }
+        .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px; max-width: 1400px; margin: 0 auto; }
+        .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: block; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
+        .poster-card:hover { transform: translateY(-12px); border-color: #f97316; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #050b14; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: center; }
+        .poster-title { font-size: 22px; font-weight: 900; margin: 0 0 8px 0; color: #39ff14; text-align: center; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(57, 255, 20, 0.4); }
+        .poster-desc { font-size: 14px; color: #bbf7d0; margin-bottom: 15px; text-align: center; font-weight: 600; line-height: 1.4; }
+        .poster-date { font-size: 11px; color: #050b14; font-weight: bold; background: #f97316; padding: 4px 10px; border-radius: 4px; display: inline-block; }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .modal-box { background: #0a192f; padding: 30px; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; border: 1px solid #f97316; text-align: center; display: flex; flex-direction: column; box-sizing: border-box; }
+        .modal-scroll-area { overflow-y: auto; flex-grow: 1; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #f97316 #050b14; }
+        .modal-scroll-area::-webkit-scrollbar { width: 6px; }
+        .modal-scroll-area::-webkit-scrollbar-track { background: #050b14; border-radius: 4px; }
+        .modal-scroll-area::-webkit-scrollbar-thumb { background-color: #f97316; border-radius: 4px; }
+        
+        .code-card { background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 20px; margin-bottom: 15px; text-align: center; }
+        .submit-action-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 15px; flex-shrink: 0; }
+        .submit-action-btn:hover { background: #ffffff; }
+        .ai-processing { color: #40e0d0; font-family: monospace; font-size: 18px; margin: 30px 0; }
+        .ai-result-code { font-size: 24px; color: #39ff14; font-weight: 900; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); font-family: monospace; }
+        .ai-result-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 10px; font-weight: bold; }
+        .spacer { height: 100px; }
+
+        /* NODE BADGE FOR CLEAN TERMINAL GAME LOOK */
+        .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0a192f 0%, #050b14 100%); padding: 10px; box-sizing: border-box; }
+        .game-node-text { font-size: 16px; font-weight: 900; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
+        .game-node-sub { font-size: 9px; color: #64748b; margin-top: 4px; letter-spacing: 3px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        
+        // CUSTOM RENDERING COMPONENT
+        const CardMedia = ({ src, label, isGame }) => {
+            if (isGame && label !== "Merge Dragons!") {
+                return (
+                    <div className="game-node-badge">
+                        <div className="game-node-text">{label.replace(/[^\w\s]/gi, '')}</div>
+                        <div className="game-node-sub">AI VERIFIED NODE</div>
+                    </div>
+                );
+            }
+            return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
+        };
+
+        // 40-GAME AI ENGINE SIMULATION DATABASE
+        const AI_DATABASE = {
+            "state of survival": [{ code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" }],
+            "whiteout survival": [{ code: "FROSTCOIN", desc: "Frost Coins & VIP Points" }],
+            "golf rival": [{ code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" }],
+            "merge dragons": [{ code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" }],
+            "idle outpost": [{ code: "CASH_FLOW", desc: "Offline Earning Multiplier" }],
+            "lords mobile": [{ code: "LM2026", desc: "Speed Up & Resource Pack" }],
+            "puzzles & survival": [{ code: "PNSELITE", desc: "5-Star Hero Recruit Token" }],
+            "genshin impact": [{ code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" }],
+            "roblox": [{ code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" }],
+            "call of duty mobile": [{ code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" }],
+            "pubg mobile": [{ code: "PUBGMOBILE2026", desc: "Legendary Outfit Box" }],
+            "clash of clans": [{ code: "GEMBOOST", desc: "500 Gems & Builder Potion" }],
+            "candy crush saga": [{ code: "SWEETTREAT", desc: "Color Bomb & 5 Extra Moves" }],
+            "coin master": [{ code: "FREESPINS", desc: "50 Free Spins & 1M Coins" }],
+            "pokemon go": [{ code: "POKEBALLS26", desc: "20x Ultra Balls & 1 Incense" }],
+            "royal match": [{ code: "KINGSLOOT", desc: "Unlimited Lives (1 Hour)" }],
+            "monopoly go": [{ code: "DICEROLL", desc: "100 Free Dice Rolls" }],
+            "brawl stars": [{ code: "BRAWLBOX", desc: "Mega Box Unlock" }],
+            "honkai star rail": [{ code: "STARRAILGIFT", desc: "50 Stellar Jade & 10000 Credits" }],
+            "afk arena": [{ code: "AFK888", desc: "300 Diamonds & 20k Gold" }],
+            "rise of kingdoms": [{ code: "ROK2026", desc: "Golden Key & Speedups" }],
+            "evony": [{ code: "EVONYKING", desc: "Advanced City Teleporter" }],
+            "clash royale": [{ code: "ROYALEGEM", desc: "100 Gems & Magical Chest" }],
+            "summoners war": [{ code: "SUMMON26", desc: "Mystical Scroll & Energy" }],
+            "township": [{ code: "TOWNBUILD", desc: "Building Materials Pack" }],
+            "gardenscapes": [{ code: "GARDENSTAR", desc: "3 Stars & Rainbow Blast" }],
+            "homescapes": [{ code: "HOMECOIN", desc: "1000 Coins & Hammer Booster" }],
+            "fishdom": [{ code: "FISHTANK", desc: "Unlimited Lives (2 Hours)" }],
+            "empires & puzzles": [{ code: "EPICHERO", desc: "Epic Hero Token" }],
+            "marvel strike force": [{ code: "MARVELHQ", desc: "Premium Orb & Energy" }],
+            "star wars galaxy of heroes": [{ code: "JEDIPOWER", desc: "50 Crystals & Omega Material" }],
+            "raid shadow legends": [{ code: "SUPERPOWERS", desc: "Start Pack: Epic Champion" }],
+            "diablo immortal": [{ code: "DIABLO26", desc: "Legendary Crest" }],
+            "clash of kings": [{ code: "COKNEWYEAR", desc: "Lord EXP & VIP Points" }],
+            "mobile legends": [{ code: "MLBB2026", desc: "Premium Skin Fragment" }],
+            "garena free fire": [{ code: "FREEFIREX", desc: "Weapon Loot Crate" }],
+            "asphalt 9": [{ code: "SPEEDSTER", desc: "Nitro Starter & Credits" }],
+            "subway surfers": [{ code: "SURFBOARD", desc: "Special Event Hoverboard" }],
+            "among us": [{ code: "IMPOSTOR", desc: "Exclusive Pet & Hat" }],
+            "minecraft": [{ code: "MINEMINER", desc: "Exclusive Marketplace Skin" }]
+        };
+
+        const INITIAL_LEDGER = [
+            /* UNIQUE HIGH-DEF BANNER IMAGES FOR GENUINE AFFILIATES */
+            { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 3, store: "⚙️ GearUP", category: "GAMING", desc: "Play Apex Legends with Lower Ping!", url: "https://www.kqzyfj.com/click-101761790-17235981", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 4, store: "⚙️ GearUP", category: "GAMING", desc: "Play Fortnite with Lower Ping & No Lag!", url: "https://www.anrdoezrs.net/click-101761790-17235980", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 5, store: "⚙️ GearUP", category: "GAMING", desc: "Less Lag, More Fun!", url: "https://www.jdoqocy.com/click-101761790-17235979", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
+            { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 7, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Buy 1 get 1 free at Unice", url: "https://www.dpbolvw.net/click-101761790-15043134", img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 8, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$30 Off Orders Over $299 For Colored Wigs", url: "#", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80", isGame: false }, /* FIXED TYPO HERE */
+            { id: 9, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Up To $60 Off", url: "https://www.jdoqocy.com/click-101761790-15509155", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 10, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Extended Fall Promo", url: "https://www.anrdoezrs.net/click-101761790-14566055", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
+            /* ALL VRBO AFFILIATE LINKS */
+            { id: 11, store: "🏡 Vrbo 1", category: "TRAVEL", desc: "Book your perfect beach house!", url: "https://www.kqzyfj.com/click-101761790-13394715", img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 12, store: "🏡 Vrbo 2", category: "TRAVEL", desc: "Find your ideal mountain retreat properties.", url: "https://www.kqzyfj.com/click-101761790-13394716", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 13, store: "🏡 Vrbo 3", category: "TRAVEL", desc: "Discover local city apartments and condo rentals.", url: "https://www.kqzyfj.com/click-101761790-13394717", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
+            /* REXING AFFILIATE LINKS */
+            { id: 17, store: "📹 Rexing RH2", category: "SPECIAL", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 18, store: "📹 Rexing AUX2", category: "SPECIAL", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 19, store: "📹 Rexing Premium", category: "SPECIAL", desc: "Secure 1456x180 infrastructure bundle.", url: "https://www.anrdoezrs.net/click-101761790-17226113", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 20, store: "📹 Rexing C2", category: "SPECIAL", desc: "Direct Deployment: Rexing C2 system.", url: "https://www.anrdoezrs.net/click-101761790-17195890", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
+            /* HOTELS.COM AFFILIATE LINKS */
+            { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 26, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Custom redirect link for specific deals.", url: "https://www.tkqlhce.com/click-101761790-15042852", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 27, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Best Hotel Deals!", url: "https://www.kqzyfj.com/click-101761790-10433860", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80", isGame: false }, /* FIXED IMAGE HERE */
+            { id: 28, store: "🏨 Hotels.com", category: "TRAVEL", desc: "No cancellation fees on bookings.", url: "https://www.tkqlhce.com/click-101761790-10671873", img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80", isGame: false },
+
+            /* ALL EXPEDIA AFFILIATE LINKS */
+            { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 40, store: "🏠 Expedia", category: "TRAVEL", desc: "Official Expedia Homepage Deals", url: "https://www.tkqlhce.com/click-101761790-15042831", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 41, store: "🔍 Expedia", category: "TRAVEL", desc: "Special Expedia Travel Deep Link", url: "https://www.kqzyfj.com/click-101761790-10581071", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 42, store: "🏷️ Expedia", category: "TRAVEL", desc: "Expedia Affiliate Banner Deal", url: "https://www.kqzyfj.com/click-101761790-15575438", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80", code: "AUTO-ROUTED", isGame: false },
+
+            /* GAMEFLY AFFILIATE LINKS */
+            { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80", isGame: false }, /* FIXED IMAGE HERE */
+            { id: 51, store: "🎮 GameFly", category: "GAMING", desc: "30-Day Free Trial - Play More, Pay Less", url: "https://www.tkqlhce.com/click-101761790-10500808", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false }, /* FIXED IMAGE HERE */
+
+            /* GAMES SET TO DISPLAY PURE MATRIX NODE CARDS WITH ZERO REPEATS */
+            { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "[ELITE] Premium HQ upgrade bundle.", url: "#", img: "", code: "SURVIVE26", isGame: true },
+            { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "[ELITE] Premium frost coins and VIP points.", url: "#", img: "", code: "FROSTCOIN", isGame: true },
+            { id: 31, store: "⛳ Golf Rival", category: "GAMING", desc: "[ELITE] Precision ball pack modifiers.", url: "#", img: "", code: "HOLEINONE", isGame: true },
+            { id: 32, store: "🏕️ Idle Outpost", category: "GAMING", desc: "Offline earning multiplier token.", url: "#", img: "", code: "CASH_FLOW", isGame: true },
+            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "[ELITE] Purple dragon star unlock code.", url: "#", img: "merge-dragons.jpg", code: "DRAGON_GEM", isGame: true },
+            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "", code: "PUBLIC", isGame: true },
+            { id: 35, store: "⚔️ Genshin Impact", category: "GAMING", desc: "50 Primogems & 3 Hero's Wit", url: "#", img: "", code: "GENSHINGIFT", isGame: true },
+            { id: 36, store: "🔫 Call of Duty Mobile", category: "GAMING", desc: "Exclusive Weapon Blueprint", url: "#", img: "", code: "BFQGZEBKCAZ97FP", isGame: true },
+            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Start Pack: Epic Champion", url: "#", img: "", code: "SUPERPOWERS", isGame: true },
+            { id: 38, store: "🧱 Roblox", category: "GAMING", desc: "Free Pet & Profile Accessories", url: "#", img: "", code: "SPIDERCOLA", isGame: true }
+        ];
+
+        function App() {
+            const [ledger, setLedger] = useState(INITIAL_LEDGER);
+            const [showModal, setShowModal] = useState(false);
+            const [searchInput, setSearchInput] = useState("");
+            const [aiState, setAiState] = useState("idle"); 
+            const [searchResult, setSearchResult] = useState(null);
+
+            const handleVerify = () => {
+                if (!searchInput.trim()) return;
+                setAiState("searching");
+                setShowModal(true);
+
+                setTimeout(() => {
+                    const query = searchInput.toLowerCase().trim();
+                    const matchKey = Object.keys(AI_DATABASE).find(key => query.includes(key) || key.includes(query));
+                    
+                    if (matchKey) {
+                        setSearchResult({ game: matchKey.toUpperCase(), codes: AI_DATABASE[matchKey] });
+                    } else {
+                        setSearchResult({ game: searchInput.toUpperCase(), codes: [{ code: "NONE FOUND", desc: "No active codes verified by AI Engine at this time." }] });
+                    }
+                    setAiState("result");
+                }, 2000);
+            };
+
+            const closeModal = () => {
+                setShowModal(false);
+                setAiState("idle");
+                setSearchResult(null);
+                setSearchInput("");
+            };
+
+            return (
+                <>
+                    {showModal && (
+                        <div className="modal-overlay">
+                            <div className="modal-box">
+                                {aiState === "searching" && (
+                                    <>
+                                        <div className="status-dot" style={{width: '20px', height: '20px', margin: '0 auto 20px'}}></div>
+                                        <h2 style={{color:'white'}}>AI ENGINE PROCESSING</h2>
+                                        <div className="ai-processing">SCYTHING WEB DATABASES...</div>
+                                    </>
+                                )}
+                                {aiState === "result" && searchResult && (
+                                    <div className="modal-scroll-area">
+                                        <h2 style={{color:'white', marginBottom: '15px', position: 'sticky', top: 0, background: '#0a192f', paddingBottom: '10px', zIndex: 5}}>{searchResult.game}</h2>
+                                        {searchResult.codes.map((c, index) => (
+                                            <div key={index} className="code-card">
+                                                <div className="ai-result-desc">{c.desc}</div>
+                                                <div className="ai-result-code">{c.code}</div>
+                                            </div>
+                                        ))}
+                                        <button className="submit-action-btn" onClick={closeModal} style={{position: 'sticky', bottom: 0, zIndex: 5}}>ACKNOWLEDGE & CLOSE</button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="rt-top-nav-wrapper">
+                        <div className="rt-top-nav">
+                            <div className="rt-logo-container">
+                                <div className="rt-logo">Promo<span>Pro</span></div>
+                                <div className="ai-badge">AI-POWERED</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="pill-container">
+                        {["ALL", "EXCLUSIVES", "TRAVEL", "GAMING", "BEAUTY"].map(cat => <div key={cat} className="pill">{cat}</div>)}
+                    </div>
+                    
+                    <div className="verify-bar-wrapper">
+                        <div className="verify-bar-container">
+                            <div className="verify-bar">
+                                <input 
+                                    className="verify-input" 
+                                    placeholder=">_ ENTER GAME NAME FOR AI VERIFICATION..." 
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
+                                />
+                                <button className="verify-btn" onClick={handleVerify}>VERIFY</button>
+                            </div>
+                            <div className="verify-status">
+                                <div className="status-dot"></div>
+                                AI VERIFICATION ENGINE STANDBY...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="media-grid">
+                        {ledger.map(p => (
+                            <a className="poster-card" key={p.id} href={p.url}>
+                                <div className="poster-img-box">
+                                    <CardMedia src={p.img} label={p.store} isGame={p.isGame} />
+                                </div>
+                                <h3 className="poster-title">{p.store}</h3>
+                                <p style={{lineHeight: '1.4'}} className="poster-desc">{p.desc}</p>
+                                <div style={{textAlign: 'center'}}><span className="poster-date">{p.code}</span></div>
+                            </a>
+                        ))}
+                    </div>
+                    <div className="spacer"></div>
+                    <div className="footer-note">PRO-ENGINE // AFFILIATE TRACKING VERSION 2026.05</div>
+                    
+                    <div style={{ textAlign: 'center', padding: '20px 40px 40px', color: '#64748b', fontSize: '11px', borderTop: '1px solid #1e293b', background: '#0a192f' }}>
+                        <p style={{ maxWidth: '800px', margin: '0 auto 15px auto', fontStyle: 'italic', lineHeight: '1.5' }}>
+                            <strong>FTC Affiliate Disclosure:</strong> PromoPro is an independent verification engine and affiliate publisher. We may earn a commission from qualifying purchases or bookings made through the links on this page at no additional cost to you.
+                        </p>
+                        <div style={{ marginBottom: '10px' }}>&copy; 2026 PromoPro AI Engine. All Rights Reserved.</div>
+                        <div>
+                            <a href="terms.html" style={{ color: '#f97316', textDecoration: 'none', margin: '0 10px', fontWeight: 'bold' }}>Terms of Service</a> | 
+                            <a href="privacy.html" style={{ color: '#f97316', textDecoration: 'none', margin: '0 10px', fontWeight: 'bold' }}>Privacy Policy</a>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
