@@ -9,51 +9,68 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        * { box-sizing: border-box; }
+        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         #root { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        .rt-top-nav-wrapper { background-color: #0a192f; border-bottom: 1px solid #1e293b; }
-        .rt-top-nav { display: flex; justify-content: center; align-items: center; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        .rt-top-nav-wrapper { background-color: #0a192f; border-bottom: 1px solid #1e293b; width: 100%; }
+        .rt-top-nav { display: flex; justify-content: center; align-items: center; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .rt-logo-container { display: flex; flex-direction: column; align-items: center; z-index: 10; }
         .rt-logo { font-size: 38px; font-weight: 900; letter-spacing: 4px; line-height: 1; text-transform: uppercase; font-family: monospace; color: #ffffff; text-shadow: 0 2px 15px rgba(249, 115, 22, 0.4); }
         .rt-logo span { color: #f97316; }
         .ai-badge { color: #f97316; font-size: 13px; font-weight: 800; letter-spacing: 8px; margin-top: 10px; border: 1px solid rgba(249, 115, 22, 0.5); padding: 6px 16px; border-radius: 4px; background: rgba(249, 115, 22, 0.1); text-transform: uppercase; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
-        .pill-container { display: flex; gap: 15px; padding: 25px; width: 100%; justify-content: center; background: #050b14; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
-        .pill { background: #0a192f; color: #f97316; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid #f97316; transition: 0.3s; text-align: center; white-space: nowrap; }
-        .pill:hover { background: #f97316; color: #050b14; transform: translateY(-3px); }
-        .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 0 10px 0; }
-        .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
+        
+        .pill-container { display: flex; gap: 15px; padding: 25px 15px; width: 100%; justify-content: center; background: #050b14; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
+        .pill { background: #0a192f; color: #f97316; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid #f97316; transition: 0.3s; text-align: center; white-space: nowrap; user-select: none; }
+        .pill:hover, .pill.active { background: #f97316; color: #050b14; transform: translateY(-3px); }
+        
+        .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 15px 10px 15px; }
+        .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
         .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); }
-        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 14px; outline: none; }
+        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 14px; outline: none; width: 100%; }
         .verify-input::placeholder { color: #64748b; }
-        .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; }
+        .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
         .verify-btn:hover { background-color: #ffffff; color: #f97316; }
         .verify-status { margin-top: 12px; font-family: monospace; font-size: 12px; color: #40e0d0; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; }
-        .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; }
+        .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
         @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
-        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px; max-width: 1400px; margin: 0 auto; }
-        .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: block; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
-        .poster-card:hover { transform: translateY(-12px); border-color: #f97316; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
+        .poster-card:hover { transform: translateY(-8px); border-color: #f97316; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #050b14; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: center; }
         .poster-title { font-size: 22px; font-weight: 900; margin: 0 0 8px 0; color: #39ff14; text-align: center; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(57, 255, 20, 0.4); }
-        .poster-desc { font-size: 14px; color: #bbf7d0; margin-bottom: 15px; text-align: center; font-weight: 600; line-height: 1.4; }
-        .poster-date { font-size: 11px; color: #050b14; font-weight: bold; background: #f97316; padding: 4px 10px; border-radius: 4px; display: inline-block; }
+        .poster-desc { font-size: 14px; color: #bbf7d0; margin-bottom: 15px; text-align: center; font-weight: 600; line-height: 1.4; flex-grow: 1; }
         
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        .modal-box { background: #0a192f; padding: 30px; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; border: 1px solid #f97316; text-align: center; display: flex; flex-direction: column; box-sizing: border-box; }
+        .copy-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 10px; font-weight: bold; font-family: monospace; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
+        .copy-btn:hover { background: #ffffff; }
+        .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
+
+        /* MODAL FIXES: Proper mobile constraints and animations */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
+        .modal-box { background: #0a192f; padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; border: 1px solid #f97316; text-align: center; display: flex; flex-direction: column; box-sizing: border-box; box-shadow: 0 0 30px rgba(249, 115, 22, 0.2); }
         .modal-scroll-area { overflow-y: auto; flex-grow: 1; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #f97316 #050b14; }
         .modal-scroll-area::-webkit-scrollbar { width: 6px; }
         .modal-scroll-area::-webkit-scrollbar-track { background: #050b14; border-radius: 4px; }
         .modal-scroll-area::-webkit-scrollbar-thumb { background-color: #f97316; border-radius: 4px; }
         
-        .code-card { background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 20px; margin-bottom: 15px; text-align: center; }
+        .code-card { background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; }
         .submit-action-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 15px; flex-shrink: 0; }
         .submit-action-btn:hover { background: #ffffff; }
-        .ai-processing { color: #40e0d0; font-family: monospace; font-size: 18px; margin: 30px 0; }
-        .ai-result-code { font-size: 24px; color: #39ff14; font-weight: 900; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); font-family: monospace; }
+        
+        /* Smooth Fade In Animation */
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* Simulator Text Formatting */
+        .ai-processing { color: #40e0d0; font-family: monospace; font-size: 16px; margin: 20px 0; letter-spacing: 1px; }
+        .ai-terminal-log { color: #64748b; font-family: monospace; font-size: 12px; line-height: 1.8; margin-bottom: 20px; text-align: center; }
+        
+        /* Dynamic sizing and breaking for long codes on mobile */
+        .ai-result-code { font-size: clamp(16px, 5vw, 24px); color: #39ff14; font-weight: 900; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); font-family: monospace; word-break: break-all; }
         .ai-result-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 10px; font-weight: bold; }
         .spacer { height: 100px; }
 
-        /* NODE BADGE FOR CLEAN TERMINAL GAME LOOK */
         .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0a192f 0%, #050b14 100%); padding: 10px; box-sizing: border-box; }
         .game-node-text { font-size: 16px; font-weight: 900; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
         .game-node-sub { font-size: 9px; color: #64748b; margin-top: 4px; letter-spacing: 3px; font-family: monospace; }
@@ -65,7 +82,6 @@
     <script type="text/babel">
         const { useState } = React;
         
-        // CUSTOM RENDERING COMPONENT
         const CardMedia = ({ src, label, isGame }) => {
             if (isGame && label !== "Merge Dragons!") {
                 return (
@@ -78,264 +94,38 @@
             return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
         };
 
-        // 40-GAME AI ENGINE SIMULATION DATABASE (FULLY LOADED)
         const AI_DATABASE = {
-            "state of survival": [
-                { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, 
-                { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" },
-                { code: "ZOMBIEWAR", desc: "Advanced Search Map & 500 Biocaps" },
-                { code: "ELITEGEAR", desc: "Legendary Hero Badge" }
-            ],
-            "whiteout survival": [
-                { code: "FROSTCOIN", desc: "Frost Coins & VIP Points" },
-                { code: "WINTERISHERE", desc: "1000x Gems & Resource Pack" },
-                { code: "ICEBREAKER", desc: "Advanced Construction Speedup" }
-            ],
-            "golf rival": [
-                { code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" },
-                { code: "EAGLEEYE", desc: "Legendary Club Chest" },
-                { code: "FAIRWAYWIN", desc: "5000 Coins & 50 Gems" }
-            ],
-            "merge dragons": [
-                { code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" },
-                { code: "MYSTICMERGE", desc: "Mystery Egg Nest" },
-                { code: "CAMPBOOST", desc: "3x Chalice Refill" }
-            ],
-            "idle outpost": [
-                { code: "CASH_FLOW", desc: "Offline Earning Multiplier" },
-                { code: "SURVIVALGEAR", desc: "Epic Scavenger Blueprint" },
-                { code: "OUTPOSTMAX", desc: "24-Hour Time Skip" }
-            ],
-            "lords mobile": [
-                { code: "LM2026", desc: "Speed Up & Resource Pack" },
-                { code: "WARLORD", desc: "Braveheart & 1000 VIP Points" },
-                { code: "KINGDOMDOM", desc: "Shield (8h) & Anti-Scout" },
-                { code: "HEROUNLOCK", desc: "5x Hero Medals" }
-            ],
-            "puzzles & survival": [
-                { code: "PNSELITE", desc: "5-Star Hero Recruit Token" },
-                { code: "MATCH3WIN", desc: "Antiserum & 500 Diamonds" },
-                { code: "NOVAUP", desc: "Nova EXP Boost (Massive)" }
-            ],
-            "genshin impact": [
-                { code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" },
-                { code: "TRAVELER26", desc: "10000 Mora & Mystic Enhancement" },
-                { code: "TEYVATEXPLORE", desc: "Adventurer's Experience x5" }
-            ],
-            "roblox": [
-                { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" },
-                { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" },
-                { code: "ROBLOXEDU", desc: "Dev Deck Accessory" }
-            ],
-            "call of duty mobile": [
-                { code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" },
-                { code: "CODMGHOST", desc: "Epic Operator Skin" },
-                { code: "TACTICAL26", desc: "Double Weapon XP Card" }
-            ],
-            "pubg mobile": [
-                { code: "PUBGMOBILE2026", desc: "Legendary Outfit Box" },
-                { code: "WINNERWINNER", desc: "Chicken Dinner Parachute Trail" },
-                { code: "BATTLEGROUNDS", desc: "1000 UC & Premium Crate Coupon" }
-            ],
-            "clash of clans": [
-                { code: "GEMBOOST", desc: "500 Gems & Builder Potion" },
-                { code: "CHIEF2026", desc: "Rune of Gold & Elixir" },
-                { code: "CLASHON", desc: "Book of Heroes" }
-            ],
-            "candy crush saga": [
-                { code: "SWEETTREAT", desc: "Color Bomb & 5 Extra Moves" },
-                { code: "SUGARCRUSH", desc: "Striped & Wrapped Candy" },
-                { code: "LOLLIBOOST", desc: "Lollipop Hammer x3" }
-            ],
-            "coin master": [
-                { code: "FREESPINS", desc: "50 Free Spins & 1M Coins" },
-                { code: "RAIDINGPARTY", desc: "100 Spins & Pet Food" },
-                { code: "GOLDENCARD", desc: "Joker Card Unlock" }
-            ],
-            "pokemon go": [
-                { code: "POKEBALLS26", desc: "20x Ultra Balls & 1 Incense" },
-                { code: "RAIDPASS", desc: "Premium Battle Pass" },
-                { code: "STARDUST", desc: "5000 Stardust & Lucky Egg" }
-            ],
-            "royal match": [
-                { code: "KINGSLOOT", desc: "Unlimited Lives (1 Hour)" },
-                { code: "ROYALCOINS", desc: "5000 Coins & Propeller Boost" },
-                { code: "MATCHMASTER", desc: "Jester Hat & TNT" }
-            ],
-            "monopoly go": [
-                { code: "DICEROLL", desc: "100 Free Dice Rolls" },
-                { code: "BOARDWALK", desc: "Cash Multiplier (30 Mins)" },
-                { code: "BANKHEIST", desc: "Guaranteed Mega Heist" }
-            ],
-            "brawl stars": [
-                { code: "BRAWLBOX", desc: "Mega Box Unlock" },
-                { code: "STARDROP", desc: "Legendary Starr Drop" },
-                { code: "BRAWLERGEM", desc: "50 Gems & Token Doubler" }
-            ],
-            "honkai star rail": [
-                { code: "STARRAILGIFT", desc: "50 Stellar Jade & 10000 Credits" },
-                { code: "TRAILBLAZER", desc: "Traveler's Guide & Refined Aether" },
-                { code: "ASTRALEXPRESS", desc: "100 Stellar Jade" }
-            ],
-            "afk arena": [
-                { code: "AFK888", desc: "300 Diamonds & 20k Gold" },
-                { code: "MYS3MERGE", desc: "Summon Scroll x10" },
-                { code: "HEROESSURGE", desc: "Hero's Essence x500" }
-            ],
-            "rise of kingdoms": [
-                { code: "ROK2026", desc: "Golden Key & Speedups" },
-                { code: "GOVERNORUP", desc: "Tome of Knowledge x10" },
-                { code: "KINGDOMWAR", desc: "Gem x500 & VIP Points" }
-            ],
-            "evony": [
-                { code: "EVONYKING", desc: "Advanced City Teleporter" },
-                { code: "MONARCH26", desc: "Monarch EXP & 1000 Gems" },
-                { code: "KINGSRETURN", desc: "Resource Chest & Speedups" }
-            ],
-            "clash royale": [
-                { code: "ROYALEGEM", desc: "100 Gems & Magical Chest" },
-                { code: "KINGTOWER", desc: "Legendary Wild Card" },
-                { code: "ARENABOOST", desc: "Chest Key & Gold Coin" }
-            ],
-            "summoners war": [
-                { code: "SUMMON26", desc: "Mystical Scroll & Energy" },
-                { code: "MANASTONE", desc: "100k Mana & 50 Crystals" },
-                { code: "SKYARENA", desc: "Devilmon Unlock" }
-            ],
-            "township": [
-                { code: "TOWNBUILD", desc: "Building Materials Pack" },
-                { code: "FARMERJANE", desc: "Barn Upgrade Tools" },
-                { code: "TCHOOCHOO", desc: "Train Cargo Fill & T-Cash" }
-            ],
-            "gardenscapes": [
-                { code: "GARDENSTAR", desc: "3 Stars & Rainbow Blast" },
-                { code: "AUSTINGIFT", desc: "Unlimited Lives (3 Hours)" },
-                { code: "SPRINGBLOOM", desc: "5000 Coins & Shovel Boost" }
-            ],
-            "homescapes": [
-                { code: "HOMECOIN", desc: "1000 Coins & Hammer Booster" },
-                { code: "MANSIONUP", desc: "Paper Plane Generator" },
-                { code: "RENOVATE", desc: "Star x5 & Bomb" }
-            ],
-            "fishdom": [
-                { code: "FISHTANK", desc: "Unlimited Lives (2 Hours)" },
-                { code: "OCEANDEEP", desc: "5000 Coins & Torpedo" },
-                { code: "CORALREEF", desc: "Lightning Boost & Extra Time" }
-            ],
-            "empires & puzzles": [
-                { code: "EPICHERO", desc: "Epic Hero Token" },
-                { code: "ALLIANCELOOT", desc: "Flask of Titan Energy" },
-                { code: "MYSTICTITAN", desc: "100 Gems & Summon Token" }
-            ],
-            "marvel strike force": [
-                { code: "MARVELHQ", desc: "Premium Orb & Energy" },
-                { code: "SHIELDAGENT", desc: "Mega Orb Fragment" },
-                { code: "MULTIVERSE", desc: "Gold Orb & Training Modules" }
-            ],
-            "star wars galaxy of heroes": [
-                { code: "JEDIPOWER", desc: "50 Crystals & Omega Material" },
-                { code: "SITHLORD", desc: "Character Shards (Random Elite)" },
-                { code: "HOLOTABLE", desc: "Cantina Energy Refresh" }
-            ],
-            "raid shadow legends": [
-                { code: "SUPERPOWERS", desc: "Start Pack: Epic Champion" },
-                { code: "ILOVERAID", desc: "Silver x100k & XP Brews" },
-                { code: "TARIQ2026", desc: "Void Shard Unlock" }
-            ],
-            "diablo immortal": [
-                { code: "DIABLO26", desc: "Legendary Crest" },
-                { code: "HELLFIRE", desc: "Aspirant's Keys x10" },
-                { code: "SANCTUARY", desc: "Platinum & Gold Pack" }
-            ],
-            "clash of kings": [
-                { code: "COKNEWYEAR", desc: "Lord EXP & VIP Points" },
-                { code: "DRAGONGLASS", desc: "Advanced Material Chest" },
-                { code: "KINGDOMRULE", desc: "Marching Speedup 50%" }
-            ],
-            "mobile legends": [
-                { code: "MLBB2026", desc: "Premium Skin Fragment" },
-                { code: "HEROTRIAL", desc: "Epic Hero Trial Card (7 Days)" },
-                { code: "BATTLEPOINTS", desc: "Double BP Card & Magic Dust" }
-            ],
-            "garena free fire": [
-                { code: "FREEFIREX", desc: "Weapon Loot Crate" },
-                { code: "BOOYAH26", desc: "Diamond Royale Voucher" },
-                { code: "PETFOOD", desc: "Exclusive Pet Skin" }
-            ],
-            "asphalt 9": [
-                { code: "SPEEDSTER", desc: "Nitro Starter & Credits" },
-                { code: "LEGENDPASS", desc: "Blueprint Pack (A-Class)" },
-                { code: "RACEDAY", desc: "Token Bundle & Car Hunt Pass" }
-            ],
-            "subway surfers": [
-                { code: "SURFBOARD", desc: "Special Event Hoverboard" },
-                { code: "COINCRAZY", desc: "10000 Coins & Score Booster" },
-                { code: "MYSTERYBOX", desc: "Super Mystery Box Unlock" }
-            ],
-            "among us": [
-                { code: "IMPOSTOR", desc: "Exclusive Pet & Hat" },
-                { code: "SUSSYCREWMATE", desc: "Visor Cosmetic Item" },
-                { code: "VENTCLEAN", desc: "Nameplate Customization" }
-            ],
-            "minecraft": [
-                { code: "MINEMINER", desc: "Exclusive Marketplace Skin" },
-                { code: "DIAMONDSWORD", desc: "Texture Pack Unlock" },
-                { code: "CREEPERBOOM", desc: "Minecoins x500" }
-            ]
+            "state of survival": [ { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" }, { code: "ZOMBIEWAR", desc: "Advanced Search Map & 500 Biocaps" }, { code: "ELITEGEAR", desc: "Legendary Hero Badge" } ],
+            "whiteout survival": [ { code: "FROSTCOIN", desc: "Frost Coins & VIP Points" }, { code: "WINTERISHERE", desc: "1000x Gems & Resource Pack" }, { code: "ICEBREAKER", desc: "Advanced Construction Speedup" } ],
+            "golf rival": [ { code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" }, { code: "EAGLEEYE", desc: "Legendary Club Chest" }, { code: "FAIRWAYWIN", desc: "5000 Coins & 50 Gems" } ],
+            "merge dragons": [ { code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" }, { code: "MYSTICMERGE", desc: "Mystery Egg Nest" }, { code: "CAMPBOOST", desc: "3x Chalice Refill" } ],
+            "idle outpost": [ { code: "CASH_FLOW", desc: "Offline Earning Multiplier" }, { code: "SURVIVALGEAR", desc: "Epic Scavenger Blueprint" }, { code: "OUTPOSTMAX", desc: "24-Hour Time Skip" } ],
+            "lords mobile": [ { code: "LM2026", desc: "Speed Up & Resource Pack" }, { code: "WARLORD", desc: "Braveheart & 1000 VIP Points" }, { code: "KINGDOMDOM", desc: "Shield (8h) & Anti-Scout" }, { code: "HEROUNLOCK", desc: "5x Hero Medals" } ],
+            "puzzles & survival": [ { code: "PNSELITE", desc: "5-Star Hero Recruit Token" }, { code: "MATCH3WIN", desc: "Antiserum & 500 Diamonds" }, { code: "NOVAUP", desc: "Nova EXP Boost (Massive)" } ],
+            "genshin impact": [ { code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" }, { code: "TRAVELER26", desc: "10000 Mora & Mystic Enhancement" }, { code: "TEYVATEXPLORE", desc: "Adventurer's Experience x5" } ],
+            "roblox": [ { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" }, { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" }, { code: "ROBLOXEDU", desc: "Dev Deck Accessory" } ],
+            "call of duty mobile": [ { code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" }, { code: "CODMGHOST", desc: "Epic Operator Skin" }, { code: "TACTICAL26", desc: "Double Weapon XP Card" } ]
         };
 
         const INITIAL_LEDGER = [
-            /* UNIQUE HIGH-DEF BANNER IMAGES FOR GENUINE AFFILIATES */
             { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 3, store: "⚙️ GearUP", category: "GAMING", desc: "Play Apex Legends with Lower Ping!", url: "https://www.kqzyfj.com/click-101761790-17235981", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 4, store: "⚙️ GearUP", category: "GAMING", desc: "Play Fortnite with Lower Ping & No Lag!", url: "https://www.anrdoezrs.net/click-101761790-17235980", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 5, store: "⚙️ GearUP", category: "GAMING", desc: "Less Lag, More Fun!", url: "https://www.jdoqocy.com/click-101761790-17235979", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
             { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 7, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Buy 1 get 1 free at Unice", url: "https://www.dpbolvw.net/click-101761790-15043134", img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 8, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$30 Off Orders Over $299 For Colored Wigs", url: "#", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 9, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Up To $60 Off", url: "https://www.jdoqocy.com/click-101761790-15509155", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 10, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Extended Fall Promo", url: "https://www.anrdoezrs.net/click-101761790-14566055", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            /* ALL VRBO AFFILIATE LINKS */
             { id: 11, store: "🏡 Vrbo 1", category: "TRAVEL", desc: "Book your perfect beach house!", url: "https://www.kqzyfj.com/click-101761790-13394715", img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 12, store: "🏡 Vrbo 2", category: "TRAVEL", desc: "Find your ideal mountain retreat properties.", url: "https://www.kqzyfj.com/click-101761790-13394716", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 13, store: "🏡 Vrbo 3", category: "TRAVEL", desc: "Discover local city apartments and condo rentals.", url: "https://www.kqzyfj.com/click-101761790-13394717", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            /* REXING AFFILIATE LINKS */
-            { id: 17, store: "📹 Rexing RH2", category: "SPECIAL", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 18, store: "📹 Rexing AUX2", category: "SPECIAL", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 19, store: "📹 Rexing Premium", category: "SPECIAL", desc: "Secure 1456x180 infrastructure bundle.", url: "https://www.anrdoezrs.net/click-101761790-17226113", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 20, store: "📹 Rexing C2", category: "SPECIAL", desc: "Direct Deployment: Rexing C2 system.", url: "https://www.anrdoezrs.net/click-101761790-17195890", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            /* HOTELS.COM AFFILIATE LINKS */
+            { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 18, store: "📹 Rexing AUX2", category: "EXCLUSIVES", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 26, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Custom redirect link for specific deals.", url: "https://www.tkqlhce.com/click-101761790-15042852", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 27, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Best Hotel Deals!", url: "https://www.kqzyfj.com/click-101761790-10433860", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 28, store: "🏨 Hotels.com", category: "TRAVEL", desc: "No cancellation fees on bookings.", url: "https://www.tkqlhce.com/click-101761790-10671873", img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            /* ALL EXPEDIA AFFILIATE LINKS */
             { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 40, store: "🏠 Expedia", category: "TRAVEL", desc: "Official Expedia Homepage Deals", url: "https://www.tkqlhce.com/click-101761790-15042831", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 41, store: "🔍 Expedia", category: "TRAVEL", desc: "Special Expedia Travel Deep Link", url: "https://www.kqzyfj.com/click-101761790-10581071", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 42, store: "🏷️ Expedia", category: "TRAVEL", desc: "Expedia Affiliate Banner Deal", url: "https://www.kqzyfj.com/click-101761790-15575438", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80", code: "AUTO-ROUTED", isGame: false },
-
-            /* GAMEFLY AFFILIATE LINKS */
             { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 51, store: "🎮 GameFly", category: "GAMING", desc: "30-Day Free Trial - Play More, Pay Less", url: "https://www.tkqlhce.com/click-101761790-10500808", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            /* GAMES SET TO DISPLAY PURE MATRIX NODE CARDS WITH ZERO REPEATS */
             { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "[ELITE] Premium HQ upgrade bundle.", url: "#", img: "", code: "SURVIVE26", isGame: true },
             { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "[ELITE] Premium frost coins and VIP points.", url: "#", img: "", code: "FROSTCOIN", isGame: true },
             { id: 31, store: "⛳ Golf Rival", category: "GAMING", desc: "[ELITE] Precision ball pack modifiers.", url: "#", img: "", code: "HOLEINONE", isGame: true },
-            { id: 32, store: "🏕️ Idle Outpost", category: "GAMING", desc: "Offline earning multiplier token.", url: "#", img: "", code: "CASH_FLOW", isGame: true },
-            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "[ELITE] Purple dragon star unlock code.", url: "#", img: "merge-dragons.jpg", code: "DRAGON_GEM", isGame: true },
-            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "", code: "PUBLIC", isGame: true },
-            { id: 35, store: "⚔️ Genshin Impact", category: "GAMING", desc: "50 Primogems & 3 Hero's Wit", url: "#", img: "", code: "GENSHINGIFT", isGame: true },
-            { id: 36, store: "🔫 Call of Duty Mobile", category: "GAMING", desc: "Exclusive Weapon Blueprint", url: "#", img: "", code: "BFQGZEBKCAZ97FP", isGame: true },
-            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Start Pack: Epic Champion", url: "#", img: "", code: "SUPERPOWERS", isGame: true },
-            { id: 38, store: "🧱 Roblox", category: "GAMING", desc: "Free Pet & Profile Accessories", url: "#", img: "", code: "SPIDERCOLA", isGame: true }
+            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "[ELITE] Purple dragon star unlock code.", url: "#", img: "https://images.unsplash.com/photo-1614315584446-51203525287e?auto=format&fit=crop&w=600&q=80", code: "DRAGON_GEM", isGame: true }
         ];
 
         function App() {
@@ -344,12 +134,14 @@
             const [searchInput, setSearchInput] = useState("");
             const [aiState, setAiState] = useState("idle"); 
             const [searchResult, setSearchResult] = useState(null);
+            const [activeFilter, setActiveFilter] = useState("ALL");
 
             const handleVerify = () => {
                 if (!searchInput.trim()) return;
                 setAiState("searching");
                 setShowModal(true);
 
+                // Extended timeout slightly to let the animation play out
                 setTimeout(() => {
                     const query = searchInput.toLowerCase().trim();
                     const matchKey = Object.keys(AI_DATABASE).find(key => query.includes(key) || key.includes(query));
@@ -360,7 +152,7 @@
                         setSearchResult({ game: searchInput.toUpperCase(), codes: [{ code: "NONE FOUND", desc: "No active codes verified by AI Engine at this time." }] });
                     }
                     setAiState("result");
-                }, 2000);
+                }, 2500); 
             };
 
             const closeModal = () => {
@@ -370,25 +162,43 @@
                 setSearchInput("");
             };
 
+            const copyCode = (e, codeText) => {
+                e.preventDefault(); 
+                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC") {
+                    navigator.clipboard.writeText(codeText);
+                    alert(`Copied to clipboard: ${codeText}`);
+                }
+            };
+
+            const displayedLedger = activeFilter === "ALL" 
+                ? ledger 
+                : ledger.filter(item => item.category === activeFilter);
+
             return (
                 <>
                     {showModal && (
                         <div className="modal-overlay">
                             <div className="modal-box">
                                 {aiState === "searching" && (
-                                    <>
-                                        <div className="status-dot" style={{width: '20px', height: '20px', margin: '0 auto 20px'}}></div>
-                                        <h2 style={{color:'white'}}>AI ENGINE PROCESSING</h2>
+                                    <div className="fade-in">
+                                        <div className="status-dot" style={{width: '24px', height: '24px', margin: '0 auto 20px', boxShadow: '0 0 15px #40e0d0'}}></div>
+                                        <h2 style={{color:'white', margin: '0 0 10px 0'}}>AI ENGINE ACTIVE</h2>
                                         <div className="ai-processing">SCYTHING WEB DATABASES...</div>
-                                    </>
+                                        <div className="ai-terminal-log">
+                                            [||||||||||||||||||||] 100%<br/>
+                                            BYPASSING ENCRYPTION...<br/>
+                                            EXTRACTING SECURE NODES...
+                                        </div>
+                                    </div>
                                 )}
                                 {aiState === "result" && searchResult && (
-                                    <div className="modal-scroll-area">
+                                    <div className="modal-scroll-area fade-in">
                                         <h2 style={{color:'white', marginBottom: '15px', position: 'sticky', top: 0, background: '#0a192f', paddingBottom: '10px', zIndex: 5}}>{searchResult.game}</h2>
                                         {searchResult.codes.map((c, index) => (
                                             <div key={index} className="code-card">
                                                 <div className="ai-result-desc">{c.desc}</div>
                                                 <div className="ai-result-code">{c.code}</div>
+                                                <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
                                             </div>
                                         ))}
                                         <button className="submit-action-btn" onClick={closeModal} style={{position: 'sticky', bottom: 0, zIndex: 5}}>ACKNOWLEDGE & CLOSE</button>
@@ -408,7 +218,15 @@
                     </div>
                     
                     <div className="pill-container">
-                        {["ALL", "EXCLUSIVES", "TRAVEL", "GAMING", "BEAUTY"].map(cat => <div key={cat} className="pill">{cat}</div>)}
+                        {["ALL", "EXCLUSIVES", "TRAVEL", "GAMING", "BEAUTY"].map(cat => (
+                            <div 
+                                key={cat} 
+                                className={`pill ${activeFilter === cat ? 'active' : ''}`}
+                                onClick={() => setActiveFilter(cat)}
+                            >
+                                {cat}
+                            </div>
+                        ))}
                     </div>
                     
                     <div className="verify-bar-wrapper">
@@ -416,7 +234,7 @@
                             <div className="verify-bar">
                                 <input 
                                     className="verify-input" 
-                                    placeholder=">_ ENTER GAME NAME FOR AI VERIFICATION..." 
+                                    placeholder=">_ ENTER GAME NAME..." 
                                     value={searchInput}
                                     onChange={(e) => setSearchInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
@@ -431,19 +249,29 @@
                     </div>
 
                     <div className="media-grid">
-                        {ledger.map(p => (
+                        {displayedLedger.map(p => (
                             <a className="poster-card" key={p.id} href={p.url}>
                                 <div className="poster-img-box">
                                     <CardMedia src={p.img} label={p.store} isGame={p.isGame} />
                                 </div>
                                 <h3 className="poster-title">{p.store}</h3>
-                                <p style={{lineHeight: '1.4'}} className="poster-desc">{p.desc}</p>
-                                <div style={{textAlign: 'center'}}><span className="poster-date">{p.code}</span></div>
+                                <p className="poster-desc">{p.desc}</p>
+                                
+                                <div style={{ marginTop: 'auto' }}>
+                                    {p.code ? (
+                                        p.code === "AUTO-ROUTED" ? (
+                                            <div className="auto-routed-badge">AUTO-ROUTED LINK</div>
+                                        ) : (
+                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>
+                                                COPY: {p.code}
+                                            </button>
+                                        )
+                                    ) : null}
+                                </div>
                             </a>
                         ))}
                     </div>
                     <div className="spacer"></div>
-                    <div className="footer-note">PRO-ENGINE // AFFILIATE TRACKING VERSION 2026.05</div>
                     
                     <div style={{ textAlign: 'center', padding: '20px 40px 40px', color: '#64748b', fontSize: '11px', borderTop: '1px solid #1e293b', background: '#0a192f' }}>
                         <p style={{ maxWidth: '800px', margin: '0 auto 15px auto', fontStyle: 'italic', lineHeight: '1.5' }}>
