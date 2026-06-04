@@ -40,7 +40,6 @@
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
         }
 
-        /* FIX: Bumped font-size to 18px!important to kill Android Chrome's accessibility auto-zoom */
         .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 18px !important; outline: none; width: 100%; touch-action: manipulation; }
         .verify-input::placeholder { color: #64748b; font-size: 16px; }
         
@@ -124,26 +123,38 @@
         };
 
         const AI_DATABASE = {
+            "whiteout survival": [
+                { code: "wm6xPkX4w", desc: "[NEW] Exclusive June Event Code" },
+                { code: "WOSFAMILY26", desc: "1,000 Gems, Training Speedups" },
+                { code: "ChildrensDay505", desc: "1,000 Gems, 8x 1h Training Speedup" },
+                { code: "HappyJuneDay", desc: "1,000 Gems, 5x 1h Training Speedup" }
+            ],
+            "genshin impact": [
+                { code: "YMYD76U85Z1U", desc: "Mora x10,000, Adventurer's Experience x10" },
+                { code: "NMI20MAJGIBP", desc: "Primogem ×20, Geode of Replication x5" },
+                { code: "OHOHONICOLE", desc: "Primogem ×30, Mora x20,000" },
+                { code: "MageNicolesPuzzle", desc: "Primogem ×30, Chenyu Adeptea x5" },
+                { code: "GENSHINGIFT", desc: "Primogems x50 and Hero's Wit x3 [Permanent]" }
+            ],
+            "roblox": [
+                { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" },
+                { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" },
+                { code: "FREENGNBOI", desc: "Nguyen Boi Bundle" },
+                { code: "FREENGNGON", desc: "Nguyen Gon Bundle" }
+            ],
+            "merge dragons": [
+                { code: "NONE ACTIVE", desc: "No valid codes for June 2026" }
+            ],
             "state of survival": [
                 { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, 
                 { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" },
                 { code: "ZOMBIEWAR", desc: "Advanced Search Map & 500 Biocaps" },
                 { code: "ELITEGEAR", desc: "Legendary Hero Badge" }
             ],
-            "whiteout survival": [
-                { code: "FROSTCOIN", desc: "Frost Coins & VIP Points" },
-                { code: "WINTERISHERE", desc: "1000x Gems & Resource Pack" },
-                { code: "ICEBREAKER", desc: "Advanced Construction Speedup" }
-            ],
             "golf rival": [
                 { code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" },
                 { code: "EAGLEEYE", desc: "Legendary Club Chest" },
                 { code: "FAIRWAYWIN", desc: "5000 Coins & 50 Gems" }
-            ],
-            "merge dragons": [
-                { code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" },
-                { code: "MYSTICMERGE", desc: "Mystery Egg Nest" },
-                { code: "CAMPBOOST", desc: "3x Chalice Refill" }
             ],
             "idle outpost": [
                 { code: "CASH_FLOW", desc: "Offline Earning Multiplier" },
@@ -160,16 +171,6 @@
                 { code: "PNSELITE", desc: "5-Star Hero Recruit Token" },
                 { code: "MATCH3WIN", desc: "Antiserum & 500 Diamonds" },
                 { code: "NOVAUP", desc: "Nova EXP Boost (Massive)" }
-            ],
-            "genshin impact": [
-                { code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" },
-                { code: "TRAVELER26", desc: "10000 Mora & Mystic Enhancement" },
-                { code: "TEYVATEXPLORE", desc: "Adventurer's Experience x5" }
-            ],
-            "roblox": [
-                { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" },
-                { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" },
-                { code: "ROBLOXEDU", desc: "Dev Deck Accessory" }
             ],
             "call of duty mobile": [
                 { code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" },
@@ -415,7 +416,7 @@
 
             const copyCode = (e, codeText) => {
                 e.preventDefault(); 
-                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC") {
+                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC" && codeText !== "NONE ACTIVE") {
                     navigator.clipboard.writeText(codeText);
                     alert(`Copied to clipboard: ${codeText}`);
                 }
@@ -449,7 +450,9 @@
                                             <div key={index} className="code-card">
                                                 <div className="ai-result-desc">{c.desc}</div>
                                                 <div className="ai-result-code">{c.code}</div>
-                                                <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
+                                                {c.code !== "NONE ACTIVE" && (
+                                                    <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
+                                                )}
                                             </div>
                                         ))}
                                         <button className="submit-action-btn" onClick={closeModal} style={{position: 'sticky', bottom: 0, zIndex: 5}}>ACKNOWLEDGE & CLOSE</button>
