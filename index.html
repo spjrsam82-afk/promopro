@@ -3,15 +3,14 @@
 <head>
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
-    <!-- FIX 1: Added maximum-scale=1.0 and user-scalable=no to prevent unwanted mobile zooming -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro Matrix</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         * { box-sizing: border-box; }
-        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; overflow-x: hidden; touch-action: manipulation; }
         #root { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
         
         .rt-top-nav-wrapper { background-color: #0a192f; border-bottom: 1px solid #1e293b; width: 100%; }
@@ -23,31 +22,61 @@
         
         .pill-container { display: flex; gap: 15px; padding: 25px 15px; width: 100%; justify-content: center; background: #050b14; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
         .pill { background: #0a192f; color: #f97316; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid #f97316; transition: 0.3s; text-align: center; white-space: nowrap; user-select: none; }
-        .pill:hover, .pill.active { background: #f97316; color: #050b14; transform: translateY(-3px); }
+        
+        .pill:hover, .pill.active { 
+            background: #ffffff; 
+            color: #050b14; 
+            transform: translateY(-3px); 
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
+        }
         
         .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 15px 10px 15px; }
         .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); }
+        .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); transition: 0.3s; }
         
-        /* FIX 2: font-size set to 16px to stop Chrome from forcing a zoom */
-        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 16px; outline: none; width: 100%; }
-        .verify-input::placeholder { color: #64748b; }
+        .verify-bar:focus-within {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* FIX: Bumped font-size to 18px!important to kill Android Chrome's accessibility auto-zoom */
+        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 18px !important; outline: none; width: 100%; touch-action: manipulation; }
+        .verify-input::placeholder { color: #64748b; font-size: 16px; }
         
         .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-        .verify-btn:hover { background-color: #ffffff; color: #f97316; }
+        
+        .verify-btn:hover { 
+            background-color: #ffffff; 
+            color: #f97316; 
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
         .verify-status { margin-top: 12px; font-family: monospace; font-size: 12px; color: #40e0d0; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; }
         .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
         @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
         
         .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
         .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
-        .poster-card:hover { transform: translateY(-8px); border-color: #f97316; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .poster-card:hover { 
+            transform: translateY(-8px); 
+            border-color: #ffffff; 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); 
+        }
+
         .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #050b14; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: center; }
         .poster-title { font-size: 22px; font-weight: 900; margin: 0 0 8px 0; color: #39ff14; text-align: center; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(57, 255, 20, 0.4); }
         .poster-desc { font-size: 14px; color: #bbf7d0; margin-bottom: 15px; text-align: center; font-weight: 600; line-height: 1.4; flex-grow: 1; }
         
         .copy-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 10px; font-weight: bold; font-family: monospace; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
-        .copy-btn:hover { background: #ffffff; }
+        
+        .copy-btn:hover { 
+            background: #ffffff; 
+            color: #f97316;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
         .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
@@ -59,7 +88,7 @@
         
         .code-card { background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; }
         .submit-action-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 15px; flex-shrink: 0; }
-        .submit-action-btn:hover { background: #ffffff; }
+        .submit-action-btn:hover { background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
         
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -357,7 +386,6 @@
             const handleVerify = () => {
                 if (!searchInput.trim()) return;
                 
-                // FIX 3: Instantly dismiss the mobile keyboard when Verify is clicked!
                 if (document.activeElement instanceof HTMLElement) {
                     document.activeElement.blur();
                 }
@@ -406,7 +434,7 @@
                                     <div className="fade-in">
                                         <div className="status-dot" style={{width: '24px', height: '24px', margin: '0 auto 20px', boxShadow: '0 0 15px #40e0d0'}}></div>
                                         <h2 style={{color:'white', margin: '0 0 10px 0'}}>AI ENGINE ACTIVE</h2>
-                                        <div className="ai-processing">SCYTHING WEB DATABASES...</div>
+                                        <div className="ai-processing">SCANNING WEB DATABASES...</div>
                                         <div className="ai-terminal-log">
                                             [||||||||||||||||||||] 100%<br/>
                                             BYPASSING ENCRYPTION...<br/>
