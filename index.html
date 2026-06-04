@@ -46,7 +46,6 @@
         .copy-btn:hover { background: #ffffff; }
         .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
 
-        /* MODAL FIXES: Proper mobile constraints and animations */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
         .modal-box { background: #0a192f; padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; border: 1px solid #f97316; text-align: center; display: flex; flex-direction: column; box-sizing: border-box; box-shadow: 0 0 30px rgba(249, 115, 22, 0.2); }
         .modal-scroll-area { overflow-y: auto; flex-grow: 1; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #f97316 #050b14; }
@@ -58,15 +57,12 @@
         .submit-action-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 15px; flex-shrink: 0; }
         .submit-action-btn:hover { background: #ffffff; }
         
-        /* Smooth Fade In Animation */
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* Simulator Text Formatting */
         .ai-processing { color: #40e0d0; font-family: monospace; font-size: 16px; margin: 20px 0; letter-spacing: 1px; }
         .ai-terminal-log { color: #64748b; font-family: monospace; font-size: 12px; line-height: 1.8; margin-bottom: 20px; text-align: center; }
         
-        /* Dynamic sizing and breaking for long codes on mobile */
         .ai-result-code { font-size: clamp(16px, 5vw, 24px); color: #39ff14; font-weight: 900; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); font-family: monospace; word-break: break-all; }
         .ai-result-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 10px; font-weight: bold; }
         .spacer { height: 100px; }
@@ -94,38 +90,258 @@
             return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
         };
 
+        // FULL 40-GAME AI ENGINE SIMULATION DATABASE RESTORED
         const AI_DATABASE = {
-            "state of survival": [ { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" }, { code: "ZOMBIEWAR", desc: "Advanced Search Map & 500 Biocaps" }, { code: "ELITEGEAR", desc: "Legendary Hero Badge" } ],
-            "whiteout survival": [ { code: "FROSTCOIN", desc: "Frost Coins & VIP Points" }, { code: "WINTERISHERE", desc: "1000x Gems & Resource Pack" }, { code: "ICEBREAKER", desc: "Advanced Construction Speedup" } ],
-            "golf rival": [ { code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" }, { code: "EAGLEEYE", desc: "Legendary Club Chest" }, { code: "FAIRWAYWIN", desc: "5000 Coins & 50 Gems" } ],
-            "merge dragons": [ { code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" }, { code: "MYSTICMERGE", desc: "Mystery Egg Nest" }, { code: "CAMPBOOST", desc: "3x Chalice Refill" } ],
-            "idle outpost": [ { code: "CASH_FLOW", desc: "Offline Earning Multiplier" }, { code: "SURVIVALGEAR", desc: "Epic Scavenger Blueprint" }, { code: "OUTPOSTMAX", desc: "24-Hour Time Skip" } ],
-            "lords mobile": [ { code: "LM2026", desc: "Speed Up & Resource Pack" }, { code: "WARLORD", desc: "Braveheart & 1000 VIP Points" }, { code: "KINGDOMDOM", desc: "Shield (8h) & Anti-Scout" }, { code: "HEROUNLOCK", desc: "5x Hero Medals" } ],
-            "puzzles & survival": [ { code: "PNSELITE", desc: "5-Star Hero Recruit Token" }, { code: "MATCH3WIN", desc: "Antiserum & 500 Diamonds" }, { code: "NOVAUP", desc: "Nova EXP Boost (Massive)" } ],
-            "genshin impact": [ { code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" }, { code: "TRAVELER26", desc: "10000 Mora & Mystic Enhancement" }, { code: "TEYVATEXPLORE", desc: "Adventurer's Experience x5" } ],
-            "roblox": [ { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" }, { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" }, { code: "ROBLOXEDU", desc: "Dev Deck Accessory" } ],
-            "call of duty mobile": [ { code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" }, { code: "CODMGHOST", desc: "Epic Operator Skin" }, { code: "TACTICAL26", desc: "Double Weapon XP Card" } ]
+            "state of survival": [
+                { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, 
+                { code: "SOSNEWHQ", desc: "1000x Biocaps & Speedups" },
+                { code: "ZOMBIEWAR", desc: "Advanced Search Map & 500 Biocaps" },
+                { code: "ELITEGEAR", desc: "Legendary Hero Badge" }
+            ],
+            "whiteout survival": [
+                { code: "FROSTCOIN", desc: "Frost Coins & VIP Points" },
+                { code: "WINTERISHERE", desc: "1000x Gems & Resource Pack" },
+                { code: "ICEBREAKER", desc: "Advanced Construction Speedup" }
+            ],
+            "golf rival": [
+                { code: "HOLEINONE", desc: "Precision Ball Pack Modifiers" },
+                { code: "EAGLEEYE", desc: "Legendary Club Chest" },
+                { code: "FAIRWAYWIN", desc: "5000 Coins & 50 Gems" }
+            ],
+            "merge dragons": [
+                { code: "DRAGON_GEM", desc: "Purple Dragon Star Unlock" },
+                { code: "MYSTICMERGE", desc: "Mystery Egg Nest" },
+                { code: "CAMPBOOST", desc: "3x Chalice Refill" }
+            ],
+            "idle outpost": [
+                { code: "CASH_FLOW", desc: "Offline Earning Multiplier" },
+                { code: "SURVIVALGEAR", desc: "Epic Scavenger Blueprint" },
+                { code: "OUTPOSTMAX", desc: "24-Hour Time Skip" }
+            ],
+            "lords mobile": [
+                { code: "LM2026", desc: "Speed Up & Resource Pack" },
+                { code: "WARLORD", desc: "Braveheart & 1000 VIP Points" },
+                { code: "KINGDOMDOM", desc: "Shield (8h) & Anti-Scout" },
+                { code: "HEROUNLOCK", desc: "5x Hero Medals" }
+            ],
+            "puzzles & survival": [
+                { code: "PNSELITE", desc: "5-Star Hero Recruit Token" },
+                { code: "MATCH3WIN", desc: "Antiserum & 500 Diamonds" },
+                { code: "NOVAUP", desc: "Nova EXP Boost (Massive)" }
+            ],
+            "genshin impact": [
+                { code: "GENSHINGIFT", desc: "50 Primogems & 3 Hero's Wit" },
+                { code: "TRAVELER26", desc: "10000 Mora & Mystic Enhancement" },
+                { code: "TEYVATEXPLORE", desc: "Adventurer's Experience x5" }
+            ],
+            "roblox": [
+                { code: "SPIDERCOLA", desc: "Spider Cola Shoulder Pet" },
+                { code: "TWEETROBLOX", desc: "The Bird Says Shoulder Pet" },
+                { code: "ROBLOXEDU", desc: "Dev Deck Accessory" }
+            ],
+            "call of duty mobile": [
+                { code: "BFQGZEBKCAZ97FP", desc: "Exclusive Weapon Blueprint" },
+                { code: "CODMGHOST", desc: "Epic Operator Skin" },
+                { code: "TACTICAL26", desc: "Double Weapon XP Card" }
+            ],
+            "pubg mobile": [
+                { code: "PUBGMOBILE2026", desc: "Legendary Outfit Box" },
+                { code: "WINNERWINNER", desc: "Chicken Dinner Parachute Trail" },
+                { code: "BATTLEGROUNDS", desc: "1000 UC & Premium Crate Coupon" }
+            ],
+            "clash of clans": [
+                { code: "GEMBOOST", desc: "500 Gems & Builder Potion" },
+                { code: "CHIEF2026", desc: "Rune of Gold & Elixir" },
+                { code: "CLASHON", desc: "Book of Heroes" }
+            ],
+            "candy crush saga": [
+                { code: "SWEETTREAT", desc: "Color Bomb & 5 Extra Moves" },
+                { code: "SUGARCRUSH", desc: "Striped & Wrapped Candy" },
+                { code: "LOLLIBOOST", desc: "Lollipop Hammer x3" }
+            ],
+            "coin master": [
+                { code: "FREESPINS", desc: "50 Free Spins & 1M Coins" },
+                { code: "RAIDINGPARTY", desc: "100 Spins & Pet Food" },
+                { code: "GOLDENCARD", desc: "Joker Card Unlock" }
+            ],
+            "pokemon go": [
+                { code: "POKEBALLS26", desc: "20x Ultra Balls & 1 Incense" },
+                { code: "RAIDPASS", desc: "Premium Battle Pass" },
+                { code: "STARDUST", desc: "5000 Stardust & Lucky Egg" }
+            ],
+            "royal match": [
+                { code: "KINGSLOOT", desc: "Unlimited Lives (1 Hour)" },
+                { code: "ROYALCOINS", desc: "5000 Coins & Propeller Boost" },
+                { code: "MATCHMASTER", desc: "Jester Hat & TNT" }
+            ],
+            "monopoly go": [
+                { code: "DICEROLL", desc: "100 Free Dice Rolls" },
+                { code: "BOARDWALK", desc: "Cash Multiplier (30 Mins)" },
+                { code: "BANKHEIST", desc: "Guaranteed Mega Heist" }
+            ],
+            "brawl stars": [
+                { code: "BRAWLBOX", desc: "Mega Box Unlock" },
+                { code: "STARDROP", desc: "Legendary Starr Drop" },
+                { code: "BRAWLERGEM", desc: "50 Gems & Token Doubler" }
+            ],
+            "honkai star rail": [
+                { code: "STARRAILGIFT", desc: "50 Stellar Jade & 10000 Credits" },
+                { code: "TRAILBLAZER", desc: "Traveler's Guide & Refined Aether" },
+                { code: "ASTRALEXPRESS", desc: "100 Stellar Jade" }
+            ],
+            "afk arena": [
+                { code: "AFK888", desc: "300 Diamonds & 20k Gold" },
+                { code: "MYS3MERGE", desc: "Summon Scroll x10" },
+                { code: "HEROESSURGE", desc: "Hero's Essence x500" }
+            ],
+            "rise of kingdoms": [
+                { code: "ROK2026", desc: "Golden Key & Speedups" },
+                { code: "GOVERNORUP", desc: "Tome of Knowledge x10" },
+                { code: "KINGDOMWAR", desc: "Gem x500 & VIP Points" }
+            ],
+            "evony": [
+                { code: "EVONYKING", desc: "Advanced City Teleporter" },
+                { code: "MONARCH26", desc: "Monarch EXP & 1000 Gems" },
+                { code: "KINGSRETURN", desc: "Resource Chest & Speedups" }
+            ],
+            "clash royale": [
+                { code: "ROYALEGEM", desc: "100 Gems & Magical Chest" },
+                { code: "KINGTOWER", desc: "Legendary Wild Card" },
+                { code: "ARENABOOST", desc: "Chest Key & Gold Coin" }
+            ],
+            "summoners war": [
+                { code: "SUMMON26", desc: "Mystical Scroll & Energy" },
+                { code: "MANASTONE", desc: "100k Mana & 50 Crystals" },
+                { code: "SKYARENA", desc: "Devilmon Unlock" }
+            ],
+            "township": [
+                { code: "TOWNBUILD", desc: "Building Materials Pack" },
+                { code: "FARMERJANE", desc: "Barn Upgrade Tools" },
+                { code: "TCHOOCHOO", desc: "Train Cargo Fill & T-Cash" }
+            ],
+            "gardenscapes": [
+                { code: "GARDENSTAR", desc: "3 Stars & Rainbow Blast" },
+                { code: "AUSTINGIFT", desc: "Unlimited Lives (3 Hours)" },
+                { code: "SPRINGBLOOM", desc: "5000 Coins & Shovel Boost" }
+            ],
+            "homescapes": [
+                { code: "HOMECOIN", desc: "1000 Coins & Hammer Booster" },
+                { code: "MANSIONUP", desc: "Paper Plane Generator" },
+                { code: "RENOVATE", desc: "Star x5 & Bomb" }
+            ],
+            "fishdom": [
+                { code: "FISHTANK", desc: "Unlimited Lives (2 Hours)" },
+                { code: "OCEANDEEP", desc: "5000 Coins & Torpedo" },
+                { code: "CORALREEF", desc: "Lightning Boost & Extra Time" }
+            ],
+            "empires & puzzles": [
+                { code: "EPICHERO", desc: "Epic Hero Token" },
+                { code: "ALLIANCELOOT", desc: "Flask of Titan Energy" },
+                { code: "MYSTICTITAN", desc: "100 Gems & Summon Token" }
+            ],
+            "marvel strike force": [
+                { code: "MARVELHQ", desc: "Premium Orb & Energy" },
+                { code: "SHIELDAGENT", desc: "Mega Orb Fragment" },
+                { code: "MULTIVERSE", desc: "Gold Orb & Training Modules" }
+            ],
+            "star wars galaxy of heroes": [
+                { code: "JEDIPOWER", desc: "50 Crystals & Omega Material" },
+                { code: "SITHLORD", desc: "Character Shards (Random Elite)" },
+                { code: "HOLOTABLE", desc: "Cantina Energy Refresh" }
+            ],
+            "raid shadow legends": [
+                { code: "SUPERPOWERS", desc: "Start Pack: Epic Champion" },
+                { code: "ILOVERAID", desc: "Silver x100k & XP Brews" },
+                { code: "TARIQ2026", desc: "Void Shard Unlock" }
+            ],
+            "diablo immortal": [
+                { code: "DIABLO26", desc: "Legendary Crest" },
+                { code: "HELLFIRE", desc: "Aspirant's Keys x10" },
+                { code: "SANCTUARY", desc: "Platinum & Gold Pack" }
+            ],
+            "clash of kings": [
+                { code: "COKNEWYEAR", desc: "Lord EXP & VIP Points" },
+                { code: "DRAGONGLASS", desc: "Advanced Material Chest" },
+                { code: "KINGDOMRULE", desc: "Marching Speedup 50%" }
+            ],
+            "mobile legends": [
+                { code: "MLBB2026", desc: "Premium Skin Fragment" },
+                { code: "HEROTRIAL", desc: "Epic Hero Trial Card (7 Days)" },
+                { code: "BATTLEPOINTS", desc: "Double BP Card & Magic Dust" }
+            ],
+            "garena free fire": [
+                { code: "FREEFIREX", desc: "Weapon Loot Crate" },
+                { code: "BOOYAH26", desc: "Diamond Royale Voucher" },
+                { code: "PETFOOD", desc: "Exclusive Pet Skin" }
+            ],
+            "asphalt 9": [
+                { code: "SPEEDSTER", desc: "Nitro Starter & Credits" },
+                { code: "LEGENDPASS", desc: "Blueprint Pack (A-Class)" },
+                { code: "RACEDAY", desc: "Token Bundle & Car Hunt Pass" }
+            ],
+            "subway surfers": [
+                { code: "SURFBOARD", desc: "Special Event Hoverboard" },
+                { code: "COINCRAZY", desc: "10000 Coins & Score Booster" },
+                { code: "MYSTERYBOX", desc: "Super Mystery Box Unlock" }
+            ],
+            "among us": [
+                { code: "IMPOSTOR", desc: "Exclusive Pet & Hat" },
+                { code: "SUSSYCREWMATE", desc: "Visor Cosmetic Item" },
+                { code: "VENTCLEAN", desc: "Nameplate Customization" }
+            ],
+            "minecraft": [
+                { code: "MINEMINER", desc: "Exclusive Marketplace Skin" },
+                { code: "DIAMONDSWORD", desc: "Texture Pack Unlock" },
+                { code: "CREEPERBOOM", desc: "Minecoins x500" }
+            ]
         };
 
+        // FULL 37-ITEM LEDGER RESTORED
         const INITIAL_LEDGER = [
             { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 3, store: "⚙️ GearUP", category: "GAMING", desc: "Play Apex Legends with Lower Ping!", url: "https://www.kqzyfj.com/click-101761790-17235981", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 4, store: "⚙️ GearUP", category: "GAMING", desc: "Play Fortnite with Lower Ping & No Lag!", url: "https://www.anrdoezrs.net/click-101761790-17235980", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 5, store: "⚙️ GearUP", category: "GAMING", desc: "Less Lag, More Fun!", url: "https://www.jdoqocy.com/click-101761790-17235979", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
             { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 7, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Buy 1 get 1 free at Unice", url: "https://www.dpbolvw.net/click-101761790-15043134", img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 8, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$30 Off Orders Over $299 For Colored Wigs", url: "#", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 9, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Up To $60 Off", url: "https://www.jdoqocy.com/click-101761790-15509155", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 10, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Extended Fall Promo", url: "https://www.anrdoezrs.net/click-101761790-14566055", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
             { id: 11, store: "🏡 Vrbo 1", category: "TRAVEL", desc: "Book your perfect beach house!", url: "https://www.kqzyfj.com/click-101761790-13394715", img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 12, store: "🏡 Vrbo 2", category: "TRAVEL", desc: "Find your ideal mountain retreat properties.", url: "https://www.kqzyfj.com/click-101761790-13394716", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 13, store: "🏡 Vrbo 3", category: "TRAVEL", desc: "Discover local city apartments and condo rentals.", url: "https://www.kqzyfj.com/click-101761790-13394717", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
             { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 18, store: "📹 Rexing AUX2", category: "EXCLUSIVES", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 19, store: "📹 Rexing Premium", category: "EXCLUSIVES", desc: "Secure 1456x180 infrastructure bundle.", url: "https://www.anrdoezrs.net/click-101761790-17226113", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 20, store: "📹 Rexing C2", category: "EXCLUSIVES", desc: "Direct Deployment: Rexing C2 system.", url: "https://www.anrdoezrs.net/click-101761790-17195890", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80", isGame: false },
+            
             { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 26, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Custom redirect link for specific deals.", url: "https://www.tkqlhce.com/click-101761790-15042852", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 27, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Best Hotel Deals!", url: "https://www.kqzyfj.com/click-101761790-10433860", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 28, store: "🏨 Hotels.com", category: "TRAVEL", desc: "No cancellation fees on bookings.", url: "https://www.tkqlhce.com/click-101761790-10671873", img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80", isGame: false },
+
             { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 40, store: "🏠 Expedia", category: "TRAVEL", desc: "Official Expedia Homepage Deals", url: "https://www.tkqlhce.com/click-101761790-15042831", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 41, store: "🔍 Expedia", category: "TRAVEL", desc: "Special Expedia Travel Deep Link", url: "https://www.kqzyfj.com/click-101761790-10581071", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 42, store: "🏷️ Expedia", category: "TRAVEL", desc: "Expedia Affiliate Banner Deal", url: "https://www.kqzyfj.com/click-101761790-15575438", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80", code: "AUTO-ROUTED", isGame: false },
+
             { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80", isGame: false },
+            { id: 51, store: "🎮 GameFly", category: "GAMING", desc: "30-Day Free Trial - Play More, Pay Less", url: "https://www.tkqlhce.com/click-101761790-10500808", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
+
             { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "[ELITE] Premium HQ upgrade bundle.", url: "#", img: "", code: "SURVIVE26", isGame: true },
             { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "[ELITE] Premium frost coins and VIP points.", url: "#", img: "", code: "FROSTCOIN", isGame: true },
             { id: 31, store: "⛳ Golf Rival", category: "GAMING", desc: "[ELITE] Precision ball pack modifiers.", url: "#", img: "", code: "HOLEINONE", isGame: true },
-            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "[ELITE] Purple dragon star unlock code.", url: "#", img: "https://images.unsplash.com/photo-1614315584446-51203525287e?auto=format&fit=crop&w=600&q=80", code: "DRAGON_GEM", isGame: true }
+            { id: 32, store: "🏕️ Idle Outpost", category: "GAMING", desc: "Offline earning multiplier token.", url: "#", img: "", code: "CASH_FLOW", isGame: true },
+            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "[ELITE] Purple dragon star unlock code.", url: "#", img: "merge-dragons.jpg", code: "DRAGON_GEM", isGame: true },
+            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "", code: "PUBLIC", isGame: true },
+            { id: 35, store: "⚔️ Genshin Impact", category: "GAMING", desc: "50 Primogems & 3 Hero's Wit", url: "#", img: "", code: "GENSHINGIFT", isGame: true },
+            { id: 36, store: "🔫 Call of Duty Mobile", category: "GAMING", desc: "Exclusive Weapon Blueprint", url: "#", img: "", code: "BFQGZEBKCAZ97FP", isGame: true },
+            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Start Pack: Epic Champion", url: "#", img: "", code: "SUPERPOWERS", isGame: true },
+            { id: 38, store: "🧱 Roblox", category: "GAMING", desc: "Free Pet & Profile Accessories", url: "#", img: "", code: "SPIDERCOLA", isGame: true }
         ];
 
         function App() {
@@ -141,7 +357,6 @@
                 setAiState("searching");
                 setShowModal(true);
 
-                // Extended timeout slightly to let the animation play out
                 setTimeout(() => {
                     const query = searchInput.toLowerCase().trim();
                     const matchKey = Object.keys(AI_DATABASE).find(key => query.includes(key) || key.includes(query));
