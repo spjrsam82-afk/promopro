@@ -3,7 +3,8 @@
 <head>
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- FIX 1: Added maximum-scale=1.0 and user-scalable=no to prevent unwanted mobile zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PromoPro Matrix</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -27,8 +28,11 @@
         .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 15px 10px 15px; }
         .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
         .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); }
-        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 14px; outline: none; width: 100%; }
+        
+        /* FIX 2: font-size set to 16px to stop Chrome from forcing a zoom */
+        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 16px; outline: none; width: 100%; }
         .verify-input::placeholder { color: #64748b; }
+        
         .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
         .verify-btn:hover { background-color: #ffffff; color: #f97316; }
         .verify-status { margin-top: 12px; font-family: monospace; font-size: 12px; color: #40e0d0; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; }
@@ -90,7 +94,6 @@
             return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
         };
 
-        // FULL 40-GAME AI ENGINE SIMULATION DATABASE RESTORED
         const AI_DATABASE = {
             "state of survival": [
                 { code: "SURVIVE26", desc: "Premium HQ Upgrade Bundle" }, 
@@ -296,7 +299,6 @@
             ]
         };
 
-        // FULL 37-ITEM LEDGER RESTORED
         const INITIAL_LEDGER = [
             { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
             { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
@@ -354,6 +356,12 @@
 
             const handleVerify = () => {
                 if (!searchInput.trim()) return;
+                
+                // FIX 3: Instantly dismiss the mobile keyboard when Verify is clicked!
+                if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                }
+
                 setAiState("searching");
                 setShowModal(true);
 
