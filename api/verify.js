@@ -1,27 +1,26 @@
-export default async (req, context) => {
+exports.handler = async (event, context) => {
   try {
-    // 1. Parse incoming user request data
-    const requestBody = await req.json();
+    // 1. Parse incoming user request data (v1 syntax)
+    const requestBody = JSON.parse(event.body);
     const { game, code } = requestBody;
 
     if (!game || !code) {
-      return new Response(JSON.stringify({ response: "System Error: Missing target game or code parameters." }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+      return {
+        statusCode: 400,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ response: "System Error: Missing target game or code parameters." })
+      };
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return new Response(JSON.stringify({ response: "System Error: AI Engine Key missing from environment configurations." }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      });
+      return {
+        statusCode: 500,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ response: "System Error: AI Engine Key missing from environment configurations." })
+      };
     }
 
-    // =========================================================================
-    // 2. THE MULTI-FEED ARCHITECTURE (100% FREE TIER OPTIMIZED)
-    // =========================================================================
     // Your verified live raw GitHub database URL:
     const PRODUCT_FEEDS = [
       "https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/gamivo-feed.csv"
@@ -29,9 +28,6 @@ export default async (req, context) => {
 
     let aggregatedFeedData = "";
 
-    // =========================================================================
-    // 3. SCAN AND AGGREGATE INVENTORY DATA
-    // =========================================================================
     for (const feedUrl of PRODUCT_FEEDS) {
       try {
         const response = await fetch(feedUrl);
@@ -56,16 +52,10 @@ export default async (req, context) => {
       }
     }
 
-    // =========================================================================
-    // 4. FALLBACK LOGIC IF NO DATA STREAM MATCHES
-    // =========================================================================
     if (!aggregatedFeedData.trim()) {
       aggregatedFeedData = `No active inventory data matched the exact string "${game}" within our system files.`;
     }
 
-    // =========================================================================
-    // 5. QUERY THE AI ENGINE (WITH COMPLETE RULE UPDATES)
-    // =========================================================================
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -94,15 +84,17 @@ CRITICAL: Because the game is in our inventory, you MUST always append this exac
     const aiData = await geminiResponse.json();
     const systemResponseText = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "The verification engine timed out. Please try again.";
 
-    return new Response(JSON.stringify({ response: systemResponseText }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ response: systemResponseText })
+    };
 
   } catch (globalError) {
-    return new Response(JSON.stringify({ response: `Critical Error: Master code exception occurred. Details: ${globalError.message}` }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ response: `Critical Error: Master code exception occurred. Details: ${globalError.message}` })
+    };
   }
 };
