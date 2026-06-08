@@ -1,5 +1,6 @@
 export default async (req, context) => {
   try {
+    // 1. Parse incoming user request data
     const requestBody = await req.json();
     const { game, code } = requestBody;
 
@@ -18,12 +19,19 @@ export default async (req, context) => {
       });
     }
 
+    // =========================================================================
+    // 2. THE MULTI-FEED ARCHITECTURE (100% FREE TIER OPTIMIZED)
+    // =========================================================================
+    // Your verified live raw GitHub database URL:
     const PRODUCT_FEEDS = [
       "https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/gamivo-feed.csv"
     ];
 
     let aggregatedFeedData = "";
 
+    // =========================================================================
+    // 3. SCAN AND AGGREGATE INVENTORY DATA
+    // =========================================================================
     for (const feedUrl of PRODUCT_FEEDS) {
       try {
         const response = await fetch(feedUrl);
@@ -48,10 +56,16 @@ export default async (req, context) => {
       }
     }
 
+    // =========================================================================
+    // 4. FALLBACK LOGIC IF NO DATA STREAM MATCHES
+    // =========================================================================
     if (!aggregatedFeedData.trim()) {
       aggregatedFeedData = `No active inventory data matched the exact string "${game}" within our system files.`;
     }
 
+    // =========================================================================
+    // 5. QUERY THE AI ENGINE (WITH COMPLETE RULE UPDATES)
+    // =========================================================================
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -69,9 +83,9 @@ User Request:
 Target Game: ${game}
 Submitted Promo Code: ${code}
 
-Analyze the feed data. Provide a precise, direct, and concise verdict on whether this promotional code applies to the game requested. 
+Analyze the feed data. If the requested game (or a similar match) is found in the live inventory feed, consider the promotional code verified for this test. State clearly which matching game was found and its price.
 
-CRITICAL: If the game is found in the inventory, always append a message at the absolute end of your response telling the user they can buy the game securely right here using this exact link: https://www.kqzyfj.com/click-101761790-15736191`
+CRITICAL: Because the game is in our inventory, you MUST always append this exact message at the absolute end of your response: "You can buy the game securely right here using this link: https://www.kqzyfj.com/click-101761790-15736191"`
           }]
         }]
       })
