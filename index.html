@@ -265,7 +265,7 @@
             const [searchResult, setSearchResult] = useState(null);
             const [activeFilter, setActiveFilter] = useState("ALL");
 
-            const handleVerify = () => {
+            const handleVerify = async () => {
                 if (!searchInput.trim()) return;
                 
                 if (document.activeElement instanceof HTMLElement) {
@@ -275,25 +275,30 @@
                 setAiState("searching");
                 setShowModal(true);
 
-                setTimeout(() => {
-                    const query = searchInput.toLowerCase().trim();
-                    const matchKey = Object.keys(AI_DATABASE).find(key => query.includes(key) || key.includes(query));
+                try {
+                    const response = await fetch('/.netlify/functions/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ game: searchInput, code: "TEST-CODE" })
+                    });
+
+                    const data = await response.json();
                     
-                    if (matchKey) {
-                        setSearchResult({ game: matchKey.toUpperCase(), codes: AI_DATABASE[matchKey] });
-                    } else {
-                        setSearchResult({ game: searchInput.toUpperCase(), codes: [{ code: "NONE FOUND", desc: "No active codes verified by AI Engine at this time." }] });
-                    }
-                    setAiState("result");
-                }, 2500); 
+                    setSearchResult({ 
+                        game: searchInput.toUpperCase(), 
+                        codes: [{ code: "VERIFIED", desc: data.response }] 
+                    });
+                } catch (error) {
+                    setSearchResult({ 
+                        game: "CONNECTION ERROR", 
+                        codes: [{ code: "ERROR", desc: "Cannot reach backend: " + error.message }] 
+                    });
+                }
+                
+                setAiState("result");
             };
 
-            const closeModal = () => {
-                setShowModal(false);
-                setAiState("idle");
-                setSearchResult(null);
-                setSearchInput("");
-            };
+            const closeModal = () 
 
             const copyCode = (e, codeText) => {
                 e.preventDefault(); 
