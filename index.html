@@ -298,7 +298,9 @@
                 setAiState("result");
             };
 
-            const closeModal = () 
+            const closeModal = () => {
+    setVerificationResult(null);
+};
 
             const copyCode = (e, codeText) => {
                 e.preventDefault(); 
