@@ -76,6 +76,9 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
 
+        .claim-btn { display: block; width: 100%; text-decoration: none; background: #39ff14; color: #050b14; padding: 15px; font-weight: 900; border-radius: 6px; margin-top: 15px; font-family: monospace; font-size: 18px; text-transform: uppercase; text-align: center; transition: 0.3s; border: 1px solid #39ff14; }
+        .claim-btn:hover { background: #ffffff; color: #39ff14; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); }
+
         .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
@@ -120,94 +123,6 @@
                 );
             }
             return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
-        };
-
-        const AI_DATABASE = {
-            "state of survival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "whiteout survival": [
-                { code: "wm6xPkX4w", desc: "100 Gems & Resources" },
-                { code: "WOSFAMILY26", desc: "1K Gems & Speedups" },
-                { code: "Happykid61", desc: "Gems & Gold Keys" }
-            ],
-            "golf rival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "merge dragons": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "idle outpost": [{ code: "NO ACTIVE CODES", desc: "Requires External Webshop Login" }],
-            "lords mobile": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "puzzles & survival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "genshin impact": [
-                { code: "NMI20MAJGIBP", desc: "20 Primogems, 160 Geode" },
-                { code: "YMYD76U85Z1U", desc: "10K Mora & Enhancement Ore" },
-                { code: "MageNicolesPuzzle", desc: "30 Primogems, Food items" }
-            ],
-            "roblox": [
-                { code: "FREENGNBOI", desc: "Nguyen Boi Bundle" },
-                { code: "FREENGNGON", desc: "Nguyen Gon Bundle" },
-                { code: "SPIDERCOLA", desc: "Spider Cola Pet" },
-                { code: "TWEETROBLOX", desc: "The Bird Says Pet" }
-            ],
-            "call of duty mobile": [
-                { code: "DCEPZBZKFD", desc: "Prey & Predator Crate x3" },
-                { code: "DCCKZBZNB5", desc: "Random Rewards" },
-                { code: "DCCJZBZN4J", desc: "Random Rewards" }
-            ],
-            "pubg mobile": [
-                { code: "PUBGMBRAUC", desc: "Brazil Championship Outfit" },
-                { code: "CMCKZBZBAW", desc: "Sea Breeze Mythic Voucher" },
-                { code: "PGMB20", desc: "3,000 Silver Fragments" }
-            ],
-            "clash of clans": [
-                { code: "WHENHOGSFLY!", desc: "Flying Royal Hogs Emote" },
-                { code: "REINABARRIGA", desc: "Snoring Dragon Banner Set" },
-                { code: "ROYALEAFFAIR", desc: "Royale Affair Goblin Emote" }
-            ],
-            "candy crush saga": [{ code: "NO ACTIVE CODES", desc: "King Account Sync Gifts" }],
-            "coin master": [{ code: "NO ACTIVE CODES", desc: "Social Spin Links Only" }],
-            "pokemon go": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "royal match": [{ code: "NO ACTIVE CODES", desc: "In-App Events Only" }],
-            "monopoly go": [{ code: "NO ACTIVE CODES", desc: "Direct Dice Links Only" }],
-            "brawl stars": [
-                { code: "ITSSUSHITIME", desc: "Content Creator Boost" },
-                { code: "SAKURASPIKE!", desc: "Content Creator Boost" },
-                { code: "BOBAPARTYYYY", desc: "Content Creator Boost" }
-            ],
-            "honkai star rail": [
-                { code: "VS3Q5VK9CMFP", desc: "50 Stellar Jade, 10K Credits" },
-                { code: "QS395DJQU4HK", desc: "60 Stellar Jade" },
-                { code: "BladeFitCheck", desc: "3 Traveler's Guide, 2 Cold Joke" }
-            ],
-            "afk arena": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "rise of kingdoms": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "evony": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "clash royale": [
-                { code: "ROYALEAFFAIR", desc: "Royale Affair Goblin emote" },
-                { code: "FIREANDICE!!", desc: "Banner decoration & frame" },
-                { code: "TRUSTYTURRET", desc: "Hero Musketeer emote" }
-            ],
-            "summoners war": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "township": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "gardenscapes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "homescapes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "fishdom": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "empires & puzzles": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "marvel strike force": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "star wars galaxy of heroes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "raid shadow legends": [
-                { code: "RAIDTOGETHER", desc: "Free Energy & Silver" },
-                { code: "2GTLUCKY2026", desc: "Special June Free Rewards" },
-                { code: "midgamejoke", desc: "50 Battles, 100k Silver" }
-            ],
-            "diablo immortal": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "clash of kings": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "mobile legends": [
-                { code: "HOLAMLBB", desc: "New-player welcome rewards" },
-                { code: "MLBBRISING", desc: "Emblem Fragments & Magic Dust" },
-                { code: "CZBR5822335", desc: "1,000 Diamonds & 10 Scrolls" }
-            ],
-            "garena free fire": [{ code: "NO ACTIVE CODES", desc: "Region-Locked System" }],
-            "asphalt 9": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "subway surfers": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "among us": [{ code: "NO ACTIVE CODES", desc: "Cosmetic Drops Only" }],
-            "minecraft": [{ code: "NO ACTIVE CODES", desc: "Marketplace Events Only" }]
         };
 
         const INITIAL_LEDGER = [
@@ -283,15 +198,21 @@
                     });
 
                     const data = await response.json();
+                    const fullText = data.response || "No data received.";
+                    
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    const extractedUrls = fullText.match(urlRegex);
+                    const linkUrl = extractedUrls ? extractedUrls[0] : null;
+                    const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
                     setSearchResult({ 
                         game: searchInput.toUpperCase(), 
-                        codes: [{ code: "VERIFIED", desc: data.response }] 
+                        codes: [{ code: "VERIFIED", desc: cleanDesc, link: linkUrl }] 
                     });
                 } catch (error) {
                     setSearchResult({ 
                         game: "CONNECTION ERROR", 
-                        codes: [{ code: "ERROR", desc: "Cannot reach backend: " + error.message }] 
+                        codes: [{ code: "ERROR", desc: "Cannot reach backend: " + error.message, link: null }] 
                     });
                 }
                 
@@ -299,8 +220,10 @@
             };
 
             const closeModal = () => {
-    setVerificationResult(null);
-};
+                setSearchResult(null);
+                setShowModal(false);
+                setAiState("idle");
+            };
 
             const copyCode = (e, codeText) => {
                 e.preventDefault(); 
@@ -321,7 +244,16 @@
                             <div className="modal-box">
                                 {aiState === "searching" && (
                                     <div className="fade-in">
-                                        <div className="status-dot" style={{width: '24px', height: '24px', margin: '0 auto 20px', boxShadow: '0 0 15px #40e0d0'}}></div>
+                                        <video 
+                                            autoPlay 
+                                            loop 
+                                            muted 
+                                            playsInline 
+                                            style={{ width: '120px', height: '120px', margin: '0 auto 20px', display: 'block', borderRadius: '50%', boxShadow: '0 0 20px rgba(57, 255, 20, 0.4)' }}
+                                        >
+                                            <source src="logo-animation.mp4" type="video/mp4" />
+                                        </video>
+                                        
                                         <h2 style={{color:'white', margin: '0 0 10px 0'}}>AI ENGINE ACTIVE</h2>
                                         <div className="ai-processing">SCANNING WEB DATABASES...</div>
                                         <div className="ai-terminal-log">
@@ -338,7 +270,13 @@
                                             <div key={index} className="code-card">
                                                 <div className="ai-result-desc">{c.desc}</div>
                                                 <div className="ai-result-code">{c.code}</div>
-                                                <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
+                                                {c.link ? (
+                                                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="claim-btn">
+                                                        CLICK TO CLAIM DEAL
+                                                    </a>
+                                                ) : (
+                                                    <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
+                                                )}
                                             </div>
                                         ))}
                                         <button className="submit-action-btn" onClick={closeModal} style={{position: 'sticky', bottom: 0, zIndex: 5}}>ACKNOWLEDGE & CLOSE</button>
