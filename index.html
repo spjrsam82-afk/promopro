@@ -112,7 +112,25 @@
         .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0a192f 0%, #050b14 100%); padding: 10px; box-sizing: border-box; }
         .game-node-text { font-size: 16px; font-weight: 900; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
         .game-node-sub { font-size: 9px; color: #64748b; margin-top: 4px; letter-spacing: 3px; font-family: monospace; }
-    </style>
+    <style>
+    /* ... your existing CSS ... */
+
+    /* ADD THIS AT THE BOTTOM OF THE STYLE BLOCK: */
+    @keyframes spin { 
+        0% { transform: rotate(0deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
+        50% { transform: rotate(180deg); filter: drop-shadow(0 0 25px #f97316) brightness(1.5); }
+        100% { transform: rotate(360deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
+    }
+
+    .promo-pro-spinning-logo { 
+        width: 140px; 
+        height: 140px; 
+        margin: 0 auto 20px; 
+        display: block; 
+        animation: spin 4s linear infinite;
+        object-fit: contain;
+    }
+</style>
 </head>
 <body>
     <div id="root"></div>
