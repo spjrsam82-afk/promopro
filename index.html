@@ -4,17 +4,18 @@
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>PromoPro Dashboard</title>
+    <title>PromoPro Matrix</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         * { box-sizing: border-box; }
         body { 
-            background: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed; 
+            /* High-res blurred room background to match your mockup's environment */
+            background: url('https://images.unsplash.com/photo-1542831371229-5be10f0c0b11?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
             background-size: cover;
             color: #ffffff; 
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
             padding: 0; 
         }
@@ -24,25 +25,27 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: row; 
-            background: rgba(2, 6, 23, 0.7); 
+            background: rgba(4, 9, 20, 0.6); /* Tint to make the UI pop */
         }
 
+        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
-            #root { flex-direction: column; height: auto; }
-            .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(64, 224, 208, 0.3) !important; padding: 15px !important; }
+            #root { flex-direction: column; }
+            .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(57, 255, 20, 0.3) !important; padding: 15px !important; }
             .sidebar-logo { margin-bottom: 10px !important; width: 100%; justify-content: center; }
             .nav-item { padding: 8px 15px !important; margin-bottom: 5px !important; font-size: 13px; }
-            .main-content { padding: 15px !important; }
-            .dashboard-window { padding: 20px !important; }
+            .main-content { padding: 10px !important; }
+            .dashboard-window { padding: 15px !important; border-width: 1px !important; }
             .search-box { flex-direction: column; width: 100% !important; }
             .search-btn { padding: 15px !important; width: 100%; }
         }
 
+        /* --- SIDEBAR --- */
         .sidebar {
-            width: 260px;
-            background: rgba(10, 25, 47, 0.7);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(64, 224, 208, 0.3);
+            width: 250px;
+            background: rgba(10, 25, 40, 0.85);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
@@ -54,38 +57,38 @@
         }
 
         .sidebar-logo {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 900;
-            letter-spacing: 2px;
-            color: #40e0d0; 
+            letter-spacing: 1px;
+            color: #ffffff;
             display: flex;
             align-items: center;
             margin-bottom: 40px;
-            text-shadow: 0 0 10px rgba(64, 224, 208, 0.5);
         }
-        .sidebar-logo span { color: #f97316; margin-right: 5px; text-shadow: 0 0 10px rgba(249, 115, 22, 0.5); }
+        .sidebar-logo span { color: #39ff14; margin-right: 8px; font-size: 28px; }
 
         .nav-item {
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
             border-radius: 8px;
             color: #a1a1aa;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 15px;
         }
         .nav-item:hover, .nav-item.active {
-            background: rgba(64, 224, 208, 0.1);
-            color: #40e0d0;
-            border-left: 4px solid #f97316; 
+            background: rgba(57, 255, 20, 0.15);
+            color: #39ff14;
         }
 
+        /* --- MAIN CONTENT & THE MASSIVE GLASS WINDOW --- */
         .main-content {
             flex: 1;
-            padding: 40px;
+            padding: 30px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -93,112 +96,134 @@
 
         .dashboard-window {
             width: 100%;
-            max-width: 1200px;
-            background: rgba(6, 15, 28, 0.75);
+            max-width: 950px;
+            background: rgba(12, 24, 36, 0.85);
             backdrop-filter: blur(25px);
-            border: 1px solid rgba(64, 224, 208, 0.4);
+            border: 2px solid #39ff14; /* THE BOLD NEON GREEN BORDER */
             border-radius: 16px;
-            box-shadow: 0 0 30px rgba(64, 224, 208, 0.15);
-            padding: 40px;
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(57, 255, 20, 0.1);
+            padding: 30px;
             display: flex;
             flex-direction: column;
             gap: 25px;
             position: relative;
         }
 
+        /* HEADER / SEARCH AREA */
         .window-header {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(64, 224, 208, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 20px;
             gap: 15px;
         }
-        .window-title { font-size: 22px; font-weight: 900; color: #ffffff; margin: 0; }
+        .window-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0; }
 
         .search-box {
             display: flex;
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid #40e0d0;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #39ff14;
             border-radius: 8px;
             overflow: hidden;
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
         }
         .search-input {
-            flex: 1; background: transparent; border: none; color: #40e0d0; padding: 12px 20px; font-family: monospace; font-size: 16px; outline: none;
+            flex: 1; background: transparent; border: none; color: #39ff14; padding: 12px 20px; font-family: monospace; font-size: 16px; outline: none; font-weight: bold;
         }
-        .search-input::placeholder { color: rgba(64, 224, 208, 0.5); }
+        .search-input::placeholder { color: rgba(57, 255, 20, 0.5); }
         .search-btn {
-            background: #f97316; color: #ffffff; border: none; padding: 0 25px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            background: #39ff14; color: #000000; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-        .search-btn:hover { background: #40e0d0; color: #020617; }
+        .search-btn:hover { background: #ffffff; }
 
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        /* --- HORIZONTAL STACKED CARDS (1:1 with mockup) --- */
+        .results-list {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
         }
 
-        .compact-card {
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(64, 224, 208, 0.3);
+        .horizontal-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(57, 255, 20, 0.4);
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            gap: 15px;
             transition: 0.3s;
+            position: relative;
         }
-        .compact-card:hover {
-            box-shadow: 0 0 20px rgba(64, 224, 208, 0.3);
-            border-color: #40e0d0;
-            transform: translateY(-5px);
+        .horizontal-card:hover {
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+            border-color: #39ff14;
         }
 
-        /* Image styling adjusted to fit real game icons perfectly */
+        .card-top-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         .card-image {
-            width: 100%;
-            height: 180px;
+            width: 70px;
+            height: 70px;
             border-radius: 8px;
-            object-fit: contain; /* Keeps entire logos visible */
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 15px;
-            padding: 10px;
+            object-fit: contain;
+            background: #ffffff; /* White background makes real logos pop */
+            padding: 5px;
         }
 
-        .card-title { font-size: 18px; font-weight: 900; color: #ffffff; margin: 0 0 8px 0; text-align: center;}
-        .card-desc { font-size: 13px; color: #a1a1aa; margin: 0 0 15px 0; text-align: center; flex-grow: 1; line-height: 1.4; }
+        .card-details {
+            flex: 1;
+        }
+        .card-subtext { color: #39ff14; font-size: 12px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
+        .card-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
+        .card-desc { font-size: 14px; color: #a1a1aa; margin: 0; }
 
+        .card-icons {
+            font-size: 20px;
+            display: flex;
+            gap: 10px;
+            color: #ffd700;
+        }
+
+        /* FULL WIDTH GREEN BUTTON (Matches mockup) */
         .claim-btn {
             width: 100%;
-            background: linear-gradient(90deg, #40e0d0, #00b3cc);
-            color: #020617;
+            background: #39ff14;
+            color: #000000;
             border: none;
-            padding: 12px;
+            padding: 14px;
             font-weight: 900;
-            font-size: 14px;
+            font-size: 16px;
             text-transform: uppercase;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
             transition: 0.3s;
             letter-spacing: 1px;
-            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
-        .claim-btn:hover { background: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.6); color: #ffffff; }
+        .claim-btn:hover { background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        .claim-btn::after { content: '✎'; font-size: 14px; } /* Little pencil icon from mockup */
 
         .copy-btn {
-            width: 100%; background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid #f97316; padding: 12px; font-weight: 900; font-size: 14px; text-transform: uppercase; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: auto;
+            width: 100%; background: transparent; color: #39ff14; border: 1px solid #39ff14; padding: 14px; font-weight: 900; font-size: 16px; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: 0.3s; text-align: center;
         }
-        .copy-btn:hover { background: #f97316; color: #020617; }
+        .copy-btn:hover { background: #39ff14; color: #000000; }
 
-        /* --- YOUR CUSTOM IMAGE SPINNER IS BACK --- */
+        /* --- THE ANIMATION YOU UPLOADED --- */
         .searching-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(2, 6, 23, 0.95);
+            background: rgba(10, 25, 40, 0.95);
             border-radius: 16px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 50;
@@ -207,10 +232,10 @@
         
         @keyframes customSpin { 100% { transform: rotate(360deg); } }
         .spinning-logo { 
-            width: 140px; 
-            height: 140px; 
+            width: 120px; 
+            height: 120px; 
             animation: customSpin 4s linear infinite; 
-            filter: drop-shadow(0 0 20px #40e0d0); 
+            filter: drop-shadow(0 0 20px #39ff14); 
             margin-bottom: 25px; 
             object-fit: contain;
         }
@@ -223,14 +248,14 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // REAL OFFICIAL LOGOS AND APP STORE IMAGES LOADED
+        // ACTUAL OFFICIAL LOGOS FOR ALL AFFILIATES
         const INITIAL_LEDGER = [
-            { id: 101, store: "GAMIVO", category: "GAMING", desc: "Massive Discounts on Steam, Xbox & PSN Keys!", url: "YOUR_GAMIVO_AFFILIATE_LINK_HERE", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
-            { id: 102, store: "GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games.", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
-            { id: 103, store: "Whiteout Survival", category: "GAMING", desc: "Claim 100 Gems & Daily Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
-            { id: 104, store: "Merge Dragons!", category: "GAMING", desc: "New Player Bonus & Camp Resources", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
+            { id: 101, store: "GAMIVO", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
+            { id: 102, store: "GameFly", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
+            { id: 103, store: "Whiteout Survival", category: "GAMING", desc: "100 Gems & Daily Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
+            { id: 104, store: "Merge Dragons!", category: "GAMING", desc: "New Player Bonus & Resources", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
             { id: 105, store: "State of Survival", category: "GAMING", desc: "1000 Biocaps & Speedups", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "SOS2026", isGame: true },
-            { id: 106, store: "Golf Rival", category: "GAMING", desc: "Free Gems & Legendary Club Chest", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", isGame: true },
+            { id: 106, store: "GearUP", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GEARUP_LINK", img: "https://play-lh.googleusercontent.com/13_0XG569EaR-F8EHK_XnI_d6q8y1qN_bX4x1H6C5KxK2e3N3K5H_e9t7A7s2Q=w240-h480-rw", isGame: false },
             { id: 107, store: "Idle Outpost", category: "GAMING", desc: "Scavenger Boosts & Caps", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: true },
             { id: 108, store: "JustPlay", category: "EXCLUSIVES", desc: "Play Games & Earn Real Rewards", url: "YOUR_JUSTPLAY_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: false }
         ];
@@ -246,7 +271,7 @@
                 setAiState("searching");
                 setDynamicResult(null);
 
-                // Forces 6 second animation of your custom logo
+                // Forces 6 second animation of YOUR exact logo
                 await new Promise(resolve => setTimeout(resolve, 6000));
 
                 const searchLower = searchInput.toLowerCase();
@@ -272,9 +297,9 @@
                     const linkUrl = extractedUrls ? extractedUrls[0] : null;
                     const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
-                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "logo.png", code: "VERIFIED" });
+                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "image_735d5d.png", code: "VERIFIED" });
                 } catch (error) {
-                    setDynamicResult({ store: "SYSTEM ERROR", desc: "Backend not reached. Please check server.", url: null, img: "logo.png", code: "ERROR" });
+                    setDynamicResult({ store: "SYSTEM ERROR", desc: "Backend not reached. Please check server.", url: null, img: "image_735d5d.png", code: "ERROR" });
                 }
                 setAiState("idle");
             };
@@ -292,8 +317,8 @@
             return (
                 <>
                     <div className="sidebar">
-                        <div className="sidebar-logo"><span>>_</span>PromoPro</div>
-                        <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>🏠 Dashboard</div>
+                        <div className="sidebar-logo"><span>P</span>PromoPro</div>
+                        <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>🏠 Home</div>
                         <div className={`nav-item ${activeFilter === "GAMING" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("GAMING"); setDynamicResult(null);}}>🎮 Gaming</div>
                         <div className={`nav-item ${activeFilter === "EXCLUSIVES" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("EXCLUSIVES"); setDynamicResult(null);}}>🔒 Exclusives</div>
                         <div className={`nav-item ${activeFilter === "TRAVEL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("TRAVEL"); setDynamicResult(null);}}>✈️ Travel</div>
@@ -302,17 +327,17 @@
                     <div className="main-content">
                         <div className="dashboard-window">
                             
-                            {/* YOUR CUSTOM UPLOADED LOGO IS BACK HERE */}
+                            {/* EXPLICITLY CALLS YOUR UPLOADED IMAGE FILE */}
                             {aiState === "searching" && (
                                 <div className="searching-overlay">
-                                    <img src="logo.png" className="spinning-logo" alt="Scanning..." />
-                                    <h2 style={{color: '#40e0d0', letterSpacing: '2px', textShadow: '0 0 10px rgba(64, 224, 208, 0.5)'}}>AI SCAN IN PROGRESS</h2>
-                                    <p style={{fontFamily: 'monospace', color: '#f97316'}}>BYPASSING ENCRYPTION & EXTRACTING NODES...</p>
+                                    <img src="image_735d5d.png" className="spinning-logo" alt="Scanning..." />
+                                    <h2 style={{color: '#39ff14', letterSpacing: '2px'}}>AI ENGINE ACTIVE</h2>
+                                    <p style={{fontFamily: 'monospace', color: '#94a3b8'}}>SCANNING DATABASES...</p>
                                 </div>
                             )}
 
                             <div className="window-header">
-                                <h1 className="window-title">System Database</h1>
+                                <h1 className="window-title">AI Promo Results</h1>
                                 <div className="search-box">
                                     <input 
                                         className="search-input" 
@@ -325,19 +350,27 @@
                                 </div>
                             </div>
 
-                            <div className="results-grid">
+                            <div className="results-list">
                                 {displayedLedger.map((p, index) => (
-                                    <div className="compact-card" key={p.id || index}>
-                                        <img src={p.img} alt={p.store} className="card-image" />
-                                        <h3 className="card-title">{p.store}</h3>
-                                        <p className="card-desc">{p.desc}</p>
+                                    <div className="horizontal-card" key={p.id || index}>
+                                        <div className="card-top-row">
+                                            <img src={p.img} alt={p.store} className="card-image" />
+                                            <div className="card-details">
+                                                <div className="card-subtext">AI Verified Node</div>
+                                                <h3 className="card-title">{p.store}</h3>
+                                                <p className="card-desc">{p.desc}</p>
+                                            </div>
+                                            <div className="card-icons">
+                                                🪙 🛒
+                                            </div>
+                                        </div>
                                         
                                         {p.url && p.url !== "#" ? (
                                             <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
                                         ) : p.code ? (
-                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY: {p.code}</button>
+                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY CODE: {p.code}</button>
                                         ) : (
-                                            <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#a1a1aa', borderColor: '#a1a1aa'}}>NO CODES</button>
+                                            <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>NO CODES AVAILABLE</button>
                                         )}
                                     </div>
                                 ))}
