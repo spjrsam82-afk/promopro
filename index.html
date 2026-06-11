@@ -55,17 +55,35 @@
         .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
         @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
         
-        /* SPINNER ANIMATION FOR LOGO */
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .spinning-logo { width: 120px; height: 120px; margin: 0 auto 20px; display: block; border-radius: 50%; box-shadow: 0 0 25px rgba(57, 255, 20, 0.5); animation: spin 2s linear infinite; object-fit: cover; border: 2px solid #39ff14; }
-
         .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        
+        /* ORIGINAL POSTER CARD (Kept for layout) */
         .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
         
-        .poster-card:hover { 
+        /* NEW GLASSMORPHISM AND NEON EFFECTS */
+        .glass-card {
+            background: rgba(10, 25, 47, 0.7) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(57, 255, 20, 0.3) !important;
+            border-radius: 16px !important;
+            padding: 20px !important;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        
+        @keyframes neon-glow {
+            0%, 100% { border-color: rgba(57, 255, 20, 0.5); box-shadow: 0 0 10px rgba(57, 255, 20, 0.3); }
+            50% { border-color: rgba(249, 115, 22, 0.8); box-shadow: 0 0 20px rgba(249, 115, 22, 0.5); }
+        }
+        
+        .neon-border {
+            animation: neon-glow 3s infinite;
+        }
+
+        .poster-card:hover, .glass-card:hover { 
             transform: translateY(-8px); 
-            border-color: #ffffff; 
+            border-color: #ffffff !important; 
             box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); 
+            animation: none; /* Stops pulsing on hover so it pops white */
         }
 
         .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #050b14; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: center; }
@@ -80,10 +98,31 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
 
-        /* UPGRADED CLAIM BUTTON */
-        @keyframes buttonPulse { 0% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); } 50% { box-shadow: 0 0 25px rgba(57, 255, 20, 0.8); } 100% { box-shadow: 0 0 10px rgba(57, 255, 20, 0.4); } }
-        .claim-btn { display: block; width: 100%; text-decoration: none; background: #39ff14; color: #050b14; padding: 18px; font-weight: 900; border-radius: 6px; margin-top: 15px; font-family: monospace; font-size: 18px; text-transform: uppercase; text-align: center; transition: 0.3s; border: 1px solid #39ff14; animation: buttonPulse 2s infinite; letter-spacing: 1px; }
-        .claim-btn:hover { background: #ffffff; color: #39ff14; animation: none; box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+        /* NEW PREMIUM CLAIM BUTTON */
+        .premium-claim-btn {
+            background: linear-gradient(90deg, #39ff14, #f97316);
+            color: #050b14;
+            font-weight: 900;
+            padding: 18px 24px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            font-family: monospace;
+            font-size: 18px;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+        .premium-claim-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
+            color: #050b14;
+        }
 
         .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
 
@@ -94,7 +133,6 @@
         .modal-scroll-area::-webkit-scrollbar-track { background: #050b14; border-radius: 4px; }
         .modal-scroll-area::-webkit-scrollbar-thumb { background-color: #f97316; border-radius: 4px; }
         
-        /* UPGRADED VERIFIED CARD */
         .code-card { background: #020617; border: 1px solid #1e293b; border-left: 5px solid #39ff14; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .ai-result-desc { font-size: 15px; color: #cbd5e1; margin-bottom: 12px; font-weight: 500; line-height: 1.5; }
         .ai-result-code { display: inline-block; background: rgba(57, 255, 20, 0.1); font-size: 14px; color: #39ff14; font-weight: bold; letter-spacing: 2px; padding: 6px 12px; border-radius: 4px; border: 1px solid rgba(57, 255, 20, 0.3); font-family: monospace; word-break: break-all; }
@@ -112,25 +150,23 @@
         .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0a192f 0%, #050b14 100%); padding: 10px; box-sizing: border-box; }
         .game-node-text { font-size: 16px; font-weight: 900; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
         .game-node-sub { font-size: 9px; color: #64748b; margin-top: 4px; letter-spacing: 3px; font-family: monospace; }
-    <style>
-    /* ... your existing CSS ... */
 
-    /* ADD THIS AT THE BOTTOM OF THE STYLE BLOCK: */
-    @keyframes spin { 
-        0% { transform: rotate(0deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
-        50% { transform: rotate(180deg); filter: drop-shadow(0 0 25px #f97316) brightness(1.5); }
-        100% { transform: rotate(360deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
-    }
+        /* CORRECTED SPINNER ANIMATION FOR LOGO */
+        @keyframes spin { 
+            0% { transform: rotate(0deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
+            50% { transform: rotate(180deg); filter: drop-shadow(0 0 25px #f97316) brightness(1.5); }
+            100% { transform: rotate(360deg); filter: drop-shadow(0 0 10px #39ff14) brightness(1.2); }
+        }
 
-    .promo-pro-spinning-logo { 
-        width: 140px; 
-        height: 140px; 
-        margin: 0 auto 20px; 
-        display: block; 
-        animation: spin 4s linear infinite;
-        object-fit: contain;
-    }
-</style>
+        .promo-pro-spinning-logo { 
+            width: 140px; 
+            height: 140px; 
+            margin: 0 auto 20px; 
+            display: block; 
+            animation: spin 4s linear infinite;
+            object-fit: contain;
+        }
+    </style>
 </head>
 <body>
     <div id="root"></div>
@@ -270,7 +306,7 @@
                                 {aiState === "searching" && (
                                     <div className="fade-in">
                                         {/* CSS SPINNER USING YOUR ACTUAL UPLOADED IMAGE */}
-                                        <img src="1781102482198.png" className="spinning-logo" alt="Scanning..." />
+                                        <img src="logo.png" className="promo-pro-spinning-logo" alt="Scanning..." />
                                         
                                         <h2 style={{color:'white', margin: '0 0 10px 0', textAlign: 'center'}}>AI ENGINE ACTIVE</h2>
                                         <div className="ai-processing">SCANNING WEB DATABASES...</div>
@@ -289,7 +325,7 @@
                                                 <div className="ai-result-desc">{c.desc}</div>
                                                 <div className="ai-result-code">NODE: {c.code}</div>
                                                 {c.link ? (
-                                                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="claim-btn">
+                                                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="premium-claim-btn">
                                                         CLICK TO CLAIM DEAL
                                                     </a>
                                                 ) : (
@@ -346,7 +382,7 @@
 
                     <div className="media-grid">
                         {displayedLedger.map(p => (
-                            <a className="poster-card" key={p.id} href={p.url}>
+                            <a className="poster-card glass-card neon-border" key={p.id} href={p.url}>
                                 <div className="poster-img-box">
                                     <CardMedia src={p.img} label={p.store} isGame={p.isGame} />
                                 </div>
