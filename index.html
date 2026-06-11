@@ -4,170 +4,235 @@
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>PromoPro Matrix</title>
+    <title>PromoPro Dashboard</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        /* BASE & BACKGROUND */
         * { box-sizing: border-box; }
         body { 
-            /* Deep, dark atmospheric gradient background */
-            background: radial-gradient(circle at top center, #0a192f 0%, #020617 100%); 
-            background-attachment: fixed;
+            /* High-res Space/Sci-fi Background to match your mockup */
+            background: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed; 
+            background-size: cover;
             color: #ffffff; 
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
-            overflow-x: hidden; 
-            touch-action: manipulation; 
-        }
-        #root { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* GLASSMORPHISM & NEON EFFECTS (Applied globally) */
-        .glass-card {
-            background: rgba(10, 25, 47, 0.4) !important;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(57, 255, 20, 0.3) !important;
-            border-radius: 16px !important;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            overflow: hidden; /* Keeps it feeling like a desktop app */
         }
         
-        @keyframes neon-glow {
-            0%, 100% { border-color: rgba(57, 255, 20, 0.4); box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
-            50% { border-color: rgba(249, 115, 22, 0.8); box-shadow: 0 0 25px rgba(249, 115, 22, 0.4); }
-        }
-        
-        .neon-border {
-            animation: neon-glow 4s infinite;
-        }
-
-        /* HEADER / NAV (Now with frosted glass) */
-        .rt-top-nav-wrapper { 
-            background: rgba(2, 6, 23, 0.6); 
-            backdrop-filter: blur(20px); 
-            border-bottom: 1px solid rgba(57, 255, 20, 0.2); 
+        #root { 
             width: 100%; 
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            height: 100vh; 
+            display: flex; 
+            background: rgba(2, 6, 23, 0.5); /* Darkens the background slightly so UI pops */
         }
-        .rt-top-nav { display: flex; justify-content: center; align-items: center; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .rt-logo-container { display: flex; flex-direction: column; align-items: center; }
-        .rt-logo { font-size: 38px; font-weight: 900; letter-spacing: 4px; line-height: 1; text-transform: uppercase; font-family: monospace; color: #ffffff; text-shadow: 0 0 20px rgba(57, 255, 20, 0.5); }
-        .rt-logo span { color: #f97316; text-shadow: 0 0 20px rgba(249, 115, 22, 0.5); }
-        .ai-badge { color: #f97316; font-size: 13px; font-weight: 800; letter-spacing: 8px; margin-top: 10px; border: 1px solid rgba(249, 115, 22, 0.5); padding: 6px 16px; border-radius: 4px; background: rgba(249, 115, 22, 0.1); text-transform: uppercase; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
-        
-        /* CATEGORY PILLS */
-        .pill-container { display: flex; gap: 15px; padding: 25px 15px; width: 100%; justify-content: center; flex-wrap: wrap; }
-        .pill { background: rgba(10, 25, 47, 0.6); backdrop-filter: blur(10px); color: #39ff14; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid rgba(57, 255, 20, 0.3); transition: 0.3s; text-align: center; white-space: nowrap; user-select: none; font-family: monospace; letter-spacing: 1px; }
-        .pill:hover, .pill.active { background: #39ff14; color: #020617; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6); border-color: #39ff14; transform: translateY(-2px); }
-        
-        /* SEARCH / VERIFY BAR (Now perfectly matches the glass theme) */
-        .verify-bar-wrapper { width: 100%; padding: 10px 15px 30px 15px; }
-        .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
-        
-        /* Applied glass-card and neon-border directly to the search bar */
-        .verify-bar { display: flex; width: 100%; max-width: 800px; overflow: hidden; padding: 0 !important; transition: 0.3s; }
-        .verify-bar:focus-within { box-shadow: 0 0 30px rgba(57, 255, 20, 0.6); border-color: #39ff14 !important; }
 
-        .verify-input { flex: 1; background: transparent; border: none; color: #39ff14; padding: 18px 25px; font-family: monospace; font-size: 18px !important; outline: none; width: 100%; touch-action: manipulation; font-weight: bold; }
-        .verify-input::placeholder { color: rgba(57, 255, 20, 0.4); font-size: 16px; }
-        
-        .verify-btn { background: linear-gradient(90deg, #39ff14, #0ca60c); color: #020617; border: none; padding: 0 35px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; flex-shrink: 0; font-size: 16px; letter-spacing: 2px; }
-        .verify-btn:hover { filter: brightness(1.3); box-shadow: -10px 0 20px rgba(57, 255, 20, 0.4); }
-
-        .verify-status { margin-top: 15px; font-family: monospace; font-size: 12px; color: #39ff14; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; text-transform: uppercase; letter-spacing: 1px; }
-        .status-dot { width: 8px; height: 8px; background-color: #39ff14; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; box-shadow: 0 0 10px #39ff14; }
-        @keyframes pulse { 0% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.3); } 100% { opacity: 0.3; transform: scale(1); } }
-        
-        /* LOGO SPINNER */
-        @keyframes spin { 
-            0% { transform: rotate(0deg); filter: drop-shadow(0 0 15px #39ff14) brightness(1.2); }
-            50% { transform: rotate(180deg); filter: drop-shadow(0 0 30px #f97316) brightness(1.5); }
-            100% { transform: rotate(360deg); filter: drop-shadow(0 0 15px #39ff14) brightness(1.2); }
+        /* --- SIDEBAR LAYOUT (Left Menu) --- */
+        .sidebar {
+            width: 260px;
+            background: rgba(10, 25, 47, 0.6);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(57, 255, 20, 0.3);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            height: 100vh;
         }
-        .promo-pro-spinning-logo { width: 150px; height: 150px; margin: 0 auto 25px; display: block; animation: spin 4s linear infinite; object-fit: contain; }
 
-        /* GRID & CARDS */
-        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px; padding: 20px 20px 60px 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
-        
-        .poster-card { 
-            text-decoration: none; color: #ffffff; cursor: pointer; display: flex; flex-direction: column; transition: 0.4s ease-out; padding: 20px !important;
-        }
-        .poster-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(57, 255, 20, 0.3); border-color: #39ff14 !important; animation: none; }
-
-        .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 20px; background: rgba(2, 6, 23, 0.8); border: 1px solid rgba(57, 255, 20, 0.2); display: flex; align-items: center; justify-content: center; }
-        .poster-title { font-size: 24px; font-weight: 900; margin: 0 0 10px 0; color: #ffffff; text-align: center; letter-spacing: 1px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
-        .poster-desc { font-size: 14px; color: #a1a1aa; margin-bottom: 20px; text-align: center; font-weight: 500; line-height: 1.5; flex-grow: 1; }
-        
-        .copy-btn { width: 100%; background: rgba(249, 115, 22, 0.1); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.5); padding: 12px; font-weight: bold; font-family: monospace; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .copy-btn:hover { background: #f97316; color: #020617; box-shadow: 0 0 20px rgba(249, 115, 22, 0.6); }
-
-        /* THE PREMIUM CLAIM BUTTON YOU REQUESTED */
-        .premium-claim-btn {
-            background: linear-gradient(90deg, #39ff14, #f97316);
-            color: #050b14;
+        .sidebar-logo {
+            font-size: 28px;
             font-weight: 900;
-            padding: 16px 24px;
+            letter-spacing: 2px;
+            color: #39ff14;
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+        }
+        .sidebar-logo span { color: #ffffff; margin-right: 10px; }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin-bottom: 10px;
             border-radius: 8px;
-            text-transform: uppercase;
-            transition: 0.3s;
-            border: none;
+            color: #a1a1aa;
+            font-weight: bold;
             cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(57, 255, 20, 0.1);
+            color: #39ff14;
+            border-left: 4px solid #39ff14;
+        }
+
+        /* --- MAIN DASHBOARD AREA (Right Side) --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-y: auto;
+        }
+
+        /* THE MASSIVE GLASS WINDOW */
+        .dashboard-window {
             width: 100%;
-            display: block;
+            max-width: 1200px;
+            background: rgba(6, 15, 28, 0.7);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(57, 255, 20, 0.5);
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(57, 255, 20, 0.2);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* HEADER / SEARCH AREA INSIDE WINDOW */
+        .window-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(57, 255, 20, 0.2);
+            padding-bottom: 20px;
+        }
+        .window-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .search-box {
+            display: flex;
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid #39ff14;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 400px;
+        }
+        .search-input {
+            flex: 1; background: transparent; border: none; color: #39ff14; padding: 12px 20px; font-family: monospace; font-size: 16px; outline: none;
+        }
+        .search-btn {
+            background: #39ff14; color: #020617; border: none; padding: 0 20px; font-weight: 900; cursor: pointer; transition: 0.3s;
+        }
+        .search-btn:hover { filter: brightness(1.2); }
+
+        /* --- HORIZONTAL CARDS (Matching your picture) --- */
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .horizontal-card {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(57, 255, 20, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+        }
+        .horizontal-card:hover {
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+            border-color: #39ff14;
+        }
+
+        .card-top-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-details {
+            flex: 1;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #ffffff;
+            margin: 0 0 5px 0;
+        }
+        .card-desc {
+            font-size: 14px;
+            color: #a1a1aa;
+            margin: 0;
+        }
+
+        .card-stats {
+            color: #39ff14;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        /* MASSIVE GREEN CLAIM BUTTON */
+        .claim-btn {
+            width: 100%;
+            background: #39ff14;
+            color: #020617;
+            border: none;
+            padding: 15px;
+            font-weight: 900;
+            font-size: 16px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
             text-align: center;
             text-decoration: none;
-            font-family: monospace;
-            font-size: 18px;
-            letter-spacing: 1.5px;
-            margin-top: 15px;
+            transition: 0.3s;
+            letter-spacing: 1px;
         }
-        .premium-claim-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
-            color: #050b14;
+        .claim-btn:hover {
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
         }
 
-        .auto-routed-badge { background: rgba(2, 6, 23, 0.8); color: #39ff14; padding: 12px; text-align: center; border-radius: 8px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; border: 1px dashed rgba(57, 255, 20, 0.4); }
-
-        /* MODAL / TERMINAL (Now Glassmorphic) */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
-        
-        .modal-box { 
-            width: 100%; max-width: 550px; max-height: 85vh; 
-            display: flex; flex-direction: column; box-sizing: border-box; 
+        .copy-btn {
+            width: 100%;
+            background: rgba(57, 255, 20, 0.1);
+            color: #39ff14;
+            border: 1px solid #39ff14;
+            padding: 15px;
+            font-weight: 900;
+            font-size: 16px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        
-        .modal-scroll-area { overflow-y: auto; flex-grow: 1; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #39ff14 rgba(2, 6, 23, 0.5); }
-        .modal-scroll-area::-webkit-scrollbar { width: 6px; }
-        .modal-scroll-area::-webkit-scrollbar-track { background: rgba(2, 6, 23, 0.5); border-radius: 4px; }
-        .modal-scroll-area::-webkit-scrollbar-thumb { background-color: #39ff14; border-radius: 4px; }
-        
-        .code-card { background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(57, 255, 20, 0.2); border-left: 5px solid #39ff14; border-radius: 8px; padding: 20px; margin-bottom: 20px; text-align: left; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-        .ai-result-desc { font-size: 15px; color: #e2e8f0; margin-bottom: 15px; font-weight: 500; line-height: 1.5; }
-        .ai-result-code { display: inline-block; background: rgba(57, 255, 20, 0.1); font-size: 16px; color: #39ff14; font-weight: bold; letter-spacing: 2px; padding: 8px 16px; border-radius: 6px; border: 1px solid rgba(57, 255, 20, 0.4); font-family: monospace; word-break: break-all; }
-        
-        .submit-action-btn { width: 100%; background: transparent; color: #a1a1aa; border: 1px solid #3f3f46; padding: 16px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.3s; margin-top: 10px; flex-shrink: 0; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; }
-        .submit-action-btn:hover { background: rgba(249, 115, 22, 0.1); color: #f97316; border-color: #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.3); }
-        
-        .fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .copy-btn:hover { background: #39ff14; color: #020617; }
 
-        .ai-processing { color: #39ff14; font-family: monospace; font-size: 18px; margin: 20px 0; letter-spacing: 2px; text-align: center; font-weight: bold; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);}
-        .ai-terminal-log { color: #a1a1aa; font-family: monospace; font-size: 13px; line-height: 2; margin-bottom: 20px; text-align: center; }
-        .spacer { height: 100px; }
+        /* SEARCHING OVERLAY */
+        .searching-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(6, 15, 28, 0.9);
+            border-radius: 16px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 50;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); filter: drop-shadow(0 0 25px #39ff14) brightness(1.5); } }
+        .spinning-logo { width: 120px; height: 120px; animation: spin 4s linear infinite; filter: drop-shadow(0 0 10px #39ff14); margin-bottom: 20px; }
 
-        .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(10, 25, 47, 0.8) 0%, rgba(2, 6, 23, 0.9) 100%); padding: 10px; box-sizing: border-box; }
-        .game-node-text { font-size: 18px; font-weight: 900; font-family: monospace; letter-spacing: 3px; text-transform: uppercase; text-align: center; color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
-        .game-node-sub { font-size: 10px; color: #39ff14; margin-top: 8px; letter-spacing: 4px; font-family: monospace; }
-        
-        /* FOOTER */
-        .footer-area { text-align: center; padding: 40px 20px; color: #64748b; font-size: 12px; border-top: 1px solid rgba(57, 255, 20, 0.2); background: rgba(2, 6, 23, 0.8); backdrop-filter: blur(10px); }
-        .footer-area a { color: #f97316; text-decoration: none; font-weight: bold; transition: 0.3s; }
-        .footer-area a:hover { color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
     </style>
 </head>
 <body>
@@ -175,94 +240,41 @@
 
     <script type="text/babel">
         const { useState } = React;
-        
-        const CardMedia = ({ src, label, isGame }) => {
-            if (isGame && label !== "Merge Dragons!") {
-                return (
-                    <div className="game-node-badge">
-                        <div className="game-node-text">{label.replace(/[^\w\s]/gi, '')}</div>
-                        <div className="game-node-sub">SECURE NODE</div>
-                    </div>
-                );
-            }
-            return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
-        };
 
+        // Added gaming images so they are no longer blank!
         const INITIAL_LEDGER = [
-            { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 3, store: "⚙️ GearUP", category: "GAMING", desc: "Play Apex Legends with Lower Ping!", url: "https://www.kqzyfj.com/click-101761790-17235981", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 4, store: "⚙️ GearUP", category: "GAMING", desc: "Play Fortnite with Lower Ping & No Lag!", url: "https://www.anrdoezrs.net/click-101761790-17235980", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 5, store: "⚙️ GearUP", category: "GAMING", desc: "Less Lag, More Fun!", url: "https://www.jdoqocy.com/click-101761790-17235979", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 7, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Buy 1 get 1 free at Unice", url: "https://www.dpbolvw.net/click-101761790-15043134", img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 8, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$30 Off Orders Over $299 For Colored Wigs", url: "#", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 9, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Up To $60 Off", url: "https://www.jdoqocy.com/click-101761790-15509155", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 10, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Extended Fall Promo", url: "https://www.anrdoezrs.net/click-101761790-14566055", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 11, store: "🏡 Vrbo 1", category: "TRAVEL", desc: "Book your perfect beach house!", url: "https://www.kqzyfj.com/click-101761790-13394715", img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 12, store: "🏡 Vrbo 2", category: "TRAVEL", desc: "Find your ideal mountain retreat properties.", url: "https://www.kqzyfj.com/click-101761790-13394716", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 13, store: "🏡 Vrbo 3", category: "TRAVEL", desc: "Discover local city apartments and condo rentals.", url: "https://www.kqzyfj.com/click-101761790-13394717", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 18, store: "📹 Rexing AUX2", category: "EXCLUSIVES", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 19, store: "📹 Rexing Premium", category: "EXCLUSIVES", desc: "Secure 1456x180 infrastructure bundle.", url: "https://www.anrdoezrs.net/click-101761790-17226113", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 20, store: "📹 Rexing C2", category: "EXCLUSIVES", desc: "Direct Deployment: Rexing C2 system.", url: "https://www.anrdoezrs.net/click-101761790-17195890", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 26, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Custom redirect link for specific deals.", url: "https://www.tkqlhce.com/click-101761790-15042852", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 27, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Best Hotel Deals!", url: "https://www.kqzyfj.com/click-101761790-10433860", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 28, store: "🏨 Hotels.com", category: "TRAVEL", desc: "No cancellation fees on bookings.", url: "https://www.tkqlhce.com/click-101761790-10671873", img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 40, store: "🏠 Expedia", category: "TRAVEL", desc: "Official Expedia Homepage Deals", url: "https://www.tkqlhce.com/click-101761790-15042831", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 41, store: "🔍 Expedia", category: "TRAVEL", desc: "Special Expedia Travel Deep Link", url: "https://www.kqzyfj.com/click-101761790-10581071", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 42, store: "🏷️ Expedia", category: "TRAVEL", desc: "Expedia Affiliate Banner Deal", url: "https://www.kqzyfj.com/click-101761790-15575438", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80", code: "AUTO-ROUTED", isGame: false },
-
-            { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 51, store: "🎮 GameFly", category: "GAMING", desc: "30-Day Free Trial - Play More, Pay Less", url: "https://www.tkqlhce.com/click-101761790-10500808", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "", isGame: true },
-            { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "100 Gems & Resources", url: "#", img: "", code: "wm6xPkX4w", isGame: true },
-            { id: 31, store: "⛳ Golf Rival", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "", isGame: true },
-            { id: 32, store: "🏕️ Idle Outpost", category: "GAMING", desc: "Requires External Webshop Login", url: "#", img: "", isGame: true },
-            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "merge-dragons.jpg", isGame: true },
-            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "", code: "PUBLIC", isGame: true },
-            { id: 35, store: "⚔️ Genshin Impact", category: "GAMING", desc: "20 Primogems & 160 Geode", url: "#", img: "", code: "NMI20MAJGIBP", isGame: true },
-            { id: 36, store: "🔫 Call of Duty Mobile", category: "GAMING", desc: "Prey & Predator Crate x3", url: "#", img: "", code: "DCEPZBZKFD", isGame: true },
-            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Free Energy & Silver", url: "#", img: "", code: "RAIDTOGETHER", isGame: true },
-            { id: 38, store: "🧱 Roblox", category: "GAMING", desc: "Nguyen Boi Bundle", url: "#", img: "", code: "FREENGNBOI", isGame: true }
+            { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=200&q=80", isGame: false },
+            { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "No global codes available.", url: "#", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80", isGame: true },
+            { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "100 Gems & Resources", url: "#", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=200&q=80", code: "wm6xPkX4w", isGame: true },
+            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=200&q=80", code: "PUBLIC", isGame: true },
+            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Free Energy & Silver", url: "#", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=200&q=80", code: "RAIDTOGETHER", isGame: true }
         ];
 
         function App() {
-            const [ledger, setLedger] = useState(INITIAL_LEDGER);
-            const [showModal, setShowModal] = useState(false);
             const [searchInput, setSearchInput] = useState("");
             const [aiState, setAiState] = useState("idle"); 
-            const [searchResult, setSearchResult] = useState(null);
             const [activeFilter, setActiveFilter] = useState("ALL");
+            const [dynamicResult, setDynamicResult] = useState(null);
 
             const handleVerify = async () => {
                 if (!searchInput.trim()) return;
-                
-                if (document.activeElement instanceof HTMLElement) {
-                    document.activeElement.blur();
-                }
-
                 setAiState("searching");
-                setShowModal(true);
+                setDynamicResult(null);
+
+                // Forces 6 second animation delay
+                await new Promise(resolve => setTimeout(resolve, 6000));
 
                 try {
-                    // Forces the 6 second neon spinner animation to play
-                    await new Promise(resolve => setTimeout(resolve, 6000));
-
                     const response = await fetch('/api/verify', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ game: searchInput, code: "TEST-CODE" })
                     });
-
                     const data = await response.json();
                     const fullText = data.response || "No data received.";
                     
@@ -271,154 +283,87 @@
                     const linkUrl = extractedUrls ? extractedUrls[0] : null;
                     const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
-                    setSearchResult({ 
-                        game: searchInput.toUpperCase(), 
-                        codes: [{ code: "VERIFIED", desc: cleanDesc, link: linkUrl }] 
-                    });
+                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=200&q=80", code: "VERIFIED" });
                 } catch (error) {
-                    setSearchResult({ 
-                        game: "CONNECTION ERROR", 
-                        codes: [{ code: "ERROR", desc: "Cannot reach backend: " + error.message, link: null }] 
-                    });
+                    setDynamicResult({ store: "ERROR", desc: "Backend not reached.", url: null, img: "", code: "ERROR" });
                 }
-                
-                setAiState("result");
-            };
-
-            const closeModal = () => {
-                setSearchResult(null);
-                setShowModal(false);
                 setAiState("idle");
             };
 
+            const displayedLedger = dynamicResult ? [dynamicResult] : (activeFilter === "ALL" ? INITIAL_LEDGER : INITIAL_LEDGER.filter(item => item.category === activeFilter));
+
             const copyCode = (e, codeText) => {
                 e.preventDefault(); 
-                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC") {
+                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC" && codeText !== "VERIFIED") {
                     navigator.clipboard.writeText(codeText);
                     alert(`Copied to clipboard: ${codeText}`);
                 }
             };
 
-            const displayedLedger = activeFilter === "ALL" 
-                ? ledger 
-                : ledger.filter(item => item.category === activeFilter);
-
             return (
                 <>
-                    {showModal && (
-                        <div className="modal-overlay">
-                            <div className="modal-box glass-card neon-border">
-                                {aiState === "searching" && (
-                                    <div className="fade-in">
-                                        <img src="logo.png" className="promo-pro-spinning-logo" alt="Scanning..." />
-                                        
-                                        <h2 style={{color:'#ffffff', margin: '0 0 10px 0', textAlign: 'center', letterSpacing: '2px', textShadow: '0 0 10px rgba(255,255,255,0.5)'}}>AI ENGINE ACTIVE</h2>
-                                        <div className="ai-processing">SCANNING WEB DATABASES...</div>
-                                        <div className="ai-terminal-log">
-                                            [||||||||||||||||||||] 100%<br/>
-                                            BYPASSING ENCRYPTION...<br/>
-                                            EXTRACTING SECURE NODES...
-                                        </div>
-                                    </div>
-                                )}
-                                {aiState === "result" && searchResult && (
-                                    <div className="modal-scroll-area fade-in">
-                                        <h2 style={{color:'#ffffff', marginBottom: '20px', textAlign: 'center', borderBottom: '1px solid rgba(57, 255, 20, 0.3)', paddingBottom: '15px', textShadow: '0 0 10px rgba(255,255,255,0.5)'}}>{searchResult.game}</h2>
-                                        {searchResult.codes.map((c, index) => (
-                                            <div key={index} className="code-card">
-                                                <div className="ai-result-desc">{c.desc}</div>
-                                                <div className="ai-result-code">NODE: {c.code}</div>
-                                                {c.link ? (
-                                                    <a href={c.link} target="_blank" rel="noopener noreferrer" className="premium-claim-btn">
-                                                        CLICK TO CLAIM DEAL
-                                                    </a>
-                                                ) : (
-                                                    <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
-                                                )}
+                    {/* LEFT SIDEBAR */}
+                    <div className="sidebar">
+                        <div className="sidebar-logo"><span>P</span>PromoPro</div>
+                        <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>🏠 Dashboard</div>
+                        <div className={`nav-item ${activeFilter === "GAMING" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("GAMING"); setDynamicResult(null);}}>🎮 Gaming</div>
+                        <div className={`nav-item ${activeFilter === "EXCLUSIVES" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("EXCLUSIVES"); setDynamicResult(null);}}>🔒 Exclusives</div>
+                        <div className={`nav-item ${activeFilter === "TRAVEL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("TRAVEL"); setDynamicResult(null);}}>✈️ Travel</div>
+                        <div className="nav-item" style={{marginTop: 'auto'}}>⚙️ Settings</div>
+                    </div>
+
+                    {/* MAIN DASHBOARD */}
+                    <div className="main-content">
+                        <div className="dashboard-window" style={{position: 'relative'}}>
+                            
+                            {/* OVERLAY FOR SEARCHING */}
+                            {aiState === "searching" && (
+                                <div className="searching-overlay">
+                                    <img src="logo.png" className="spinning-logo" alt="Scanning..." />
+                                    <h2 style={{color: '#39ff14', letterSpacing: '2px'}}>AI ENGINE ACTIVE</h2>
+                                    <p style={{fontFamily: 'monospace', color: '#a1a1aa'}}>BYPASSING ENCRYPTION & EXTRACTING SECURE NODES...</p>
+                                </div>
+                            )}
+
+                            <div className="window-header">
+                                <h1 className="window-title">AI Promo Results</h1>
+                                <div className="search-box">
+                                    <input 
+                                        className="search-input" 
+                                        placeholder=">_ Verify Game or Store..." 
+                                        value={searchInput}
+                                        onChange={(e) => setSearchInput(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
+                                    />
+                                    <button className="search-btn" onClick={handleVerify}>SCAN</button>
+                                </div>
+                            </div>
+
+                            <div className="results-list">
+                                {displayedLedger.map((p, index) => (
+                                    <div className="horizontal-card" key={p.id || index}>
+                                        <div className="card-top-row">
+                                            <img src={p.img} alt={p.store} className="card-image" />
+                                            <div className="card-details">
+                                                <h3 className="card-title">{p.store}</h3>
+                                                <p className="card-desc">{p.desc}</p>
                                             </div>
-                                        ))}
-                                        <button className="submit-action-btn" onClick={closeModal}>CLOSE TERMINAL</button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="rt-top-nav-wrapper">
-                        <div className="rt-top-nav">
-                            <div className="rt-logo-container">
-                                <div className="rt-logo">Promo<span>Pro</span></div>
-                                <div className="ai-badge">AI-POWERED</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="pill-container">
-                        {["ALL", "EXCLUSIVES", "TRAVEL", "GAMING", "BEAUTY"].map(cat => (
-                            <div 
-                                key={cat} 
-                                className={`pill ${activeFilter === cat ? 'active' : ''}`}
-                                onClick={() => setActiveFilter(cat)}
-                            >
-                                {cat}
-                            </div>
-                        ))}
-                    </div>
-                    
-                    <div className="verify-bar-wrapper">
-                        <div className="verify-bar-container">
-                            <div className="verify-bar glass-card neon-border">
-                                <input 
-                                    className="verify-input" 
-                                    placeholder=">_ ENTER GAME NAME..." 
-                                    value={searchInput}
-                                    onChange={(e) => setSearchInput(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
-                                />
-                                <button className="verify-btn" onClick={handleVerify}>VERIFY</button>
-                            </div>
-                            <div className="verify-status">
-                                <div className="status-dot"></div>
-                                AI VERIFICATION ENGINE STANDBY...
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="media-grid">
-                        {displayedLedger.map(p => (
-                            <a className="poster-card glass-card neon-border" key={p.id} href={p.url}>
-                                <div className="poster-img-box">
-                                    <CardMedia src={p.img} label={p.store} isGame={p.isGame} />
-                                </div>
-                                <h3 className="poster-title">{p.store}</h3>
-                                <p className="poster-desc">{p.desc}</p>
-                                
-                                <div style={{ marginTop: 'auto' }}>
-                                    {p.code ? (
-                                        p.code === "AUTO-ROUTED" ? (
-                                            <div className="auto-routed-badge">AUTO-ROUTED LINK</div>
+                                            <div className="card-stats">
+                                                Active Node<br/>
+                                                <span style={{color: '#ffffff'}}>{p.category || "AI VERIFIED"}</span>
+                                            </div>
+                                        </div>
+                                        
+                                        {p.url && p.url !== "#" ? (
+                                            <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
+                                        ) : p.code ? (
+                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY CODE: {p.code}</button>
                                         ) : (
-                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>
-                                                COPY: {p.code}
-                                            </button>
-                                        )
-                                    ) : null}
-                                </div>
-                            </a>
-                        ))}
-                    </div>
-                    <div className="spacer"></div>
-                    
-                    <div className="footer-area">
-                        <p style={{ maxWidth: '800px', margin: '0 auto 15px auto', fontStyle: 'italic', lineHeight: '1.8' }}>
-                            <strong>FTC Affiliate Disclosure:</strong> PromoPro is an independent verification engine and affiliate publisher. We may earn a commission from qualifying purchases or bookings made through the links on this page at no additional cost to you.
-                        </p>
-                        <div style={{ marginBottom: '10px', letterSpacing: '1px' }}>&copy; 2026 PromoPro AI Engine. All Rights Reserved.</div>
-                        <div style={{ margin: '15px 0' }}>
-                            <a href="terms.html">Terms of Service</a> &nbsp;|&nbsp; <a href="privacy.html">Privacy Policy</a>
-                        </div>
-                        <div style={{ marginTop: '15px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                            Secure Support Channel: <a href="mailto:spjrsam82@gmail.com">spjrsam82@gmail.com</a>
+                                            <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed'}}>NO ACTIVE CODES</button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </>
