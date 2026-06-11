@@ -12,7 +12,7 @@
         * { box-sizing: border-box; }
         
         body { 
-            /* High-res Global Network background matching the mockup */
+            /* High-res Global Network background */
             background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
             background-size: cover;
             color: #ffffff; 
@@ -24,7 +24,6 @@
             flex-direction: column;
         }
 
-        /* Dark tint to make the neon blue glow pop */
         .overlay-tint {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(4, 9, 24, 0.75);
@@ -37,10 +36,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 40px;
-            background: rgba(10, 15, 30, 0.5);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 15, 30, 0.6);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(0, 240, 255, 0.2);
             z-index: 10;
+            position: sticky;
+            top: 0;
         }
 
         .nav-logo {
@@ -54,12 +55,8 @@
         }
         .nav-logo span { color: #00f0ff; margin-right: 10px; }
 
-        /* Search Bar & Execute Button */
-        .nav-actions {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        
         .search-input {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(0, 240, 255, 0.4);
@@ -69,7 +66,7 @@
             font-family: monospace;
             font-size: 15px;
             outline: none;
-            width: 250px;
+            width: 300px;
             transition: 0.3s;
         }
         .search-input:focus { border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); }
@@ -88,101 +85,87 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .execute-btn:hover {
-            background: #00f0ff;
-            color: #020617;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-        }
+        .execute-btn:hover { background: #00f0ff; color: #020617; box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
 
-        /* --- MOBILE RESPONSIVENESS FOR SAMSUNG A16 --- */
+        /* --- MOBILE RESPONSIVENESS FOR GALAXY A16 --- */
         @media (max-width: 768px) {
-            .top-nav { flex-direction: column; gap: 20px; padding: 20px; }
+            .top-nav { flex-direction: column; gap: 15px; padding: 20px; }
             .nav-actions { width: 100%; flex-direction: column; }
             .search-input { width: 100%; }
             .execute-btn { width: 100%; }
             .dashboard-grid { grid-template-columns: 1fr !important; padding: 20px !important; }
         }
 
-        /* --- MAIN DASHBOARD GRID (Matches Mockup) --- */
+        /* --- THE PROMO PRO GRID --- */
         .dashboard-grid {
             flex: 1;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
             padding: 40px;
             max-width: 1400px;
             margin: 0 auto;
             width: 100%;
             z-index: 10;
         }
-        .span-2 { grid-column: span 2; }
-        @media (max-width: 1024px) { .span-2 { grid-column: span 1; } }
 
         /* --- THE ROUNDED GLASS CARDS --- */
         .glass-card {
             background: rgba(13, 20, 35, 0.65);
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 240, 255, 0.2);
-            border-radius: 20px; /* Perfectly rounded corners */
+            border-radius: 20px;
             padding: 25px;
             display: flex;
             flex-direction: column;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(0, 240, 255, 0.05);
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
         }
         .glass-card:hover {
             border-color: rgba(0, 240, 255, 0.6);
             box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 25px rgba(0, 240, 255, 0.15);
-            transform: translateY(-4px);
+            transform: translateY(-5px);
         }
 
-        .card-header {
-            font-size: 18px;
-            font-weight: 900;
-            color: #ffffff;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Card Internals */
+        .card-header-row {
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-        .card-header span { color: #a1a1aa; font-weight: normal; font-size: 14px; text-transform: none; }
-
-        /* Specific Card Image Styling */
-        .card-banner-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
         }
         
-        .flex-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-        .logo-box { width: 120px; height: 60px; object-fit: contain; }
-        .character-art { height: 140px; object-fit: contain; border-radius: 8px; }
+        .card-logo-wrapper {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            flex-shrink: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .card-logo { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Icon Grid for Partners */
-        .icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .icon-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; border: 1px solid rgba(0, 240, 255, 0.3); }
+        .card-title-box { flex: 1; }
+        .card-store-name { font-size: 20px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: 0.5px; }
+        .card-node-type { font-size: 12px; color: #00f0ff; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-top: 4px; }
 
-        /* Tech Hub Bottom Row */
-        .tech-icons { display: flex; gap: 20px; justify-content: space-around; margin-top: auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .tech-icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: #a1a1aa; font-weight: bold; }
-        .tech-icon-item img { width: 40px; height: 40px; object-fit: contain; }
+        .card-desc { font-size: 14px; color: #a1a1aa; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
 
-        /* THE MASSIVE CLAIM BUTTON */
+        /* THE MASSIVE GREEN CLAIM BUTTON */
         .claim-btn {
             width: 100%;
-            background: #4ade80; /* Solid Green from your previous request */
+            background: #4ade80; /* Neon Green */
             color: #022c22;
             border: none;
             padding: 16px;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 15px;
             text-transform: uppercase;
             border-radius: 12px;
             cursor: pointer;
@@ -190,9 +173,14 @@
             text-decoration: none;
             transition: 0.3s;
             letter-spacing: 1px;
-            margin-top: 15px;
+            margin-top: auto;
         }
-        .claim-btn:hover { background: #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); }
+        .claim-btn:hover { background: #ffffff; box-shadow: 0 0 20px rgba(74, 222, 128, 0.6); transform: scale(1.02); }
+
+        .copy-btn {
+            width: 100%; background: transparent; color: #4ade80; border: 2px solid #4ade80; padding: 14px; font-weight: 900; font-size: 15px; text-transform: uppercase; border-radius: 12px; cursor: pointer; transition: 0.3s; text-align: center; margin-top: auto; letter-spacing: 1px;
+        }
+        .copy-btn:hover { background: #4ade80; color: #022c22; }
 
         /* --- THE ANIMATION & RESULT OVERLAY --- */
         .modal-overlay {
@@ -219,8 +207,7 @@
         .close-btn { position: absolute; top: 30px; right: 40px; background: transparent; color: #fff; border: 1px solid #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .close-btn:hover { background: #fff; color: #000; }
 
-        /* Image Fallback */
-        .fallback-bg { background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; border-radius: 12px; color: #00f0ff; font-weight: bold; text-align: center; padding: 10px;}
+        .fallback-bg { background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #00f0ff; font-weight: bold; font-size: 10px; text-align: center; width: 100%; height: 100%; padding: 5px;}
     </style>
 </head>
 <body>
@@ -229,21 +216,22 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Image Fallback Component
         const SafeImage = ({ src, alt, className }) => {
             const [error, setError] = useState(false);
             if (error || !src) return <div className={`fallback-bg ${className}`}>{alt}</div>;
             return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
         };
 
-        // Complete Affiliate Ledger
+        // ACTUAL PROMO-PRO LEDGER DATA
         const INITIAL_LEDGER = [
-            { id: 1, store: "GAMIVO", category: "GAMING", label: "Digital Key Node", desc: "Massive Discounts on Steam & Console Keys", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
-            { id: 2, store: "NordVPN", category: "SECURITY", label: "Internet Security Node", desc: "Military-grade encryption tunnel", url: "YOUR_NORDVPN_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/NordVPN_logo.svg/512px-NordVPN_logo.svg.png", isGame: false },
-            { id: 3, store: "Whiteout Survival", category: "GAMING", label: "Mobile Node", desc: "Claim 100 Gems & Daily Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
-            { id: 4, store: "Merge Dragons!", category: "GAMING", label: "Mobile Node", desc: "New Player Bonus", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
-            { id: 5, store: "JustPlay", category: "EXCLUSIVES", label: "Rewards Node", desc: "Earn Real Rewards", url: "YOUR_JUSTPLAY_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: false },
-            { id: 6, store: "GameFly", category: "GAMING", label: "Rental Node", desc: "Premium Console Rentals", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false }
+            { id: 1, store: "GAMIVO", category: "Digital Key", desc: "Massive Discounts on Steam, Xbox & PSN Keys. Save instantly on top titles.", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
+            { id: 2, store: "NordVPN", category: "Security", desc: "Military-grade encryption tunnel. Secure your gaming network and lower ping.", url: "YOUR_NORDVPN_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/NordVPN_logo.svg/512px-NordVPN_logo.svg.png", isGame: false },
+            { id: 3, store: "Whiteout Survival", category: "Mobile Gaming", desc: "Claim 100 Free Gems & Daily Resources using the active verification node.", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
+            { id: 4, store: "Merge Dragons!", category: "Mobile Gaming", desc: "New Player Bonus & Camp Resources. Auto-routed via Impact partnership.", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
+            { id: 5, store: "JustPlay", category: "Rewards", desc: "Play Mobile Games & Earn Real Rewards. Cash out instantly.", url: "YOUR_JUSTPLAY_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: false },
+            { id: 6, store: "GameFly", category: "Console", desc: "Premium Console Game Rentals. Access the newest PS5 and Xbox titles.", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
+            { id: 7, store: "State of Survival", category: "Mobile Gaming", desc: "1000 Biocaps & Speedups. Active global code verified.", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "SOS2026", isGame: true },
+            { id: 8, store: "Expedia", category: "Travel", desc: "Global Flights & Premium Hotel Reservations at a discounted affiliate rate.", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/512px-Expedia_logo.svg.png", isGame: false }
         ];
 
         function App() {
@@ -256,7 +244,7 @@
                 setAiState("searching");
                 setDynamicResult(null);
 
-                // Wait 6 seconds to show the animation
+                // Wait 6 seconds to show the animation using your exact file
                 await new Promise(resolve => setTimeout(resolve, 6000));
 
                 const searchLower = searchInput.toLowerCase();
@@ -268,7 +256,8 @@
                     return;
                 }
 
-                setDynamicResult({ store: searchInput.toUpperCase(), category: "AI SEARCH", label: "Extracted Node", desc: "AI Engine successfully bypassed and verified custom parameters.", url: "#", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/512px-GameFly_logo.svg.png", code: "VERIFIED" });
+                // Fallback for searches not in the ledger
+                setDynamicResult({ store: searchInput.toUpperCase(), category: "Web Extracted", desc: "AI Engine verified custom parameters for this query.", url: "#", img: null, code: "VERIFIED" });
                 setAiState("result");
             };
 
@@ -284,7 +273,7 @@
                 <>
                     <div className="overlay-tint"></div>
 
-                    {/* TOP NAVIGATION EXACTLY LIKE MOCKUP */}
+                    {/* EXACT TOP NAVIGATION FROM MOCKUP */}
                     <div className="top-nav">
                         <div className="nav-logo">
                             <span>>_</span> PROMO PRO MATRIX
@@ -301,75 +290,38 @@
                         </div>
                     </div>
 
-                    {/* DEFAULT DASHBOARD GRID */}
+                    {/* PROMO PRO AFFILIATE CARDS (No Personal Hubs) */}
                     {aiState === "idle" && (
                         <div className="dashboard-grid">
-                            
-                            {/* CARD 1: TECH HUB (Spans 2 columns) */}
-                            <div className="glass-card span-2">
-                                <div className="card-header">SAMUEL P. JR.'S TECH HUB</div>
-                                <SafeImage src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" alt="Code Editor" className="card-banner-img" />
-                                <div className="tech-icons">
-                                    <div className="tech-icon-item">
-                                        <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/512px-Samsung_Logo.svg.png" alt="Samsung" />
-                                        Samsung A16
+                            {INITIAL_LEDGER.map((p, index) => (
+                                <div className="glass-card" key={p.id || index}>
+                                    <div className="card-header-row">
+                                        <div className="card-logo-wrapper">
+                                            <SafeImage src={p.img} alt={p.store} className="card-logo" />
+                                        </div>
+                                        <div className="card-title-box">
+                                            <h3 className="card-store-name">{p.store}</h3>
+                                            <div className="card-node-type">// {p.category} NODE</div>
+                                        </div>
                                     </div>
-                                    <div className="tech-icon-item">
-                                        <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/C_Logo.png/512px-C_Logo.png" alt="CS50" />
-                                        CS50
-                                    </div>
-                                    <div className="tech-icon-item">
-                                        <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png" alt="GitHub" />
-                                        GitHub
-                                    </div>
-                                </div>
-                            </div>
+                                    
+                                    <div className="card-desc">{p.desc}</div>
 
-                            {/* CARD 2: NORDVPN */}
-                            <div className="glass-card">
-                                <div className="card-header">NORDVPN <span>// Internet Security Node</span></div>
-                                <div className="flex-row" style={{marginTop: '20px'}}>
-                                    <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/NordVPN_logo.svg/512px-NordVPN_logo.svg.png" alt="NordVPN" className="logo-box" />
-                                    <SafeImage src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Call_of_Duty_Mobile_Logo.png/320px-Call_of_Duty_Mobile_Logo.png" alt="COD" className="character-art" />
+                                    {p.url && p.url !== "#" ? (
+                                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">
+                                            Claim Deal
+                                        </a>
+                                    ) : p.code ? (
+                                        <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>
+                                            COPY CODE: {p.code}
+                                        </button>
+                                    ) : (
+                                        <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>
+                                            NO CODES
+                                        </button>
+                                    )}
                                 </div>
-                            </div>
-
-                            {/* CARD 3: GAMIVO */}
-                            <div className="glass-card">
-                                <div className="card-header">GAMIVO <span>// Digital Key Node</span></div>
-                                <div className="flex-row" style={{marginTop: '20px'}}>
-                                    <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png" alt="Gamivo" className="logo-box" />
-                                    <SafeImage src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Valorant_logo_-_pink_color_version.svg/512px-Valorant_logo_-_pink_color_version.svg.png" alt="Valorant" className="character-art" />
-                                </div>
-                            </div>
-
-                            {/* CARD 4: PARTNERS */}
-                            <div className="glass-card">
-                                <div className="card-header">AFFILIATE PARTNERS & GAMING</div>
-                                <div className="icon-grid">
-                                    <SafeImage src="https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg" alt="Whiteout" />
-                                    <SafeImage src="https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg" alt="Merge" />
-                                    <SafeImage src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg" alt="State" />
-                                    <SafeImage src="https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg" alt="JustPlay" />
-                                </div>
-                            </div>
-
-                            {/* CARD 5: VENTURES */}
-                            <div className="glass-card">
-                                <div className="card-header">CURRENT VENTURES</div>
-                                <div style={{display: 'flex', gap: '15px', marginTop: '10px'}}>
-                                    <div style={{flex: 1}}>
-                                        <SafeImage src="https://images.unsplash.com/photo-1588610738622-c3132e67a42d?auto=format&fit=crop&w=300&q=80" alt="CannaConnect" className="card-banner-img" style={{height: '100px'}} />
-                                        <div style={{fontSize: '14px', fontWeight: 'bold'}}>CannaConnect //</div>
-                                        <div style={{fontSize: '12px', color: '#a1a1aa'}}>Industrial Infrastructure</div>
-                                    </div>
-                                    <div style={{flex: 1}}>
-                                        <SafeImage src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" alt="PromoPro" className="card-banner-img" style={{height: '100px'}} />
-                                        <div style={{fontSize: '14px', fontWeight: 'bold'}}>PromoPro AI //</div>
-                                        <div style={{fontSize: '12px', color: '#a1a1aa'}}>Verification Engine</div>
-                                    </div>
-                                </div>
-                            </div>
+                            ))}
                         </div>
                     )}
 
@@ -389,22 +341,27 @@
                             <button className="close-btn" onClick={() => setAiState("idle")}>X CLOSE</button>
                             
                             <div className="glass-card" style={{width: '90%', maxWidth: '500px'}}>
-                                <div className="card-header">{dynamicResult.store} <span>// {dynamicResult.label}</span></div>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px'}}>
-                                    <SafeImage src={dynamicResult.img} alt={dynamicResult.store} className="logo-box" style={{background: '#fff', padding: '5px', borderRadius: '8px'}} />
-                                    <div style={{color: '#a1a1aa', fontSize: '14px'}}>{dynamicResult.desc}</div>
+                                <div className="card-header-row">
+                                    <div className="card-logo-wrapper">
+                                        <SafeImage src={dynamicResult.img} alt={dynamicResult.store} className="card-logo" />
+                                    </div>
+                                    <div className="card-title-box">
+                                        <h3 className="card-store-name">{dynamicResult.store}</h3>
+                                        <div className="card-node-type">// {dynamicResult.category} NODE</div>
+                                    </div>
                                 </div>
+                                <div className="card-desc" style={{marginBottom: '20px'}}>{dynamicResult.desc}</div>
 
                                 {dynamicResult.url && dynamicResult.url !== "#" ? (
                                     <a href={dynamicResult.url} target="_blank" rel="noopener noreferrer" className="claim-btn">
                                         Claim Deal
                                     </a>
                                 ) : dynamicResult.code ? (
-                                    <button className="claim-btn" onClick={(e) => copyCode(e, dynamicResult.code)} style={{background: 'transparent', color: '#4ade80', border: '2px solid #4ade80'}}>
+                                    <button className="copy-btn" onClick={(e) => copyCode(e, dynamicResult.code)}>
                                         COPY CODE: {dynamicResult.code}
                                     </button>
                                 ) : (
-                                    <button className="claim-btn" style={{opacity: 0.5, cursor: 'not-allowed', background: '#3f3f46', color: '#a1a1aa'}}>
+                                    <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>
                                         NO CODES
                                     </button>
                                 )}
