@@ -10,13 +10,21 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Inter:wght@300;400;600;800&display=swap');
+
         * { box-sizing: border-box; }
         
         body { 
-            background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
-            background-size: cover;
-            color: #ffffff; 
-            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            /* High-tech CSS Grid Background */
+            background-color: #050810;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
+                linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            background-position: 0 0, 0 0, 0 0;
+            color: #e2e8f0; 
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
             display: flex;
@@ -25,10 +33,19 @@
             padding-bottom: 100px; 
         }
 
-        .overlay-tint {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(8, 11, 24, 0.7); 
+        /* Scanline Overlay */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             z-index: -1;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
 
         #root { 
@@ -36,23 +53,25 @@
             display: flex; 
             flex-direction: row; 
             flex: 1;
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
         @media (max-width: 768px) {
             #root { flex-direction: column; }
-            .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: column !important; border-right: none !important; border-bottom: 2px solid rgba(139, 92, 246, 0.4) !important; padding: 20px !important; }
+            .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: column !important; border-right: none !important; border-bottom: 1px solid rgba(139, 92, 246, 0.3) !important; padding: 20px !important; }
             .nav-menu { display: flex; gap: 10px; width: 100%; overflow-x: auto; padding-top: 15px; margin-bottom: 15px;}
             .nav-item { padding: 8px 16px !important; margin: 0 !important; white-space: nowrap; font-size: 13px !important; flex-shrink: 0; }
             .career-context { display: none; }
             .main-content { padding: 20px 15px !important; }
-            .search-wrapper { width: 100% !important; margin-bottom: 20px !important; }
             .grid { grid-template-columns: 1fr !important; }
         }
 
         .sidebar {
             width: 280px;
-            background: rgba(11, 15, 30, 0.95);
-            border-right: 1px solid rgba(139, 92, 246, 0.3);
+            background: rgba(8, 11, 20, 0.85);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(139, 92, 246, 0.2);
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
@@ -65,12 +84,13 @@
 
         .sidebar-logo {
             font-size: 24px;
-            font-weight: 900;
+            font-weight: 800;
             color: #ffffff;
             display: flex;
             align-items: center;
             margin-bottom: 30px;
             letter-spacing: 1px;
+            font-family: 'Fira Code', monospace;
         }
         .logo-icon {
             background: transparent;
@@ -85,55 +105,63 @@
 
         .nav-matrix-title {
             color: #64748b;
-            font-size: 12px;
+            font-size: 11px;
+            font-weight: 800;
             letter-spacing: 2px;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: left;
+            text-transform: uppercase;
         }
 
         .nav-item {
-            padding: 14px 18px;
-            margin-bottom: 5px;
-            border-radius: 8px;
-            color: #ffffff;
-            font-weight: bold;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            color: #94a3b8;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
+            transition: all 0.2s ease;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 12px;
+            font-family: 'Fira Code', monospace;
         }
         
         .nav-item.active {
-            background: rgba(139, 92, 246, 0.3);
-            border-left: 4px solid #8b5cf6;
-            box-shadow: inset 10px 0 20px rgba(139, 92, 246, 0.2);
+            background: rgba(139, 92, 246, 0.15);
+            color: #ffffff;
+            border-left: 3px solid #8b5cf6;
+            box-shadow: inset 10px 0 20px rgba(139, 92, 246, 0.1);
         }
-        .nav-item:hover:not(.active) { background: rgba(139, 92, 246, 0.1); }
+        .nav-item:hover:not(.active) { 
+            background: rgba(255, 255, 255, 0.03); 
+            color: #e2e8f0;
+        }
 
         .career-context {
             margin-top: auto;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.05);
             padding-top: 20px;
         }
-        .career-title { color: #94a3b8; font-size: 12px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .career-title { color: #64748b; font-size: 11px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1.5px; }
         .career-icons { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
-        .career-icons span { font-size: 24px; color: #f97316; }
         .cs50-icon {
-            border: 2px solid #8b5cf6; color: #8b5cf6 !important; border-radius: 6px; padding: 2px 8px; font-family: monospace; font-size: 14px !important; font-weight: bold;
+            border: 1px solid #4ade80; color: #4ade80; border-radius: 4px; padding: 3px 8px; font-family: 'Fira Code', monospace; font-size: 12px; font-weight: bold; background: rgba(74, 222, 128, 0.1);
         }
         .career-box {
-            background: rgba(139, 92, 246, 0.1);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 8px;
-            padding: 15px;
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.6;
+            background: #0b0f19;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.7;
+            font-family: 'Fira Code', monospace;
         }
+        .career-box strong { color: #e2e8f0; }
 
         .main-content {
             flex: 1;
@@ -144,158 +172,176 @@
         }
 
         .search-wrapper {
-            background: rgba(10, 15, 30, 0.8);
-            border: 2px solid #8b5cf6;
-            border-radius: 8px;
-            padding: 12px 20px;
+            background: #0b0f19;
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            border-radius: 6px;
+            padding: 15px 20px;
             width: 100%;
             max-width: 600px;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-            margin: 0 auto 40px auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            margin: 0 0 40px 0;
             display: flex;
+            align-items: center;
         }
+        .search-wrapper::before {
+            content: ">";
+            color: #4ade80;
+            font-family: 'Fira Code', monospace;
+            margin-right: 15px;
+            font-weight: bold;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        
         .system-search {
-            width: 100%; background: transparent; border: none; color: #8b5cf6; font-family: monospace; font-size: 15px; outline: none;
+            width: 100%; background: transparent; border: none; color: #e2e8f0; font-family: 'Fira Code', monospace; font-size: 14px; outline: none;
         }
-        .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
+        .system-search::placeholder { color: #64748b; }
 
         .section-label {
             width: 100%;
-            max-width: 1400px;
-            margin: 0 auto 18px auto;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 3px;
+            margin: 0 0 20px 0;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
             color: #8b5cf6;
             text-transform: uppercase;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
-            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto 40px auto;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 0 0 50px 0;
             width: 100%;
         }
 
         .matrix-card {
-            background: rgba(10, 15, 30, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 15px;
+            background: rgba(11, 15, 25, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             position: relative;
-            transition: 0.3s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .matrix-card:hover { transform: translateY(-3px); }
+        .matrix-card:hover { 
+            transform: translateY(-4px); 
+            background: rgba(15, 20, 35, 0.9);
+        }
 
-        .theme-orange { border: 2px solid #f97316; box-shadow: 0 0 20px rgba(249, 115, 22, 0.3); }
-        .theme-green  { border: 2px solid #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
-        .theme-blue   { border: 2px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+        .theme-orange { border-top: 3px solid #f97316; }
+        .theme-orange:hover { box-shadow: 0 8px 25px rgba(249, 115, 22, 0.15); }
+        
+        .theme-green  { border-top: 3px solid #4ade80; }
+        .theme-green:hover  { box-shadow: 0 8px 25px rgba(74, 222, 128, 0.15); }
+        
+        .theme-blue   { border-top: 3px solid #38bdf8; }
+        .theme-blue:hover   { box-shadow: 0 8px 25px rgba(56, 189, 248, 0.15); }
 
-        .card-header { font-size: 15px; font-weight: bold; color: #ffffff; padding-right: 25px; }
-        .card-header span { font-weight: normal; color: #cbd5e1; }
+        .card-header { font-size: 15px; font-weight: 600; color: #ffffff; padding-right: 25px; display: flex; flex-direction: column; gap: 4px; }
+        .card-header span { font-size: 11px; font-weight: normal; color: #64748b; font-family: 'Fira Code', monospace; text-transform: uppercase; }
 
         .card-banner {
-            width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; height: 160px; object-fit: cover; border-radius: 4px; background: #000; border: 1px solid rgba(255,255,255,0.05);
         }
         .card-banner-contain {
-            width: 100%; height: 160px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; height: 160px; object-fit: contain; border-radius: 4px; background: rgba(0,0,0,0.5); padding: 15px; border: 1px solid rgba(255,255,255,0.05);
         }
         
         .fallback-bg {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(249,115,22,0.1));
-            border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
-            color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
-            text-align: center; padding: 10px;
+            width: 100%; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #0b0f19;
+            border-radius: 4px; border: 1px dashed rgba(139, 92, 246, 0.3);
+            color: #64748b; font-family: 'Fira Code', monospace; font-size: 12px; text-transform: uppercase; text-align: center; gap: 8px;
         }
 
         .card-footer {
-            display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px;
+            display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
         }
         .card-info {
-            font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6;
+            font-family: 'Fira Code', monospace; font-size: 11px; color: #94a3b8; line-height: 1.6;
         }
-        .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
-        .hidden-code { color: #f97316; font-weight: bold; letter-spacing: 2px; }
+        .highlight { color: #e2e8f0; font-weight: 600; }
+        .status-badge { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; margin-right: 5px; }
+        .hidden-code { color: #f97316; font-weight: 600; letter-spacing: 2px; }
 
         .status-btn {
-            background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s;
+            background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80; padding: 6px 12px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 11px; font-weight: 600; cursor: pointer; transition: 0.2s;
         }
-        .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
-        .status-btn.blue-btn { border-color: #38bdf8; color: #38bdf8; }
-        .status-btn.blue-btn:hover { background: #38bdf8; color: #020617; box-shadow: 0 0 15px rgba(56,189,248,0.5); }
+        .status-btn:hover { background: #4ade80; color: #050810; }
+        .status-btn.theme-blue { background: rgba(56, 189, 248, 0.1); border-color: #38bdf8; color: #38bdf8; }
+        .status-btn.theme-blue:hover { background: #38bdf8; color: #050810; }
+        .status-btn.theme-orange { background: rgba(249, 115, 22, 0.1); border-color: #f97316; color: #f97316; }
+        .status-btn.theme-orange:hover { background: #f97316; color: #050810; }
 
         .dismiss-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(239, 68, 68, 0.7);
-            color: white;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            color: #64748b;
             border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
+            font-size: 16px;
             z-index: 5;
             transition: 0.2s;
         }
-        .dismiss-btn:hover {
-            background: rgba(239, 68, 68, 1);
-            transform: scale(1.1);
-        }
+        .dismiss-btn:hover { color: #ef4444; transform: scale(1.1); }
 
         /* --- FOOTER STYLES --- */
         .site-footer {
             width: 100%;
-            background: rgba(8, 11, 24, 0.98);
-            border-top: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 30px 40px;
-            font-family: monospace;
-            font-size: 12px;
+            background: #050810;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 40px 40px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
             color: #64748b;
             line-height: 1.8;
             z-index: 5;
         }
         .footer-grid {
-            max-width: 1400px;
+            max-width: 1800px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            gap: 40px;
         }
         .footer-section-title {
-            color: #8b5cf6;
-            font-weight: bold;
-            letter-spacing: 2px;
+            color: #e2e8f0;
+            font-weight: 600;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            font-size: 11px;
+            margin-bottom: 12px;
+            font-size: 12px;
         }
         .footer-link {
-            color: #f97316;
+            color: #8b5cf6;
             text-decoration: none;
+            transition: color 0.2s;
         }
-        .footer-link:hover { text-decoration: underline; }
+        .footer-link:hover { color: #a78bfa; text-decoration: underline; }
         .footer-bottom {
-            max-width: 1400px;
-            margin: 20px auto 0 auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            max-width: 1800px;
+            margin: 30px auto 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
             text-align: center;
             color: #475569;
-            font-size: 11px;
         }
     </style>
 </head>
@@ -304,21 +350,24 @@
 
     <script type="text/babel">
         const { useState } = React;
-        const PROXY_URL = "https://wsrv.nl/?url=";
 
         const SafeImage = ({ src, alt, className }) => {
-            const [attempts, setAttempts] = useState(0);
-            if (!src || attempts >= 2) {
-                return <div className="fallback-bg">🎮 {alt}</div>;
+            const [error, setError] = useState(false);
+            if (!src || error) {
+                return (
+                    <div className="fallback-bg">
+                        <span style={{fontSize: '24px'}}>📦</span>
+                        {alt}
+                    </div>
+                );
             }
-            const isAbsolute = src.startsWith('http');
-            const proxiedSrc = (attempts === 1 && isAbsolute) ? PROXY_URL + encodeURIComponent(src) : src;
             return (
                 <img
-                    src={proxiedSrc}
+                    src={src}
                     alt={alt}
                     className={className}
-                    onError={() => setAttempts(a => a + 1)}
+                    onError={() => setError(true)}
+                    loading="lazy"
                 />
             );
         };
@@ -332,43 +381,40 @@
             { id: 49, store: "Halo: Master Chief Collection", category: "Hero Product Node", img: "https://images.gamivo.com/512x512/halo-the-master-chief-collection.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET HALO", theme: "blue", url: "https://www.gamivo.com/product/halo-the-master-chief-collection?glv=8kuvauuj", fit: "cover" }
         ];
 
+        // Fixed image sources utilizing highly reliable CDN endpoints like Placehold.co and Google Favicons
         const CORE_LEDGER = [
-            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
-            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
-            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
-            { id: 4, store: "GearUP Booster", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
-            { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Call_of_Duty_Mobile_cover.jpg/220px-Call_of_Duty_Mobile_cover.jpg", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
-            { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/2/21/State_of_Survival_logo.png", code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/Genshin_Impact_cover_art.jpg/220px-Genshin_Impact_cover_art.jpg", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "cover" },
-            { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Raid_Shadow_Legends_cover.jpg/220px-Raid_Shadow_Legends_cover.jpg", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
-            { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/800px-GameFly_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
-            { id: 12, store: "Expedia", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/800px-Expedia_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
-            { id: 13, store: "UNice Hair", category: "Beauty Node", img: "https://www.unice.com/static/version_1/images/logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain" },
-            { id: 14, store: "Vrbo", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/800px-Vrbo_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
-            { id: 15, store: "Rexing", category: "Exclusive Node", img: "https://www.rexingusa.com/wp-content/uploads/2019/08/Rexing-Logo-White.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain" },
-            { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
-            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain" },
-            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" },
-            { id: 22, store: "NEW AFFILIATE 22", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.kqzyfj.com/click-101761790-15727427", fit: "contain" },
-            { id: 23, store: "NEW AFFILIATE 23", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-15371308", fit: "contain" },
-            { id: 24, store: "NEW AFFILIATE 24", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17045169", fit: "contain" },
-            { id: 25, store: "NEW AFFILIATE 25", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17050091", fit: "contain" },
-            { id: 26, store: "NEW AFFILIATE 26", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.dpbolvw.net/click-101761790-17295667", fit: "contain" }
+            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://placehold.co/600x400/0b0f19/f97316?text=Whiteout+Survival&font=Montserrat", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
+            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://placehold.co/600x400/0b0f19/4ade80?text=Merge+Dragons!&font=Montserrat", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
+            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://www.google.com/s2/favicons?domain=gamivo.com&sz=128", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
+            { id: 4, store: "GearUP Booster", category: "Technical Node", img: "https://www.google.com/s2/favicons?domain=gearupbooster.com&sz=128", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
+            { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://placehold.co/600x400/0b0f19/f97316?text=CODM&font=Montserrat", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://www.google.com/s2/favicons?domain=epicgames.com&sz=128", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
+            { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://placehold.co/600x400/0b0f19/f97316?text=State+Of+Survival&font=Montserrat", code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://placehold.co/600x400/0b0f19/4ade80?text=Genshin+Impact&font=Montserrat", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "cover" },
+            { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://placehold.co/600x400/0b0f19/f97316?text=RAID&font=Montserrat", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://www.google.com/s2/favicons?domain=roblox.com&sz=128", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
+            { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://www.google.com/s2/favicons?domain=gamefly.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
+            { id: 12, store: "Expedia", category: "Travel Node", img: "https://www.google.com/s2/favicons?domain=expedia.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
+            { id: 13, store: "UNice Hair", category: "Beauty Node", img: "https://www.google.com/s2/favicons?domain=unice.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain" },
+            { id: 14, store: "Vrbo", category: "Travel Node", img: "https://www.google.com/s2/favicons?domain=vrbo.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
+            { id: 15, store: "Rexing", category: "Exclusive Node", img: "https://www.google.com/s2/favicons?domain=rexingusa.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain" },
+            { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://www.google.com/s2/favicons?domain=hotels.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
+            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://placehold.co/600x400/0b0f19/f97316?text=Idle+Outpost&font=Montserrat", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain" },
+            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://placehold.co/600x400/0b0f19/4ade80?text=Golf+Rival&font=Montserrat", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" }
         ];
 
         const GAMIVO_NODES = [
-            { id: 30, store: "All PC Games", category: "GAMIVO Gaming Hub", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Windows_logo_-_2006.svg/800px-Windows_logo_-_2006.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE ALL", theme: "orange", url: "https://www.gamivo.com/store/games?glv=8kuvauuj", fit: "contain" },
-            { id: 31, store: "Xbox Games", category: "GAMIVO Gaming Hub", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/800px-Xbox_one_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE XBOX", theme: "green", url: "https://www.gamivo.com/store/xbox?glv=8kuvauuj", fit: "contain" },
-            { id: 32, store: "Epic Games Store", category: "GAMIVO Gaming Hub", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE EPIC", theme: "blue", url: "https://www.gamivo.com/store/games/epic?glv=8kuvauuj", fit: "contain" },
-            { id: 33, store: "PlayStation Store", category: "GAMIVO Gaming Hub", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE PSN", theme: "blue", url: "https://www.gamivo.com/store/playstation?glv=8kuvauuj", fit: "contain" }
+            { id: 30, store: "All PC Games", category: "GAMIVO Gaming Hub", img: "https://placehold.co/600x400/0b0f19/f97316?text=PC+GAMING&font=Montserrat", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE ALL", theme: "orange", url: "https://www.gamivo.com/store/games?glv=8kuvauuj", fit: "contain" },
+            { id: 31, store: "Xbox Games", category: "GAMIVO Gaming Hub", img: "https://placehold.co/600x400/0b0f19/4ade80?text=XBOX+STORE&font=Montserrat", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE XBOX", theme: "green", url: "https://www.gamivo.com/store/xbox?glv=8kuvauuj", fit: "contain" },
+            { id: 32, store: "Epic Games Store", category: "GAMIVO Gaming Hub", img: "https://www.google.com/s2/favicons?domain=epicgames.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE EPIC", theme: "blue", url: "https://www.gamivo.com/store/games/epic?glv=8kuvauuj", fit: "contain" },
+            { id: 33, store: "PlayStation Store", category: "GAMIVO Gaming Hub", img: "https://www.google.com/s2/favicons?domain=playstation.com&sz=128", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE PSN", theme: "blue", url: "https://www.gamivo.com/store/playstation?glv=8kuvauuj", fit: "contain" }
         ];
 
         const ALL_ENTRIES = [...HERO_NODES, ...CORE_LEDGER, ...GAMIVO_NODES];
 
         function App() {
             const [searchInput, setSearchInput]     = useState("");
+            const [activeTab, setActiveTab]         = useState("SYSTEM LEDGER");
             const [aiState, setAiState]             = useState("idle");
             const [dynamicResult, setDynamicResult] = useState(null);
             const [revealedCodes, setRevealedCodes] = useState({});
@@ -378,7 +424,7 @@
                 if (!searchInput.trim()) return;
                 setAiState("searching");
                 setDynamicResult(null);
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                await new Promise(resolve => setTimeout(resolve, 800)); // Simulated network latency for realism
                 const searchLower = searchInput.toLowerCase();
                 const match = ALL_ENTRIES.find(item => item.store.toLowerCase().includes(searchLower));
 
@@ -387,7 +433,7 @@
                 } else {
                     setDynamicResult({
                         id: 999, store: searchInput.toUpperCase(), category: "Extracted Node",
-                        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png",
+                        img: `https://placehold.co/600x400/0b0f19/8b5cf6?text=${searchInput.toUpperCase()}&font=Montserrat`,
                         code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain"
                     });
                 }
@@ -402,7 +448,7 @@
 
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
-                    alert(`System Log: Code '${codeText}' revealed and copied to clipboard. Redirecting...`);
+                    alert(`SYSTEM LOG // Code '${codeText}' extracted to clipboard.`);
                 }
                 if (hasLink) {
                     window.open(url, "_blank");
@@ -415,21 +461,24 @@
             };
 
             const renderCode = (id, code) => {
-                if (["AUTO-ROUTED","NONE","PUBLIC","WEBSHOP"].includes(code)) return <span className="highlight">'{code}'</span>;
-                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
+                if (["AUTO-ROUTED","NONE","PUBLIC","WEBSHOP"].includes(code)) return <span className="highlight">[{code}]</span>;
+                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">••••••••</span>;
             };
 
             const renderCard = (p) => (
                 <div className={`matrix-card theme-${p.theme}`} key={p.id}>
-                    <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Dismiss Card">×</button>
-                    <div className="card-header">{p.store} <span>// {p.category}</span></div>
+                    <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Purge Node">×</button>
+                    <div className="card-header">
+                        {p.store} 
+                        <span>// {p.category}</span>
+                    </div>
                     <SafeImage src={p.img} alt={p.store} className={p.fit === "contain" ? "card-banner-contain" : "card-banner"} />
                     <div className="card-footer">
                         <div className="card-info">
-                            <div>code: {renderCode(p.id, p.code)}</div>
-                            <div>status: <span className="highlight">'{p.status}'</span></div>
+                            <div>CODE_KEY: {renderCode(p.id, p.code)}</div>
+                            <div>SYS_STATE: <span className="status-badge"></span><span className="highlight">{p.status}</span></div>
                         </div>
-                        <button className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`} onClick={(e) => handleAction(e, p.id, p.code, p.url)}>
+                        <button className={`status-btn theme-${p.theme}`} onClick={(e) => handleAction(e, p.id, p.code, p.url)}>
                             {p.btn}
                         </button>
                     </div>
@@ -438,52 +487,87 @@
 
             return (
                 <>
-                    <div className="overlay-tint"></div>
                     <div className="sidebar">
                         <div className="sidebar-logo">
                             <div className="logo-icon">P</div>
                             <span>Promo</span><span style={{color: '#f97316'}}>Pro</span>
                         </div>
-                        <div className="nav-matrix-title">NAV-MATRIX</div>
+                        <div className="nav-matrix-title">System Directory</div>
                         <div className="nav-menu">
-                            <div className="nav-item">🏠 HOME</div>
-                            <div className="nav-item active">📄 SYSTEM LEDGER</div>
-                            <div className="nav-item">🎮 GAMING NODES</div>
+                            <div className={`nav-item ${activeTab === "MAIN DASHBOARD" ? "active" : ""}`} onClick={() => setActiveTab("MAIN DASHBOARD")}>
+                                <span style={{width: '20px'}}>⌂</span> MAIN DASHBOARD
+                            </div>
+                            <div className={`nav-item ${activeTab === "SYSTEM LEDGER" ? "active" : ""}`} onClick={() => setActiveTab("SYSTEM LEDGER")}>
+                                <span style={{width: '20px'}}>▤</span> SYSTEM LEDGER
+                            </div>
+                            <div className={`nav-item ${activeTab === "GAMING HUB" ? "active" : ""}`} onClick={() => setActiveTab("GAMING HUB")}>
+                                <span style={{width: '20px'}}>🎮</span> GAMING HUB
+                            </div>
+                            <div className={`nav-item ${activeTab === "TRAVEL HUB" ? "active" : ""}`} onClick={() => setActiveTab("TRAVEL HUB")}>
+                                <span style={{width: '20px'}}>✈️</span> TRAVEL HUB
+                            </div>
                         </div>
                         <div className="career-context">
-                            <div className="career-title">SYSTEM STATUS</div>
+                            <div className="career-title">System Telemetry</div>
                             <div className="career-icons">
                                 <span>🛡️</span> <span>⚡</span> <span className="cs50-icon">SECURE</span>
                             </div>
                             <div className="career-box">
-                                <strong>SYSTEM ADMIN:</strong><br/>
-                                Access Level: Tier 1<br/>
-                                Engine Status: Online & Routing
+                                <strong>SESSION ID:</strong> 47D4-8F78<br/>
+                                <strong>CLEARANCE:</strong> Admin Tier 1<br/>
+                                <strong>ENGINE:</strong> Online & Routing<br/>
+                                <strong>UPTIME:</strong> 99.98%
                             </div>
                         </div>
                     </div>
 
                     <div className="main-content">
                         <div className="search-wrapper">
-                            <input className="system-search" placeholder="SYSTEM DATABASE SEARCH // Execute" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
+                            <input className="system-search" placeholder="QUERY SYSTEM DATABASE // e.g. 'Minecraft' and press Enter" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
                         </div>
 
                         {aiState === "idle" && (
                             <>
-                                <div className="section-label">🏆 Hero Products — Top Picks</div>
-                                <div className="grid">
-                                    {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                </div>
+                                {(activeTab === "MAIN DASHBOARD" || activeTab === "SYSTEM LEDGER") && (
+                                    <>
+                                        <div className="section-label">🏆 Hero Nodes [Priority Alpha]</div>
+                                        <div className="grid">
+                                            {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+                                    </>
+                                )}
 
-                                <div className="section-label">⚡ Core Affiliate Ledger</div>
-                                <div className="grid">
-                                    {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                </div>
+                                {activeTab === "SYSTEM LEDGER" && (
+                                    <>
+                                        <div className="section-label">⚡ Core Ledger [Active Routing]</div>
+                                        <div className="grid">
+                                            {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+                                    </>
+                                )}
 
-                                <div className="section-label">🎮 GAMIVO Gaming Hub</div>
+                                {(activeTab === "MAIN DASHBOARD" || activeTab === "GAMING HUB") && (
+                                    <>
+                                        <div className="section-label">🎮 GAMIVO Gateway [Sector G]</div>
+                                        <div className="grid">
+                                            {GAMIVO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+                                    </>
+                                )}
+                            </>
+                        )}
+                        
+                        {aiState === "searching" && (
+                            <div style={{color: '#8b5cf6', fontFamily: "'Fira Code', monospace"}}>EXECUTING QUERY... SEARCHING REGISTRIES...</div>
+                        )}
+                        
+                        {aiState === "result" && dynamicResult && (
+                            <>
+                                <div className="section-label">🔍 Query Result [Isolated Node]</div>
                                 <div className="grid">
-                                    {GAMIVO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                    {renderCard(dynamicResult)}
                                 </div>
+                                <button className="status-btn theme-blue" style={{maxWidth: '200px'}} onClick={() => {setAiState("idle"); setSearchInput("");}}>RESET QUERY</button>
                             </>
                         )}
                     </div>
@@ -497,37 +581,37 @@
     <footer class="site-footer">
         <div class="footer-grid">
             <div>
-                <div class="footer-section-title">⚠️ Affiliate Disclaimer</div>
-                <p>PromoPro contains affiliate links. When you click a link and make a purchase or sign up, we may earn a commission at no extra cost to you. This helps keep the site running and free to use. We only feature products and services we believe provide value.</p>
+                <div class="footer-section-title">⚠️ Affiliate Protocols</div>
+                <p>PromoPro routes via affiliate nodes. When traversing a link and completing a transaction, the network may allocate a commission at no extra bandwidth or cost to you. We strictly authenticate products and services that provide verified value to users.</p>
             </div>
 
             <div>
-                <div class="footer-section-title">🛡️ Support & Contact</div>
-                <p>Questions, issues, or partnership inquiries?<br/>
-                Reach us at:<br/>
+                <div class="footer-section-title">🛡️ Support Terminal</div>
+                <p>Anomalies, connection failures, or partnership pings?<br/>
+                Establish a secure line to:<br/>
                 <a class="footer-link" href="mailto:spjrsam82@gmail.com">spjrsam82@gmail.com</a>
                 </p>
             </div>
 
             <div>
-                <div class="footer-section-title">© Copyright</div>
-                <p>© <span id="footer-year"></span> PromoPro. All rights reserved.<br/>
-                Unauthorized reproduction or distribution of content, codes, or site structure is prohibited. All trademarks and logos belong to their respective owners.</p>
+                <div class="footer-section-title">© Registry Data</div>
+                <p>© <span id="footer-year"></span> PromoPro Framework. All rights reserved.<br/>
+                Unauthorized replication or distribution of system structure is logged. All entity trademarks belong to their respective corporations.</p>
             </div>
         </div>
         <div class="footer-bottom">
-            PromoPro is an independent affiliate portal and is not affiliated with, endorsed by, or sponsored by any of the listed brands.
+            PromoPro acts as an independent routing portal and operates outside direct corporate endorsement of listed brands.
         </div>
     </footer>
     <script>
         document.getElementById('footer-year').textContent = new Date().getFullYear();
     </script>
 
-    <div class="promo-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; background: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); border-top: 1px solid #38bdf8;">
+    <div class="promo-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; background: rgba(5, 8, 16, 0.95); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); border-top: 1px solid rgba(139, 92, 246, 0.5);">
         <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" style="display: block; position: relative;">
-            <img src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/twitch_overlay_250x150px.png" alt="GAMIVO 3% Off" style="max-height: 75px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png'">
+            <img src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/twitch_overlay_250x150px.png" alt="GAMIVO 3% Off" style="max-height: 75px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onerror="this.src='https://www.google.com/s2/favicons?domain=gamivo.com&sz=128'">
         </a>
-        <button onclick="document.querySelector('.promo-footer').style.display='none'" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; color: #64748b; border: 1px solid #64748b; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">HIDE</button>
+        <button onclick="document.querySelector('.promo-footer').style.display='none'" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; color: #64748b; border: 1px solid #64748b; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: 'Fira Code', monospace;">DISMISS NODE</button>
     </div>
 </body>
 </html>
