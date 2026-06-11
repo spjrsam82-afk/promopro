@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
+    <meta name="referrer" content="no-referrer">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro System Ledger</title>
@@ -46,7 +47,6 @@
             .grid { grid-template-columns: 1fr !important; }
         }
 
-        /* --- THE SIDEBAR --- */
         .sidebar {
             width: 280px;
             background: rgba(11, 15, 30, 0.95);
@@ -112,7 +112,6 @@
         }
         .nav-item:hover:not(.active) { background: rgba(139, 92, 246, 0.1); }
 
-        /* --- CAREER CONTEXT --- */
         .career-context {
             margin-top: auto;
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -134,7 +133,6 @@
             line-height: 1.6;
         }
 
-        /* --- MAIN CONTENT --- */
         .main-content {
             flex: 1;
             padding: 40px;
@@ -159,7 +157,6 @@
         }
         .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
 
-        /* --- THE GRID & CARDS --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -189,14 +186,14 @@
         .card-header span { font-weight: normal; color: #cbd5e1; }
 
         .card-banner {
-            width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: rgba(0,0,0,0.5);
+            width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
         }
         .card-banner-contain {
-            width: 100%; height: 160px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.5); padding: 10px;
+            width: 100%; height: 160px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1);
         }
         
         .fallback-bg {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
+            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-family: monospace; font-size: 16px; font-weight: bold; text-transform: uppercase;
         }
 
         .card-footer {
@@ -208,11 +205,11 @@
         .highlight { color: #4ade80; }
 
         .status-btn {
-            background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 6px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; text-transform: uppercase; cursor: pointer; transition: 0.2s;
+            background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s;
         }
         .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);}
 
-        /* --- THE LOGO-ONLY ANIMATION OVERLAY --- */
+        /* --- THE NEW ANIMATION OVERLAY --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(10, 15, 30, 0.95);
@@ -221,17 +218,41 @@
             backdrop-filter: blur(15px);
         }
         
-        @keyframes pulseGlow { 
-            0% { transform: scale(1); filter: drop-shadow(0 0 20px #8b5cf6); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px #f97316); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 20px #8b5cf6); }
+        .animation-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        /* The glowing CSS ring that guarantees an animation even if the image delays */
+        .css-spinner {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 4px solid rgba(139, 92, 246, 0.2);
+            border-top: 4px solid #f97316;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+            z-index: 1;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         
         .pulsing-logo { 
-            width: 160px; 
-            height: 160px; 
-            animation: pulseGlow 2.5s infinite ease-in-out; 
+            width: 120px; 
+            height: 120px; 
             object-fit: contain;
+            z-index: 2;
+            animation: pulseGlow 2.5s infinite ease-in-out; 
+        }
+
+        @keyframes pulseGlow { 
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px #8b5cf6); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 20px #8b5cf6); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px #8b5cf6); }
         }
 
         .close-btn { margin-top: 20px; background: transparent; color: #f97316; border: 1px solid #f97316; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
@@ -251,25 +272,26 @@
             return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
         };
 
+        // ALL CLEARBIT DOMAINS REPLACED WITH UNBREAKABLE HD WIKIPEDIA/CDN LINKS
         const INITIAL_LEDGER = [
-            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "cover" },
-            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
-            { id: 4, store: "GearUP", category: "Technical Node", img: "https://play-lh.googleusercontent.com/V9rGzP1H1e_2xH0_f_2tZ8N_j6b6T4u9b_9_4m_x8K3H9d_j_9M8T_7g_9_H_m9Z_9A=w512", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
+            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
+            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
+            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
+            { id: 4, store: "GearUP", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
             { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/codm/CODM-S6-SYNTHWAVE-TOUT.jpg", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/3/31/Epic_Games_logo.svg", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
+            { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
             { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://cdn2.unrealengine.com/egs-stateofsurvival-funplusinternationalag-g1a-00-1920x1080-4dfcc66504b2.jpg", code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
             { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://cdn2.unrealengine.com/genshin-impact-1920x1080-4963574c89d8.jpg", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "cover" },
             { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://cdn2.unrealengine.com/egs-raidshadowlegends-plarium-g1a-03-1920x1080-6079c6d48259.jpg", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Roblox_player_icon_black.svg", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
-            { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
-            { id: 12, store: "Expedia", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/512px-Expedia_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
+            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
+            { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/800px-GameFly_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
+            { id: 12, store: "Expedia", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/800px-Expedia_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
             { id: 13, store: "UNice", category: "Beauty Node", img: "https://www.unice.com/static/version_1/images/logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain" },
-            { id: 14, store: "Vrbo", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/512px-Vrbo_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
+            { id: 14, store: "Vrbo", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/800px-Vrbo_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
             { id: 15, store: "Rexing", category: "Exclusive Node", img: "https://www.rexingusa.com/wp-content/uploads/2019/08/Rexing-Logo-White.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain" },
-            { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/512px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
-            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "cover" },
-            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" }
+            { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
+            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain" },
+            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "contain" }
         ];
 
         function App() {
@@ -290,25 +312,22 @@
                 if (matchedAffiliate) {
                     setDynamicResult(matchedAffiliate);
                 } else {
-                    setDynamicResult({ id: 999, store: searchInput.toUpperCase(), category: "Extracted Node", img: null, code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain" });
+                    setDynamicResult({ id: 999, store: searchInput.toUpperCase(), category: "Extracted Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png", code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain" });
                 }
                 setAiState("result");
             };
 
-            // DUAL-ACTION AFFILIATE TRIGGER
             const handleAction = (e, codeText, url) => {
                 e.preventDefault(); 
                 
                 const hasLink = url && url !== "#";
                 const hasCode = codeText && codeText !== "AUTO-ROUTED" && codeText !== "NONE" && codeText !== "WEBSHOP" && codeText !== "PUBLIC";
 
-                // Step 1: Copy Code if one exists
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
-                    alert(`System Log: Code '${codeText}' copied to clipboard. Redirecting to affiliate portal...`);
+                    alert(`System Log: Code '${codeText}' copied to clipboard. Redirecting...`);
                 }
 
-                // Step 2: Open tracking link to drop the commission cookie
                 if (hasLink) {
                     window.open(url, "_blank");
                 }
@@ -375,10 +394,13 @@
                             </div>
                         )}
 
-                        {/* --- STRICTLY JUST THE LOGO, USING LOCAL GITHUB PATH --- */}
+                        {/* --- ANIMATION OVERLAY WITH CSS FALLBACK RING --- */}
                         {aiState === "searching" && (
                             <div className="modal-overlay">
-                                <img src="1781102482198.png" className="pulsing-logo" alt="Scanning..." />
+                                <div className="animation-container">
+                                    <div className="css-spinner"></div>
+                                    <img src="1781102482198.png" className="pulsing-logo" alt="" />
+                                </div>
                             </div>
                         )}
 
