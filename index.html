@@ -23,11 +23,10 @@
             width: 100%; 
             min-height: 100vh; 
             display: flex; 
-            flex-direction: row; /* Desktop default */
-            background: rgba(2, 6, 23, 0.7); /* Darkens the space background */
+            flex-direction: row; 
+            background: rgba(2, 6, 23, 0.7); 
         }
 
-        /* --- RESPONSIVE LAYOUT FOR MOBILE --- */
         @media (max-width: 768px) {
             #root { flex-direction: column; height: auto; }
             .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(64, 224, 208, 0.3) !important; padding: 15px !important; }
@@ -39,7 +38,6 @@
             .search-btn { padding: 15px !important; width: 100%; }
         }
 
-        /* --- SIDEBAR LAYOUT --- */
         .sidebar {
             width: 260px;
             background: rgba(10, 25, 47, 0.7);
@@ -59,7 +57,7 @@
             font-size: 28px;
             font-weight: 900;
             letter-spacing: 2px;
-            color: #40e0d0; /* Turquoise */
+            color: #40e0d0; 
             display: flex;
             align-items: center;
             margin-bottom: 40px;
@@ -82,10 +80,9 @@
         .nav-item:hover, .nav-item.active {
             background: rgba(64, 224, 208, 0.1);
             color: #40e0d0;
-            border-left: 4px solid #f97316; /* Orange accent */
+            border-left: 4px solid #f97316; 
         }
 
-        /* --- MAIN DASHBOARD AREA --- */
         .main-content {
             flex: 1;
             padding: 40px;
@@ -94,7 +91,6 @@
             align-items: flex-start;
         }
 
-        /* THE MASSIVE GLASS WINDOW */
         .dashboard-window {
             width: 100%;
             max-width: 1200px;
@@ -110,7 +106,6 @@
             position: relative;
         }
 
-        /* HEADER / SEARCH AREA */
         .window-header {
             display: flex;
             flex-wrap: wrap;
@@ -136,11 +131,10 @@
         }
         .search-input::placeholder { color: rgba(64, 224, 208, 0.5); }
         .search-btn {
-            background: #f97316; color: #ffffff; border: none; padding: 0 25px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            background: #f97316; color: #ffffff; border: none; padding: 0 25px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase;
         }
         .search-btn:hover { background: #40e0d0; color: #020617; }
 
-        /* --- COMPACT CARDS GRID (Replaces the wide stretched layout) --- */
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -162,19 +156,21 @@
             transform: translateY(-5px);
         }
 
+        /* Image styling adjusted to fit real game icons perfectly */
         .card-image {
             width: 100%;
-            height: 120px;
+            height: 180px;
             border-radius: 8px;
-            object-fit: cover;
+            object-fit: contain; /* Keeps entire logos visible */
+            background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 15px;
+            padding: 10px;
         }
 
         .card-title { font-size: 18px; font-weight: 900; color: #ffffff; margin: 0 0 8px 0; text-align: center;}
         .card-desc { font-size: 13px; color: #a1a1aa; margin: 0 0 15px 0; text-align: center; flex-grow: 1; line-height: 1.4; }
 
-        /* TURQUOISE & ORANGE CLAIM BUTTONS */
         .claim-btn {
             width: 100%;
             background: linear-gradient(90deg, #40e0d0, #00b3cc);
@@ -199,7 +195,7 @@
         }
         .copy-btn:hover { background: #f97316; color: #020617; }
 
-        /* --- PURE CSS SPINNER (No images to break!) --- */
+        /* --- YOUR CUSTOM IMAGE SPINNER IS BACK --- */
         .searching-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(2, 6, 23, 0.95);
@@ -209,18 +205,15 @@
             backdrop-filter: blur(10px);
         }
         
-        .pure-css-spinner {
-            width: 80px; height: 80px;
-            border: 6px solid rgba(64, 224, 208, 0.1);
-            border-top: 6px solid #40e0d0; /* Turquoise */
-            border-bottom: 6px solid #f97316; /* Orange */
-            border-radius: 50%;
-            animation: spin 1.2s linear infinite;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 0 20px rgba(64, 224, 208, 0.3), inset 0 0 20px rgba(249, 115, 22, 0.3);
+        @keyframes customSpin { 100% { transform: rotate(360deg); } }
+        .spinning-logo { 
+            width: 140px; 
+            height: 140px; 
+            animation: customSpin 4s linear infinite; 
+            filter: drop-shadow(0 0 20px #40e0d0); 
+            margin-bottom: 25px; 
+            object-fit: contain;
         }
-        
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     </style>
 </head>
@@ -230,16 +223,16 @@
     <script type="text/babel">
         const { useState } = React;
 
+        // REAL OFFICIAL LOGOS AND APP STORE IMAGES LOADED
         const INITIAL_LEDGER = [
-            { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", isGame: false },
-            { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "100 Gems & Resources", url: "#", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=300&q=80", code: "wm6xPkX4w", isGame: true },
-            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=300&q=80", code: "PUBLIC", isGame: true },
-            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Free Energy & Silver", url: "#", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=300&q=80", code: "RAIDTOGETHER", isGame: true }
+            { id: 101, store: "GAMIVO", category: "GAMING", desc: "Massive Discounts on Steam, Xbox & PSN Keys!", url: "YOUR_GAMIVO_AFFILIATE_LINK_HERE", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
+            { id: 102, store: "GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games.", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
+            { id: 103, store: "Whiteout Survival", category: "GAMING", desc: "Claim 100 Gems & Daily Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
+            { id: 104, store: "Merge Dragons!", category: "GAMING", desc: "New Player Bonus & Camp Resources", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
+            { id: 105, store: "State of Survival", category: "GAMING", desc: "1000 Biocaps & Speedups", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "SOS2026", isGame: true },
+            { id: 106, store: "Golf Rival", category: "GAMING", desc: "Free Gems & Legendary Club Chest", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", isGame: true },
+            { id: 107, store: "Idle Outpost", category: "GAMING", desc: "Scavenger Boosts & Caps", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: true },
+            { id: 108, store: "JustPlay", category: "EXCLUSIVES", desc: "Play Games & Earn Real Rewards", url: "YOUR_JUSTPLAY_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: false }
         ];
 
         function App() {
@@ -253,8 +246,17 @@
                 setAiState("searching");
                 setDynamicResult(null);
 
-                // Forces 6 second pure CSS animation
+                // Forces 6 second animation of your custom logo
                 await new Promise(resolve => setTimeout(resolve, 6000));
+
+                const searchLower = searchInput.toLowerCase();
+                const matchedAffiliate = INITIAL_LEDGER.find(item => item.store.toLowerCase().includes(searchLower) || item.desc.toLowerCase().includes(searchLower));
+
+                if (matchedAffiliate) {
+                    setDynamicResult(matchedAffiliate);
+                    setAiState("idle");
+                    return;
+                }
 
                 try {
                     const response = await fetch('/api/verify', {
@@ -270,9 +272,9 @@
                     const linkUrl = extractedUrls ? extractedUrls[0] : null;
                     const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
-                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=300&q=80", code: "VERIFIED" });
+                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "logo.png", code: "VERIFIED" });
                 } catch (error) {
-                    setDynamicResult({ store: "ERROR", desc: "Backend not reached.", url: null, img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=300&q=80", code: "ERROR" });
+                    setDynamicResult({ store: "SYSTEM ERROR", desc: "Backend not reached. Please check server.", url: null, img: "logo.png", code: "ERROR" });
                 }
                 setAiState("idle");
             };
@@ -289,7 +291,6 @@
 
             return (
                 <>
-                    {/* LEFT / TOP SIDEBAR */}
                     <div className="sidebar">
                         <div className="sidebar-logo"><span>>_</span>PromoPro</div>
                         <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>🏠 Dashboard</div>
@@ -298,14 +299,13 @@
                         <div className={`nav-item ${activeFilter === "TRAVEL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("TRAVEL"); setDynamicResult(null);}}>✈️ Travel</div>
                     </div>
 
-                    {/* MAIN DASHBOARD */}
                     <div className="main-content">
                         <div className="dashboard-window">
                             
-                            {/* NEW CSS SPINNER OVERLAY (No Images) */}
+                            {/* YOUR CUSTOM UPLOADED LOGO IS BACK HERE */}
                             {aiState === "searching" && (
                                 <div className="searching-overlay">
-                                    <div className="pure-css-spinner"></div>
+                                    <img src="logo.png" className="spinning-logo" alt="Scanning..." />
                                     <h2 style={{color: '#40e0d0', letterSpacing: '2px', textShadow: '0 0 10px rgba(64, 224, 208, 0.5)'}}>AI SCAN IN PROGRESS</h2>
                                     <p style={{fontFamily: 'monospace', color: '#f97316'}}>BYPASSING ENCRYPTION & EXTRACTING NODES...</p>
                                 </div>
@@ -325,7 +325,6 @@
                                 </div>
                             </div>
 
-                            {/* COMPACT CARDS GRID */}
                             <div className="results-grid">
                                 {displayedLedger.map((p, index) => (
                                     <div className="compact-card" key={p.id || index}>
