@@ -4,7 +4,7 @@
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>PromoPro Dashboard</title>
+    <title>PromoPro AI Engine</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -12,228 +12,276 @@
         * { box-sizing: border-box; }
         
         body { 
-            /* High-res blurred desk background matching your mockup */
-            background: url('https://images.unsplash.com/photo-1542831371229-5be10f0c0b11?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
-            background-size: cover;
+            /* THE NEW "ACTUAL" TECH BACKGROUND */
+            background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(57, 255, 20, 0.15), transparent 60%),
+                linear-gradient(rgba(57, 255, 20, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            background-position: center top, center center, center center;
             color: #ffffff; 
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
             display: flex;
-            align-items: center;
             justify-content: center;
             min-height: 100vh;
         }
         
-        /* THE FLOATING APP WINDOW (1:1 with mockup) */
         #root { 
             width: 100%;
-            max-width: 1200px;
-            height: 85vh;
-            min-height: 600px;
-            background: rgba(15, 23, 42, 0.85); /* Dark slate glass */
-            backdrop-filter: blur(20px);
-            border: 2px solid #4ade80; /* The exact mint/neon green */
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(74, 222, 128, 0.1);
+            max-width: 1400px;
             display: flex; 
             flex-direction: row; 
-            overflow: hidden;
-            margin: 20px;
+            min-height: 100vh;
         }
 
-        /* --- MOBILE RESPONSIVENESS (For your Samsung A16) --- */
+        /* --- MOBILE LAYOUT TUNED FOR YOUR SCREEN --- */
         @media (max-width: 768px) {
-            body { align-items: flex-start; }
-            #root { flex-direction: column; height: auto; margin: 0; border-radius: 0; border: none; border-top: 2px solid #4ade80; }
-            .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(74, 222, 128, 0.3) !important; padding: 15px !important; }
-            .sidebar-logo { width: 100%; justify-content: center; margin-bottom: 15px !important; }
-            .nav-item { padding: 8px 12px !important; margin-bottom: 5px !important; font-size: 13px !important; }
-            .main-content { padding: 15px !important; }
-            .search-box { width: 100% !important; }
+            #root { flex-direction: column; }
+            .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: row !important; flex-wrap: wrap; justify-content: space-between; align-items: center; border-right: none !important; border-bottom: 2px solid rgba(57, 255, 20, 0.4) !important; padding: 20px !important; background: #020617 !important;}
+            .sidebar-logo { margin: 0 !important; font-size: 22px !important; }
+            .nav-menu { display: flex; gap: 10px; width: 100%; overflow-x: auto; padding-top: 15px; }
+            .nav-item { padding: 8px 16px !important; margin: 0 !important; white-space: nowrap; font-size: 13px !important; flex-shrink: 0; }
+            .main-content { padding: 20px 15px !important; }
+            .search-box { width: 100% !important; flex-direction: column; }
+            .search-input { width: 100%; border-bottom: 1px solid rgba(57, 255, 20, 0.3) !important; }
+            .search-btn { width: 100%; padding: 15px !important; }
+            .tech-card { flex-direction: column !important; text-align: center; }
+            .card-image-wrapper { margin: 0 auto 15px auto !important; }
+            .card-details { align-items: center; }
+            .card-actions { width: 100%; margin-top: 15px; }
         }
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 250px;
-            background: rgba(0, 0, 0, 0.2);
-            border-right: 1px solid rgba(74, 222, 128, 0.2);
+            width: 280px;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(57, 255, 20, 0.2);
             display: flex;
             flex-direction: column;
-            padding: 30px 20px;
+            padding: 40px 25px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
             flex-shrink: 0;
-            overflow-y: auto;
         }
 
         .sidebar-logo {
-            font-size: 20px;
+            font-size: 26px;
             font-weight: 900;
             color: #ffffff;
             display: flex;
             align-items: center;
-            margin-bottom: 30px;
-            letter-spacing: 0.5px;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
         }
-        .sidebar-logo span { color: #4ade80; font-size: 24px; margin-right: 10px; }
+        .sidebar-logo span { color: #39ff14; font-size: 30px; margin-right: 12px; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); }
 
         .nav-item {
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            color: #94a3b8;
-            font-weight: 600;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            color: #64748b;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            transition: all 0.3s ease;
             font-size: 14px;
-        }
-        /* Active state matching the dark green filled pill from mockup */
-        .nav-item:hover, .nav-item.active {
-            background: rgba(22, 101, 52, 0.8);
-            color: #ffffff;
-            box-shadow: inset 0 0 10px rgba(74, 222, 128, 0.2);
-        }
-
-        /* --- MAIN CONTENT AREA --- */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             position: relative;
         }
+        .nav-item::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #39ff14; transition: 0.3s;
+        }
+        .nav-item:hover, .nav-item.active { color: #ffffff; background: rgba(57, 255, 20, 0.05); }
+        .nav-item:hover::before, .nav-item.active::before { width: 4px; box-shadow: 0 0 15px #39ff14; }
 
-        /* HEADER / SEARCH AREA */
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
         .window-header {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            gap: 15px;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
         }
-        .window-title { font-size: 24px; font-weight: bold; color: #ffffff; margin: 0; }
+        .window-title { font-size: 32px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
 
         .search-box {
             display: flex;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(74, 222, 128, 0.5);
-            border-radius: 8px;
+            background: rgba(2, 6, 23, 0.9);
+            border: 1px solid rgba(57, 255, 20, 0.5);
+            border-radius: 4px;
             overflow: hidden;
-            width: 350px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(57, 255, 20, 0.1);
+            transition: 0.3s;
+            position: relative;
         }
+        /* Search box corner accents */
+        .search-box::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 10px; border-top: 2px solid #39ff14; border-right: 2px solid #39ff14;
+        }
+        
         .search-input {
-            flex: 1; background: transparent; border: none; color: #4ade80; padding: 10px 15px; font-family: monospace; font-size: 14px; outline: none;
+            flex: 1; background: transparent; border: none; color: #39ff14; padding: 20px 25px; font-family: monospace; font-size: 18px; outline: none; font-weight: bold;
         }
-        .search-input::placeholder { color: rgba(74, 222, 128, 0.4); }
+        .search-input::placeholder { color: rgba(57, 255, 20, 0.3); }
         .search-btn {
-            background: rgba(74, 222, 128, 0.2); color: #4ade80; border: none; border-left: 1px solid rgba(74, 222, 128, 0.5); padding: 0 20px; font-weight: bold; cursor: pointer; transition: 0.2s;
+            background: #39ff14; color: #020617; border: none; padding: 0 45px; font-weight: 900; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;
         }
-        .search-btn:hover { background: #4ade80; color: #022c22; }
+        .search-btn:hover { background: #ffffff; box-shadow: 0 0 20px rgba(255,255,255,0.8); }
 
-        /* --- CARDS (1:1 with mockup) --- */
+        /* --- THE NEW HIGH-TECH CARDS (THICKER CORNERS & DETAILED LINES) --- */
         .results-list {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            max-width: 800px;
+            gap: 30px;
         }
 
-        .mockup-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(74, 222, 128, 0.4);
-            border-radius: 12px;
-            padding: 20px;
+        .tech-card {
+            position: relative;
+            background: rgba(6, 15, 28, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 30px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            transition: 0.3s;
-        }
-        .mockup-card:hover {
-            border-color: #4ade80;
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
+            flex-direction: row;
+            align-items: center;
+            gap: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            /* The base thin border */
+            border: 1px solid rgba(57, 255, 20, 0.15);
         }
 
-        .card-top-row {
+        /* THIS CREATES THE THICK CORNERS YOU ASKED FOR */
+        .tech-card::before, .tech-card::after {
+            content: ''; position: absolute; width: 25px; height: 25px; transition: 0.3s; pointer-events: none;
+        }
+        .tech-card::before {
+            top: -2px; left: -2px;
+            border-top: 3px solid #39ff14; border-left: 3px solid #39ff14;
+        }
+        .tech-card::after {
+            bottom: -2px; right: -2px;
+            border-bottom: 3px solid #39ff14; border-right: 3px solid #39ff14;
+        }
+
+        .tech-card:hover {
+            background: rgba(10, 20, 35, 0.95);
+            border-color: rgba(57, 255, 20, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 30px rgba(57, 255, 20, 0.05);
+            transform: translateY(-4px);
+        }
+        .tech-card:hover::before, .tech-card:hover::after {
+            width: 40px; height: 40px; box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+        }
+
+        /* Detailed Inner Image Frame */
+        .card-image-wrapper {
+            width: 100px;
+            height: 100px;
+            background: #ffffff;
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            padding: 10px;
+            flex-shrink: 0;
+            border: 2px solid rgba(57, 255, 20, 0.3);
+            position: relative;
         }
-
-        /* Unbreakable Clearbit Logos */
-        .card-image {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            object-fit: contain;
-            background: #ffffff;
-            padding: 5px;
-        }
-
-        .card-details { flex: 1; }
+        /* Inner corner details on the image */
+        .card-image-wrapper::before { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; border: 1px dashed rgba(0,0,0,0.2); pointer-events: none; }
         
-        /* Matches the small orange text, large white text, small green subtext */
-        .mockup-orange-title { color: #f97316; font-size: 14px; font-weight: bold; margin: 0 0 2px 0; display: flex; align-items: center; gap: 8px; }
-        .mockup-orange-title span { background: #f97316; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
-        
-        .mockup-main-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
-        .mockup-subtext { font-size: 12px; color: #a1a1aa; margin: 0; }
+        .card-image { width: 100%; height: 100%; object-fit: contain; }
 
-        .card-icons {
-            font-size: 20px;
+        .card-details { 
+            flex: 1; 
             display: flex;
-            gap: 10px;
-            color: #fbbf24;
+            flex-direction: column;
+            gap: 8px;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding-left: 25px;
         }
+        
+        .tech-orange-title { color: #f97316; font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; display: flex; align-items: center; gap: 12px; }
+        .tech-orange-title span { background: rgba(57, 255, 20, 0.1); color: #39ff14; padding: 4px 10px; font-size: 11px; border: 1px solid rgba(57, 255, 20, 0.5); letter-spacing: 1px;}
+        
+        .tech-main-title { font-size: 26px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: 1px; }
+        .tech-subtext { font-family: monospace; font-size: 14px; color: #94a3b8; margin: 0; }
 
         /* THE MASSIVE GREEN BUTTON */
+        .card-actions {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 220px;
+        }
+
         .claim-btn {
             width: 100%;
-            background: #4ade80;
-            color: #022c22; /* Dark green/black text */
-            border: none;
-            padding: 14px;
+            background: #39ff14;
+            color: #020617;
+            border: 1px solid #ffffff;
+            padding: 18px 24px;
             font-weight: 900;
             font-size: 16px;
-            border-radius: 8px;
+            text-transform: uppercase;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            transition: 0.2s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            transition: 0.3s;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
         }
-        .claim-btn:hover { background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        /* Shine effect over the button */
+        .claim-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
+        }
+        .claim-btn:hover { background: #ffffff; box-shadow: 0 0 30px rgba(255, 255, 255, 0.9); }
+        .claim-btn:hover::before { left: 200%; }
 
         .copy-btn {
-            width: 100%; background: transparent; color: #4ade80; border: 1px solid #4ade80; padding: 14px; font-weight: 900; font-size: 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center;
+            width: 100%; background: rgba(57, 255, 20, 0.05); color: #39ff14; border: 1px solid #39ff14; padding: 18px 24px; font-weight: 900; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; text-align: center; letter-spacing: 2px;
         }
-        .copy-btn:hover { background: #4ade80; color: #022c22; }
+        .copy-btn:hover { background: #39ff14; color: #020617; }
 
-        /* --- THE ANIMATION OVERLAY --- */
+        /* --- YOUR ANIMATION OVERLAY --- */
         .searching-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 16px;
+            background: rgba(2, 6, 23, 0.95);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 50;
-            backdrop-filter: blur(10px);
+            z-index: 100;
+            backdrop-filter: blur(15px);
         }
         
         @keyframes customSpin { 100% { transform: rotate(360deg); } }
         .spinning-logo { 
-            width: 120px; 
-            height: 120px; 
+            width: 160px; 
+            height: 160px; 
             animation: customSpin 4s linear infinite; 
-            filter: drop-shadow(0 0 20px #4ade80); 
-            margin-bottom: 25px; 
+            filter: drop-shadow(0 0 30px #39ff14); 
+            margin-bottom: 35px; 
             object-fit: contain;
         }
+
+        .ai-text { color: #39ff14; font-weight: 900; letter-spacing: 4px; font-size: 24px; margin-bottom: 12px; text-transform: uppercase; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6); }
+        .ai-subtext { font-family: monospace; color: #64748b; font-size: 15px; letter-spacing: 1px; }
 
     </style>
 </head>
@@ -243,15 +291,20 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Rock-Solid Logos using Clearbit API (These won't break)
+        const ImageWithFallback = ({ src, alt }) => {
+            const [imgSrc, setImgSrc] = useState(src);
+            const fallbackSrc = "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80";
+            return <img src={imgSrc} alt={alt} className="card-image" onError={() => setImgSrc(fallbackSrc)} />;
+        };
+
         const INITIAL_LEDGER = [
-            { id: 101, store: "GAMIVO", category: "GAMING", label: "Anal Pro", desc: "Show • Creal • 338%", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://logo.clearbit.com/gamivo.com", isGame: false },
-            { id: 102, store: "GearUP", category: "GAMING", label: "AI Node", desc: "State • Cred • 390%", url: "YOUR_GEARUP_LINK", img: "https://logo.clearbit.com/gearupbooster.com", isGame: false },
-            { id: 103, store: "Expedia", category: "TRAVEL", label: "Travel Pro", desc: "Global Flights & Hotels", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://logo.clearbit.com/expedia.com", isGame: false },
-            { id: 104, store: "GameFly", category: "GAMING", label: "Rental Node", desc: "Console Game Rentals", url: "YOUR_GAMEFLY_LINK", img: "https://logo.clearbit.com/gamefly.com", isGame: false },
-            { id: 105, store: "Whiteout Survival", category: "GAMING", label: "Mobile Node", desc: "100 Gems & Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
-            { id: 106, store: "Merge Dragons!", category: "GAMING", label: "Mobile Node", desc: "New Player Bonus", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
-            { id: 107, store: "Hotels.com", category: "TRAVEL", label: "Travel Node", desc: "Global Lodging", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://logo.clearbit.com/hotels.com", isGame: false }
+            { id: 101, store: "GAMIVO", category: "GAMING", label: "VERIFIED NODE", desc: "Sys.Log // Massive Discounts on Steam & Console Keys", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
+            { id: 102, store: "GearUP", category: "GAMING", label: "NETWORK NODE", desc: "Sys.Log // Reduce Ping & Lag in Competitive Games", url: "YOUR_GEARUP_LINK", img: "https://play-lh.googleusercontent.com/9C0D3i-z1YpG8228tB1P4FqfS0M4u_E17Q66iN-Tq5m5N8yXnE7m9M1Wk2kY7_k0Qw=w240-h480", isGame: false },
+            { id: 103, store: "GameFly", category: "GAMING", label: "RENTAL NODE", desc: "Sys.Log // Premium Console Game Rentals", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
+            { id: 104, store: "Whiteout Survival", category: "GAMING", label: "MOBILE NODE", desc: "Sys.Log // Claim 100 Gems & Daily Resources", url: "#", img: "https://play-lh.googleusercontent.com/1GkG-L9-wQZEMW2K1qIikW0eWlZ0p3oE0U2Z_v0yT8zJ4Q_k9kPZ998xL_9w-H_Q_w=w240-h480", code: "wm6xPkX4w", isGame: true },
+            { id: 105, store: "Merge Dragons!", category: "GAMING", label: "MOBILE NODE", desc: "Sys.Log // New Player Bonus & Resources", url: "YOUR_IMPACT_LINK", img: "https://play-lh.googleusercontent.com/8Q_a4d9q_5e2l_29R-B8G-7xZ_l92X4c0-7_N-X8_w_c8Q_l_u_6_d8Q_v-9_2_Q_w=w240-h480", code: "AUTO-ROUTED", isGame: true },
+            { id: 106, store: "JustPlay", category: "EXCLUSIVES", label: "REWARDS NODE", desc: "Sys.Log // Play Mobile Games & Earn Real Rewards", url: "YOUR_JUSTPLAY_LINK", img: "https://play-lh.googleusercontent.com/F_rV-O8Q_f_d_r_u_9_V_5_O_b_L_1_R_5_D_H_W_D_u_c_A_1_b_z_x_D_t_Z_8_Y=w240-h480", isGame: false },
+            { id: 107, store: "Expedia", category: "TRAVEL", label: "TRAVEL NODE", desc: "Sys.Log // Global Flights & Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/512px-Expedia_logo.svg.png", isGame: false }
         ];
 
         function App() {
@@ -290,9 +343,9 @@
                     const linkUrl = extractedUrls ? extractedUrls[0] : null;
                     const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
-                    setDynamicResult({ store: searchInput.toUpperCase(), category: "AI SEARCH", label: "Extracted", desc: cleanDesc, url: linkUrl, img: "https://logo.clearbit.com/cloud.google.com", code: "VERIFIED" });
+                    setDynamicResult({ store: searchInput.toUpperCase(), category: "AI SEARCH", label: "EXTRACTED NODE", desc: "Sys.Log // " + cleanDesc, url: linkUrl, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80", code: "VERIFIED" });
                 } catch (error) {
-                    setDynamicResult({ store: "SYSTEM ERROR", category: "ERROR", label: "Failed", desc: "Backend not reached. Please check server.", url: null, img: "https://logo.clearbit.com/cloudflare.com", code: "ERROR" });
+                    setDynamicResult({ store: "SYSTEM ERROR", category: "ERROR", label: "CONNECTION FAILED", desc: "Sys.Log // Backend not reached. Check server integrity.", url: null, img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80", code: "ERROR" });
                 }
                 setAiState("idle");
             };
@@ -303,7 +356,7 @@
                 e.preventDefault(); 
                 if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC" && codeText !== "VERIFIED") {
                     navigator.clipboard.writeText(codeText);
-                    alert(`Copied to clipboard: ${codeText}`);
+                    alert(`System Log: Copied ${codeText} to clipboard.`);
                 }
             };
 
@@ -311,25 +364,26 @@
                 <>
                     <div className="sidebar">
                         <div className="sidebar-logo"><span>P</span>PromoPro</div>
-                        <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>🏠 Home</div>
-                        <div className={`nav-item ${activeFilter === "GAMING" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("GAMING"); setDynamicResult(null);}}>🎮 Gaming</div>
-                        <div className={`nav-item ${activeFilter === "EXCLUSIVES" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("EXCLUSIVES"); setDynamicResult(null);}}>🔒 Exclusives</div>
-                        <div className={`nav-item ${activeFilter === "TRAVEL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("TRAVEL"); setDynamicResult(null);}}>✈️ Travel</div>
+                        <div className="nav-menu">
+                            <div className={`nav-item ${activeFilter === "ALL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("ALL"); setDynamicResult(null);}}>System Home</div>
+                            <div className={`nav-item ${activeFilter === "GAMING" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("GAMING"); setDynamicResult(null);}}>Gaming Network</div>
+                            <div className={`nav-item ${activeFilter === "EXCLUSIVES" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("EXCLUSIVES"); setDynamicResult(null);}}>Secure Exclusives</div>
+                            <div className={`nav-item ${activeFilter === "TRAVEL" && !dynamicResult ? 'active' : ''}`} onClick={() => {setActiveFilter("TRAVEL"); setDynamicResult(null);}}>Travel Nodes</div>
+                        </div>
                     </div>
 
                     <div className="main-content">
                         
-                        {/* THIS TAG REQUIRES image_735d5d.png TO BE IN GITHUB */}
                         {aiState === "searching" && (
                             <div className="searching-overlay">
-                                <img src="image_735d5d.png" className="spinning-logo" alt="If you see this text, upload image_735d5d.png to GitHub!" />
-                                <h2 style={{color: '#4ade80', letterSpacing: '2px'}}>AI ENGINE ACTIVE</h2>
-                                <p style={{fontFamily: 'monospace', color: '#94a3b8'}}>SCANNING DATABASES...</p>
+                                <img src="image_735d5d.png" className="spinning-logo" alt="Scanning..." />
+                                <div className="ai-text">AI ENGINE ACTIVE</div>
+                                <div className="ai-subtext">BYPASSING ENCRYPTION & EXTRACTING NODES...</div>
                             </div>
                         )}
 
                         <div className="window-header">
-                            <h1 className="window-title">Results</h1>
+                            <h1 className="window-title">System Database</h1>
                             <div className="search-box">
                                 <input 
                                     className="search-input" 
@@ -338,34 +392,32 @@
                                     onChange={(e) => setSearchInput(e.target.value)}
                                     onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
                                 />
-                                <button className="search-btn" onClick={handleVerify}>SCAN</button>
+                                <button className="search-btn" onClick={handleVerify}>Execute</button>
                             </div>
                         </div>
 
                         <div className="results-list">
                             {displayedLedger.map((p, index) => (
-                                <div className="mockup-card" key={p.id || index}>
-                                    <div className="card-top-row">
-                                        <img src={p.img} alt={p.store} className="card-image" />
-                                        <div className="card-details">
-                                            <div className="mockup-orange-title">
-                                                {p.store} <span>{p.label}</span>
-                                            </div>
-                                            <h3 className="mockup-main-title">{p.store}</h3>
-                                            <p className="mockup-subtext">{p.desc}</p>
-                                        </div>
-                                        <div className="card-icons">
-                                            🪙 🛒 ✎
-                                        </div>
+                                <div className="tech-card" key={p.id || index}>
+                                    <div className="card-image-wrapper">
+                                        <ImageWithFallback src={p.img} alt={p.store} />
                                     </div>
-                                    
-                                    {p.url && p.url !== "#" ? (
-                                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
-                                    ) : p.code ? (
-                                        <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY CODE: {p.code}</button>
-                                    ) : (
-                                        <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>NO CODES</button>
-                                    )}
+                                    <div className="card-details">
+                                        <div className="tech-orange-title">
+                                            {p.store} <span>{p.label}</span>
+                                        </div>
+                                        <h3 className="tech-main-title">{p.store}</h3>
+                                        <p className="tech-subtext">{p.desc}</p>
+                                    </div>
+                                    <div className="card-actions">
+                                        {p.url && p.url !== "#" ? (
+                                            <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
+                                        ) : p.code ? (
+                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY: {p.code}</button>
+                                        ) : (
+                                            <button className="copy-btn" style={{opacity: 0.3, cursor: 'not-allowed'}}>NO CODES</button>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                         </div>
