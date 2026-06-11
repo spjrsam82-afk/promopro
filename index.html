@@ -4,108 +4,105 @@
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>PromoPro Matrix</title>
+    <title>PromoPro Dashboard</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         * { box-sizing: border-box; }
+        
         body { 
-            /* High-res blurred room background to match your mockup's environment */
+            /* High-res blurred desk background matching your mockup */
             background: url('https://images.unsplash.com/photo-1542831371229-5be10f0c0b11?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
             background-size: cover;
             color: #ffffff; 
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
             padding: 0; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
         
+        /* THE FLOATING APP WINDOW (1:1 with mockup) */
         #root { 
-            width: 100%; 
-            min-height: 100vh; 
+            width: 100%;
+            max-width: 1200px;
+            height: 85vh;
+            min-height: 600px;
+            background: rgba(15, 23, 42, 0.85); /* Dark slate glass */
+            backdrop-filter: blur(20px);
+            border: 2px solid #4ade80; /* The exact mint/neon green */
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(74, 222, 128, 0.1);
             display: flex; 
             flex-direction: row; 
-            background: rgba(4, 9, 20, 0.6); /* Tint to make the UI pop */
+            overflow: hidden;
+            margin: 20px;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE RESPONSIVENESS (For your Samsung A16) --- */
         @media (max-width: 768px) {
-            #root { flex-direction: column; }
-            .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(57, 255, 20, 0.3) !important; padding: 15px !important; }
-            .sidebar-logo { margin-bottom: 10px !important; width: 100%; justify-content: center; }
-            .nav-item { padding: 8px 15px !important; margin-bottom: 5px !important; font-size: 13px; }
-            .main-content { padding: 10px !important; }
-            .dashboard-window { padding: 15px !important; border-width: 1px !important; }
-            .search-box { flex-direction: column; width: 100% !important; }
-            .search-btn { padding: 15px !important; width: 100%; }
+            body { align-items: flex-start; }
+            #root { flex-direction: column; height: auto; margin: 0; border-radius: 0; border: none; border-top: 2px solid #4ade80; }
+            .sidebar { width: 100% !important; height: auto !important; flex-direction: row !important; flex-wrap: wrap; justify-content: center; border-right: none !important; border-bottom: 1px solid rgba(74, 222, 128, 0.3) !important; padding: 15px !important; }
+            .sidebar-logo { width: 100%; justify-content: center; margin-bottom: 15px !important; }
+            .nav-item { padding: 8px 12px !important; margin-bottom: 5px !important; font-size: 13px !important; }
+            .main-content { padding: 15px !important; }
+            .search-box { width: 100% !important; }
         }
 
         /* --- SIDEBAR --- */
         .sidebar {
             width: 250px;
-            background: rgba(10, 25, 40, 0.85);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(74, 222, 128, 0.2);
             display: flex;
             flex-direction: column;
             padding: 30px 20px;
-            height: 100vh;
-            position: sticky;
-            top: 0;
             flex-shrink: 0;
-            z-index: 10;
+            overflow-y: auto;
         }
 
         .sidebar-logo {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
-            letter-spacing: 1px;
             color: #ffffff;
             display: flex;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
         }
-        .sidebar-logo span { color: #39ff14; margin-right: 8px; font-size: 28px; }
+        .sidebar-logo span { color: #4ade80; font-size: 24px; margin-right: 10px; }
 
         .nav-item {
             padding: 12px 16px;
             margin-bottom: 8px;
             border-radius: 8px;
-            color: #a1a1aa;
+            color: #94a3b8;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 15px;
+            font-size: 14px;
         }
+        /* Active state matching the dark green filled pill from mockup */
         .nav-item:hover, .nav-item.active {
-            background: rgba(57, 255, 20, 0.15);
-            color: #39ff14;
+            background: rgba(22, 101, 52, 0.8);
+            color: #ffffff;
+            box-shadow: inset 0 0 10px rgba(74, 222, 128, 0.2);
         }
 
-        /* --- MAIN CONTENT & THE MASSIVE GLASS WINDOW --- */
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             flex: 1;
-            padding: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .dashboard-window {
-            width: 100%;
-            max-width: 950px;
-            background: rgba(12, 24, 36, 0.85);
-            backdrop-filter: blur(25px);
-            border: 2px solid #39ff14; /* THE BOLD NEON GREEN BORDER */
-            border-radius: 16px;
-            box-shadow: 0 0 40px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(57, 255, 20, 0.1);
-            padding: 30px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            overflow-y: auto;
             position: relative;
         }
 
@@ -115,51 +112,49 @@
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 20px;
+            margin-bottom: 30px;
             gap: 15px;
         }
-        .window-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0; }
+        .window-title { font-size: 24px; font-weight: bold; color: #ffffff; margin: 0; }
 
         .search-box {
             display: flex;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #39ff14;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(74, 222, 128, 0.5);
             border-radius: 8px;
             overflow: hidden;
-            width: 100%;
-            max-width: 400px;
+            width: 350px;
         }
         .search-input {
-            flex: 1; background: transparent; border: none; color: #39ff14; padding: 12px 20px; font-family: monospace; font-size: 16px; outline: none; font-weight: bold;
+            flex: 1; background: transparent; border: none; color: #4ade80; padding: 10px 15px; font-family: monospace; font-size: 14px; outline: none;
         }
-        .search-input::placeholder { color: rgba(57, 255, 20, 0.5); }
+        .search-input::placeholder { color: rgba(74, 222, 128, 0.4); }
         .search-btn {
-            background: #39ff14; color: #000000; border: none; padding: 0 25px; font-weight: bold; cursor: pointer; transition: 0.3s;
+            background: rgba(74, 222, 128, 0.2); color: #4ade80; border: none; border-left: 1px solid rgba(74, 222, 128, 0.5); padding: 0 20px; font-weight: bold; cursor: pointer; transition: 0.2s;
         }
-        .search-btn:hover { background: #ffffff; }
+        .search-btn:hover { background: #4ade80; color: #022c22; }
 
-        /* --- HORIZONTAL STACKED CARDS (1:1 with mockup) --- */
+        /* --- CARDS (1:1 with mockup) --- */
         .results-list {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            max-width: 800px;
         }
 
-        .horizontal-card {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(57, 255, 20, 0.4);
+        .mockup-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(74, 222, 128, 0.4);
             border-radius: 12px;
             padding: 20px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             transition: 0.3s;
-            position: relative;
         }
-        .horizontal-card:hover {
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
-            border-color: #39ff14;
+        .mockup-card:hover {
+            border-color: #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.15);
         }
 
         .card-top-row {
@@ -168,62 +163,62 @@
             gap: 20px;
         }
 
+        /* Unbreakable Clearbit Logos */
         .card-image {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 8px;
             object-fit: contain;
-            background: #ffffff; /* White background makes real logos pop */
+            background: #ffffff;
             padding: 5px;
         }
 
-        .card-details {
-            flex: 1;
-        }
-        .card-subtext { color: #39ff14; font-size: 12px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; }
-        .card-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
-        .card-desc { font-size: 14px; color: #a1a1aa; margin: 0; }
+        .card-details { flex: 1; }
+        
+        /* Matches the small orange text, large white text, small green subtext */
+        .mockup-orange-title { color: #f97316; font-size: 14px; font-weight: bold; margin: 0 0 2px 0; display: flex; align-items: center; gap: 8px; }
+        .mockup-orange-title span { background: #f97316; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+        
+        .mockup-main-title { font-size: 22px; font-weight: bold; color: #ffffff; margin: 0 0 4px 0; }
+        .mockup-subtext { font-size: 12px; color: #a1a1aa; margin: 0; }
 
         .card-icons {
             font-size: 20px;
             display: flex;
             gap: 10px;
-            color: #ffd700;
+            color: #fbbf24;
         }
 
-        /* FULL WIDTH GREEN BUTTON (Matches mockup) */
+        /* THE MASSIVE GREEN BUTTON */
         .claim-btn {
             width: 100%;
-            background: #39ff14;
-            color: #000000;
+            background: #4ade80;
+            color: #022c22; /* Dark green/black text */
             border: none;
             padding: 14px;
             font-weight: 900;
             font-size: 16px;
-            text-transform: uppercase;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            transition: 0.3s;
-            letter-spacing: 1px;
+            transition: 0.2s;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .claim-btn:hover { background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-        .claim-btn::after { content: '✎'; font-size: 14px; } /* Little pencil icon from mockup */
 
         .copy-btn {
-            width: 100%; background: transparent; color: #39ff14; border: 1px solid #39ff14; padding: 14px; font-weight: 900; font-size: 16px; text-transform: uppercase; border-radius: 8px; cursor: pointer; transition: 0.3s; text-align: center;
+            width: 100%; background: transparent; color: #4ade80; border: 1px solid #4ade80; padding: 14px; font-weight: 900; font-size: 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; text-align: center;
         }
-        .copy-btn:hover { background: #39ff14; color: #000000; }
+        .copy-btn:hover { background: #4ade80; color: #022c22; }
 
-        /* --- THE ANIMATION YOU UPLOADED --- */
+        /* --- THE ANIMATION OVERLAY --- */
         .searching-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(10, 25, 40, 0.95);
+            background: rgba(15, 23, 42, 0.9);
             border-radius: 16px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 50;
@@ -235,7 +230,7 @@
             width: 120px; 
             height: 120px; 
             animation: customSpin 4s linear infinite; 
-            filter: drop-shadow(0 0 20px #39ff14); 
+            filter: drop-shadow(0 0 20px #4ade80); 
             margin-bottom: 25px; 
             object-fit: contain;
         }
@@ -248,16 +243,15 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // ACTUAL OFFICIAL LOGOS FOR ALL AFFILIATES
+        // Rock-Solid Logos using Clearbit API (These won't break)
         const INITIAL_LEDGER = [
-            { id: 101, store: "GAMIVO", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", isGame: false },
-            { id: 102, store: "GameFly", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GAMEFLY_LINK", img: "https://upload.wikimedia.org/wikipedia/commons/e/e0/GameFly_logo.svg", isGame: false },
-            { id: 103, store: "Whiteout Survival", category: "GAMING", desc: "100 Gems & Daily Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
-            { id: 104, store: "Merge Dragons!", category: "GAMING", desc: "New Player Bonus & Resources", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
-            { id: 105, store: "State of Survival", category: "GAMING", desc: "1000 Biocaps & Speedups", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "SOS2026", isGame: true },
-            { id: 106, store: "GearUP", category: "GAMING", desc: "Status • Verified 100%", url: "YOUR_GEARUP_LINK", img: "https://play-lh.googleusercontent.com/13_0XG569EaR-F8EHK_XnI_d6q8y1qN_bX4x1H6C5KxK2e3N3K5H_e9t7A7s2Q=w240-h480-rw", isGame: false },
-            { id: 107, store: "Idle Outpost", category: "GAMING", desc: "Scavenger Boosts & Caps", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: true },
-            { id: 108, store: "JustPlay", category: "EXCLUSIVES", desc: "Play Games & Earn Real Rewards", url: "YOUR_JUSTPLAY_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/f0/a6/f0/f0a6f0a4-37f2-1a74-9f20-b32de22c4f74/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", isGame: false }
+            { id: 101, store: "GAMIVO", category: "GAMING", label: "Anal Pro", desc: "Show • Creal • 338%", url: "YOUR_GAMIVO_AFFILIATE_LINK", img: "https://logo.clearbit.com/gamivo.com", isGame: false },
+            { id: 102, store: "GearUP", category: "GAMING", label: "AI Node", desc: "State • Cred • 390%", url: "YOUR_GEARUP_LINK", img: "https://logo.clearbit.com/gearupbooster.com", isGame: false },
+            { id: 103, store: "Expedia", category: "TRAVEL", label: "Travel Pro", desc: "Global Flights & Hotels", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://logo.clearbit.com/expedia.com", isGame: false },
+            { id: 104, store: "GameFly", category: "GAMING", label: "Rental Node", desc: "Console Game Rentals", url: "YOUR_GAMEFLY_LINK", img: "https://logo.clearbit.com/gamefly.com", isGame: false },
+            { id: 105, store: "Whiteout Survival", category: "GAMING", label: "Mobile Node", desc: "100 Gems & Resources", url: "#", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", isGame: true },
+            { id: 106, store: "Merge Dragons!", category: "GAMING", label: "Mobile Node", desc: "New Player Bonus", url: "YOUR_IMPACT_LINK", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", isGame: true },
+            { id: 107, store: "Hotels.com", category: "TRAVEL", label: "Travel Node", desc: "Global Lodging", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://logo.clearbit.com/hotels.com", isGame: false }
         ];
 
         function App() {
@@ -271,7 +265,6 @@
                 setAiState("searching");
                 setDynamicResult(null);
 
-                // Forces 6 second animation of YOUR exact logo
                 await new Promise(resolve => setTimeout(resolve, 6000));
 
                 const searchLower = searchInput.toLowerCase();
@@ -297,9 +290,9 @@
                     const linkUrl = extractedUrls ? extractedUrls[0] : null;
                     const cleanDesc = linkUrl ? fullText.replace(linkUrl, '').trim() : fullText;
                     
-                    setDynamicResult({ store: searchInput.toUpperCase(), desc: cleanDesc, url: linkUrl, img: "image_735d5d.png", code: "VERIFIED" });
+                    setDynamicResult({ store: searchInput.toUpperCase(), category: "AI SEARCH", label: "Extracted", desc: cleanDesc, url: linkUrl, img: "https://logo.clearbit.com/cloud.google.com", code: "VERIFIED" });
                 } catch (error) {
-                    setDynamicResult({ store: "SYSTEM ERROR", desc: "Backend not reached. Please check server.", url: null, img: "image_735d5d.png", code: "ERROR" });
+                    setDynamicResult({ store: "SYSTEM ERROR", category: "ERROR", label: "Failed", desc: "Backend not reached. Please check server.", url: null, img: "https://logo.clearbit.com/cloudflare.com", code: "ERROR" });
                 }
                 setAiState("idle");
             };
@@ -325,56 +318,56 @@
                     </div>
 
                     <div className="main-content">
-                        <div className="dashboard-window">
-                            
-                            {/* EXPLICITLY CALLS YOUR UPLOADED IMAGE FILE */}
-                            {aiState === "searching" && (
-                                <div className="searching-overlay">
-                                    <img src="image_735d5d.png" className="spinning-logo" alt="Scanning..." />
-                                    <h2 style={{color: '#39ff14', letterSpacing: '2px'}}>AI ENGINE ACTIVE</h2>
-                                    <p style={{fontFamily: 'monospace', color: '#94a3b8'}}>SCANNING DATABASES...</p>
-                                </div>
-                            )}
-
-                            <div className="window-header">
-                                <h1 className="window-title">AI Promo Results</h1>
-                                <div className="search-box">
-                                    <input 
-                                        className="search-input" 
-                                        placeholder="Verify Game or Store..." 
-                                        value={searchInput}
-                                        onChange={(e) => setSearchInput(e.target.value)}
-                                        onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
-                                    />
-                                    <button className="search-btn" onClick={handleVerify}>SCAN</button>
-                                </div>
+                        
+                        {/* THIS TAG REQUIRES image_735d5d.png TO BE IN GITHUB */}
+                        {aiState === "searching" && (
+                            <div className="searching-overlay">
+                                <img src="image_735d5d.png" className="spinning-logo" alt="If you see this text, upload image_735d5d.png to GitHub!" />
+                                <h2 style={{color: '#4ade80', letterSpacing: '2px'}}>AI ENGINE ACTIVE</h2>
+                                <p style={{fontFamily: 'monospace', color: '#94a3b8'}}>SCANNING DATABASES...</p>
                             </div>
+                        )}
 
-                            <div className="results-list">
-                                {displayedLedger.map((p, index) => (
-                                    <div className="horizontal-card" key={p.id || index}>
-                                        <div className="card-top-row">
-                                            <img src={p.img} alt={p.store} className="card-image" />
-                                            <div className="card-details">
-                                                <div className="card-subtext">AI Verified Node</div>
-                                                <h3 className="card-title">{p.store}</h3>
-                                                <p className="card-desc">{p.desc}</p>
+                        <div className="window-header">
+                            <h1 className="window-title">Results</h1>
+                            <div className="search-box">
+                                <input 
+                                    className="search-input" 
+                                    placeholder="Verify Game or Store..." 
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
+                                />
+                                <button className="search-btn" onClick={handleVerify}>SCAN</button>
+                            </div>
+                        </div>
+
+                        <div className="results-list">
+                            {displayedLedger.map((p, index) => (
+                                <div className="mockup-card" key={p.id || index}>
+                                    <div className="card-top-row">
+                                        <img src={p.img} alt={p.store} className="card-image" />
+                                        <div className="card-details">
+                                            <div className="mockup-orange-title">
+                                                {p.store} <span>{p.label}</span>
                                             </div>
-                                            <div className="card-icons">
-                                                🪙 🛒
-                                            </div>
+                                            <h3 className="mockup-main-title">{p.store}</h3>
+                                            <p className="mockup-subtext">{p.desc}</p>
                                         </div>
-                                        
-                                        {p.url && p.url !== "#" ? (
-                                            <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
-                                        ) : p.code ? (
-                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY CODE: {p.code}</button>
-                                        ) : (
-                                            <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>NO CODES AVAILABLE</button>
-                                        )}
+                                        <div className="card-icons">
+                                            🪙 🛒 ✎
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
+                                    
+                                    {p.url && p.url !== "#" ? (
+                                        <a href={p.url} target="_blank" rel="noopener noreferrer" className="claim-btn">Claim Deal</a>
+                                    ) : p.code ? (
+                                        <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>COPY CODE: {p.code}</button>
+                                    ) : (
+                                        <button className="copy-btn" style={{opacity: 0.5, cursor: 'not-allowed', color: '#94a3b8', borderColor: '#94a3b8'}}>NO CODES</button>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </>
