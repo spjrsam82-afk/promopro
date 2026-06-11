@@ -157,12 +157,26 @@
         }
         .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
 
+        /* Section divider header */
+        .section-label {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto 18px auto;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #8b5cf6;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            padding-bottom: 8px;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 25px;
             max-width: 1400px;
-            margin: 0 auto;
+            margin: 0 auto 40px auto;
             width: 100%;
         }
 
@@ -180,7 +194,8 @@
         .matrix-card:hover { transform: translateY(-3px); }
 
         .theme-orange { border: 2px solid #f97316; box-shadow: 0 0 20px rgba(249, 115, 22, 0.3); }
-        .theme-green { border: 2px solid #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+        .theme-green  { border: 2px solid #4ade80; box-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+        .theme-blue   { border: 2px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
 
         .card-header { font-size: 15px; font-weight: bold; color: #ffffff; }
         .card-header span { font-weight: normal; color: #cbd5e1; }
@@ -193,7 +208,11 @@
         }
         
         .fallback-bg {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
+            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(249,115,22,0.1));
+            border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+            color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
+            text-align: center; padding: 10px;
         }
 
         .card-footer {
@@ -208,9 +227,11 @@
         .status-btn {
             background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s;
         }
-        .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);}
+        .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
+        .status-btn.blue-btn { border-color: #38bdf8; color: #38bdf8; }
+        .status-btn.blue-btn:hover { background: #38bdf8; color: #020617; box-shadow: 0 0 15px rgba(56,189,248,0.5); }
 
-        /* --- THE ANIMATION OVERLAY --- */
+        /* --- ANIMATION OVERLAY --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(10, 15, 30, 0.95);
@@ -250,9 +271,9 @@
         }
 
         @keyframes pulseGlow { 
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px #8b5cf6); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 20px #8b5cf6); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 10px #8b5cf6); }
+            0%   { transform: scale(1);    filter: drop-shadow(0 0 10px #8b5cf6); }
+            50%  { transform: scale(1.05); filter: drop-shadow(0 0 20px #8b5cf6); }
+            100% { transform: scale(1);    filter: drop-shadow(0 0 10px #8b5cf6); }
         }
 
         .close-btn { margin-top: 20px; background: transparent; color: #f97316; border: 1px solid #f97316; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
@@ -264,42 +285,164 @@
     <script type="text/babel">
         const { useState } = React;
 
+        // Proxy fallback for hotlink-protected images
         const PROXY_URL = "https://wsrv.nl/?url=";
 
+        // SafeImage: tries direct first, then proxy, then text fallback
         const SafeImage = ({ src, alt, className }) => {
             const [attempts, setAttempts] = useState(0);
-            if (!src || attempts >= 2) return <div className="fallback-bg">{alt}</div>;
+            if (!src || attempts >= 2) {
+                return <div className="fallback-bg">🎮 {alt}</div>;
+            }
             const proxiedSrc = attempts === 1 ? PROXY_URL + encodeURIComponent(src) : src;
-            return <img src={proxiedSrc} alt={alt} className={className} onError={() => setAttempts(a => a + 1)} />;
+            return (
+                <img
+                    src={proxiedSrc}
+                    alt={alt}
+                    className={className}
+                    onError={() => setAttempts(a => a + 1)}
+                />
+            );
         };
 
-        const INITIAL_LEDGER = [
-            // Wikipedia / Wikimedia Pulled Assets
-            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
-            { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Call_of_Duty_Mobile_Logo.png/320px-Call_of_Duty_Mobile_Logo.png", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
-            { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
-            { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/Genshin_Impact_logo.svg/320px-Genshin_Impact_logo.svg.png", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
-            { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Raid_Shadow_Legends_cover.jpg/220px-Raid_Shadow_Legends_cover.jpg", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
-            { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/800px-GameFly_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
-            { id: 12, store: "Expedia", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/800px-Expedia_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
-            { id: 14, store: "Vrbo", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/800px-Vrbo_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
-            { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
-            
-            // Raw CDNs & Direct Fallbacks (No Wikipedia Image Exists)
-            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "cover" },
-            { id: 4, store: "GearUP", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
-            { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/31/57/02/3157021b-db87-8d07-2856-78e72750e3a6/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 13, store: "UNice", category: "Beauty Node", img: "https://www.unice.com/static/version_1/images/logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain" },
-            { id: 15, store: "Rexing", category: "Exclusive Node", img: "https://www.rexingusa.com/wp-content/uploads/2019/08/Rexing-Logo-White.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain" },
-            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "cover" },
-            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" }
+        // ── CORE LEDGER ─────────────────────────────────────────────────────────────
+        const CORE_LEDGER = [
+            {
+                id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node",
+                img: "https://play-lh.googleusercontent.com/S-QLBXqFzCqVEMk5cBMHkZhFpMKqBKX0m7aMFa2HBXQH75QzUHgULvVCZOCFBMJx=w480-h960",
+                code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover"
+            },
+            {
+                id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node",
+                img: "https://play-lh.googleusercontent.com/tFmKuFbIKpUH9YtqNTqJDKkN3nI3u3WL0nBdFtfv0sNd7rE7nJRCGSTzGkNKDuINDtU=w480",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green",
+                url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "cover"
+            },
+            {
+                id: 3, store: "GAMIVO", category: "Digital Key Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png",
+                code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange",
+                url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain"
+            },
+            {
+                id: 4, store: "GearUP Booster", category: "Technical Node",
+                img: "https://www.gearupbooster.com/images/index/logo.png",
+                code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green",
+                url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain"
+            },
+            {
+                id: 5, store: "Call of Duty Mobile", category: "Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Call_of_Duty_Mobile_cover.jpg/220px-Call_of_Duty_Mobile_cover.jpg",
+                code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover"
+            },
+            {
+                id: 6, store: "Epic Games", category: "Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png",
+                code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green",
+                url: "https://store.epicgames.com/en-US/free-games", fit: "contain"
+            },
+            {
+                id: 7, store: "State of Survival", category: "Mobile Gaming Node",
+                img: "https://play-lh.googleusercontent.com/uniV3VAFQ5hy9AuvmLSm1LYOG9RKcKKzWCgRzSWFT_W3y7UEY0nDC7l_g7fT4IhPxA=w480",
+                code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover"
+            },
+            {
+                id: 8, store: "Genshin Impact", category: "Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/Genshin_Impact_cover_art.jpg/220px-Genshin_Impact_cover_art.jpg",
+                code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "cover"
+            },
+            {
+                id: 9, store: "RAID: Shadow Legends", category: "Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Raid_Shadow_Legends_cover.jpg/220px-Raid_Shadow_Legends_cover.jpg",
+                code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover"
+            },
+            {
+                id: 10, store: "Roblox", category: "Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png",
+                code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain"
+            },
+            {
+                id: 11, store: "GameFly", category: "Console Gaming Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/800px-GameFly_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange",
+                url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain"
+            },
+            {
+                id: 12, store: "Expedia", category: "Travel Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/800px-Expedia_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green",
+                url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain"
+            },
+            {
+                id: 13, store: "UNice Hair", category: "Beauty Node",
+                img: "https://www.unice.com/static/version_1/images/logo.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange",
+                url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain"
+            },
+            {
+                id: 14, store: "Vrbo", category: "Travel Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/800px-Vrbo_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green",
+                url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain"
+            },
+            {
+                id: 15, store: "Rexing", category: "Exclusive Node",
+                img: "https://www.rexingusa.com/wp-content/uploads/2019/08/Rexing-Logo-White.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange",
+                url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain"
+            },
+            {
+                id: 16, store: "Hotels.com", category: "Travel Node",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green",
+                url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain"
+            },
+            {
+                id: 17, store: "Idle Outpost", category: "Gaming Node",
+                img: "https://play-lh.googleusercontent.com/jB9BgIWq_gflHFoFwjGHaOanCrBbN1CrAMQNBQ_Gn6Y8HpNJX1wfzQwJJ5BEGlF5tA=w480",
+                code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain"
+            },
+            {
+                id: 18, store: "Golf Rival", category: "Gaming Node",
+                img: "https://play-lh.googleusercontent.com/WV0S_vCGbwK49xJSGQ7J7nqHLNiuFyJK1vJP3g5P7xPqjh5wRMCpS8q8Vo9mXJYjkA=w480",
+                code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover"
+            }
         ];
 
+        // ── GAMIVO HUB NODES ────────────────────────────────────────────────────────
+        const GAMIVO_NODES = [
+            {
+                id: 30, store: "All PC Games", category: "GAMIVO Gaming Hub",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Windows_logo_-_2006.svg/800px-Windows_logo_-_2006.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE ALL", theme: "orange",
+                url: "https://www.gamivo.com/store/games?glv=8kuvauuj", fit: "contain"
+            },
+            {
+                id: 31, store: "Xbox Games", category: "GAMIVO Gaming Hub",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Xbox_one_logo.svg/800px-Xbox_one_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE XBOX", theme: "green",
+                url: "https://www.gamivo.com/store/xbox?glv=8kuvauuj", fit: "contain"
+            },
+            {
+                id: 32, store: "Epic Games Store", category: "GAMIVO Gaming Hub",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE EPIC", theme: "blue",
+                url: "https://www.gamivo.com/store/games/epic?glv=8kuvauuj", fit: "contain"
+            },
+            {
+                id: 33, store: "PlayStation Store", category: "GAMIVO Gaming Hub",
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png",
+                code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE PSN", theme: "blue",
+                url: "https://www.gamivo.com/store/playstation?glv=8kuvauuj", fit: "contain"
+            }
+        ];
+
+        // Combined for search
+        const ALL_ENTRIES = [...CORE_LEDGER, ...GAMIVO_NODES];
+
         function App() {
-            const [searchInput, setSearchInput] = useState("");
-            const [aiState, setAiState] = useState("idle"); 
+            const [searchInput, setSearchInput]     = useState("");
+            const [aiState, setAiState]             = useState("idle");
             const [dynamicResult, setDynamicResult] = useState(null);
             const [revealedCodes, setRevealedCodes] = useState({});
 
@@ -311,40 +454,67 @@
                 await new Promise(resolve => setTimeout(resolve, 6000));
 
                 const searchLower = searchInput.toLowerCase();
-                const matchedAffiliate = INITIAL_LEDGER.find(item => item.store.toLowerCase().includes(searchLower));
+                const match = ALL_ENTRIES.find(item => item.store.toLowerCase().includes(searchLower));
 
-                if (matchedAffiliate) {
-                    setDynamicResult(matchedAffiliate);
+                if (match) {
+                    setDynamicResult(match);
                 } else {
-                    setDynamicResult({ id: 999, store: searchInput.toUpperCase(), category: "Extracted Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png", code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain" });
+                    setDynamicResult({
+                        id: 999, store: searchInput.toUpperCase(), category: "Extracted Node",
+                        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png",
+                        code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain"
+                    });
                 }
                 setAiState("result");
             };
 
             const handleAction = (e, id, codeText, url) => {
-                e.preventDefault(); 
-                
+                e.preventDefault();
                 setRevealedCodes(prev => ({ ...prev, [id]: true }));
 
                 const hasLink = url && url !== "#";
-                const hasCode = codeText && codeText !== "AUTO-ROUTED" && codeText !== "NONE" && codeText !== "WEBSHOP" && codeText !== "PUBLIC";
+                const hasCode = codeText && !["AUTO-ROUTED","NONE","WEBSHOP","PUBLIC"].includes(codeText);
 
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
                     alert(`System Log: Code '${codeText}' revealed and copied to clipboard. Redirecting...`);
                 }
-
                 if (hasLink) {
                     window.open(url, "_blank");
                 }
             };
 
             const renderCode = (id, code) => {
-                if (code === "AUTO-ROUTED" || code === "NONE" || code === "PUBLIC" || code === "WEBSHOP") {
+                if (["AUTO-ROUTED","NONE","PUBLIC","WEBSHOP"].includes(code)) {
                     return <span className="highlight">'{code}'</span>;
                 }
-                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
+                return revealedCodes[id]
+                    ? <span className="highlight">'{code}'</span>
+                    : <span className="hidden-code">'••••••••'</span>;
             };
+
+            const renderCard = (p) => (
+                <div className={`matrix-card theme-${p.theme}`} key={p.id}>
+                    <div className="card-header">{p.store} <span>// {p.category}</span></div>
+                    <SafeImage
+                        src={p.img}
+                        alt={p.store}
+                        className={p.fit === "contain" ? "card-banner-contain" : "card-banner"}
+                    />
+                    <div className="card-footer">
+                        <div className="card-info">
+                            <div>code: {renderCode(p.id, p.code)}</div>
+                            <div>status: <span className="highlight">'{p.status}'</span></div>
+                        </div>
+                        <button
+                            className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`}
+                            onClick={(e) => handleAction(e, p.id, p.code, p.url)}
+                        >
+                            {p.btn}
+                        </button>
+                    </div>
+                </div>
+            );
 
             return (
                 <>
@@ -373,17 +543,17 @@
                             <div className="career-box">
                                 <strong>SYSTEM ADMIN:</strong><br/>
                                 Access Level: Tier 1<br/>
-                                Engine Status: Online & Routing
+                                Engine Status: Online &amp; Routing
                             </div>
                         </div>
                     </div>
 
                     <div className="main-content">
-                        
+
                         <div className="search-wrapper">
-                            <input 
-                                className="system-search" 
-                                placeholder="SYSTEM DATABASE SEARCH // Execute" 
+                            <input
+                                className="system-search"
+                                placeholder="SYSTEM DATABASE SEARCH // Execute"
                                 value={searchInput}
                                 onChange={(e) => setSearchInput(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
@@ -391,52 +561,67 @@
                         </div>
 
                         {aiState === "idle" && (
-                            <div className="grid">
-                                {INITIAL_LEDGER.map((p) => (
-                                    <div className={`matrix-card theme-${p.theme}`} key={p.id}>
-                                        <div className="card-header">{p.store} <span>// {p.category}</span></div>
-                                        <SafeImage src={p.img} alt={p.store} className={p.fit === "contain" ? "card-banner-contain" : "card-banner"} />
-                                        <div className="card-footer">
-                                            <div className="card-info">
-                                                <div>code: {renderCode(p.id, p.code)}</div>
-                                                <div>status: <span className="highlight">'{p.status}'</span></div>
-                                            </div>
-                                            <button className="status-btn" onClick={(e) => handleAction(e, p.id, p.code, p.url)}>{p.btn}</button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            <>
+                                {/* ── CORE AFFILIATE LEDGER ── */}
+                                <div className="section-label">⚡ Core Affiliate Ledger</div>
+                                <div className="grid">
+                                    {CORE_LEDGER.map(renderCard)}
+                                </div>
+
+                                {/* ── GAMIVO GAMING HUB ── */}
+                                <div className="section-label">🎮 GAMIVO Gaming Hub</div>
+                                <div className="grid">
+                                    {GAMIVO_NODES.map(renderCard)}
+                                </div>
+                            </>
                         )}
 
+                        {/* SEARCH ANIMATION */}
                         {aiState === "searching" && (
                             <div className="modal-overlay">
                                 <div className="animation-container">
                                     <div className="css-spinner"></div>
-                                    <SafeImage src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png" className="pulsing-logo" alt="Scanning..." />
+                                    <SafeImage
+                                        src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png"
+                                        className="pulsing-logo"
+                                        alt=""
+                                    />
                                 </div>
                             </div>
                         )}
 
+                        {/* SEARCH RESULT */}
                         {aiState === "result" && dynamicResult && (
                             <div className="modal-overlay">
                                 <div className={`matrix-card theme-${dynamicResult.theme}`} style={{width: '90%', maxWidth: '500px'}}>
                                     <div className="card-header">{dynamicResult.store} <span>// {dynamicResult.category}</span></div>
-                                    <SafeImage src={dynamicResult.img} alt={dynamicResult.store} className={dynamicResult.fit === "contain" ? "card-banner-contain" : "card-banner"} />
+                                    <SafeImage
+                                        src={dynamicResult.img}
+                                        alt={dynamicResult.store}
+                                        className={dynamicResult.fit === "contain" ? "card-banner-contain" : "card-banner"}
+                                    />
                                     <div className="card-footer">
                                         <div className="card-info">
                                             <div>code: {renderCode(dynamicResult.id, dynamicResult.code)}</div>
                                             <div>status: <span className="highlight">'{dynamicResult.status}'</span></div>
                                         </div>
-                                        <button className="status-btn" onClick={(e) => handleAction(e, dynamicResult.id, dynamicResult.code, dynamicResult.url)}>{dynamicResult.btn}</button>
+                                        <button
+                                            className={`status-btn${dynamicResult.theme === "blue" ? " blue-btn" : ""}`}
+                                            onClick={(e) => handleAction(e, dynamicResult.id, dynamicResult.code, dynamicResult.url)}
+                                        >
+                                            {dynamicResult.btn}
+                                        </button>
                                     </div>
                                 </div>
-                                <button className="close-btn" onClick={() => setAiState("idle")}>X CLOSE ENGINE</button>
+                                <button className="close-btn" onClick={() => setAiState("idle")}>✕ CLOSE ENGINE</button>
                             </div>
                         )}
+
                     </div>
                 </>
             );
         }
+
         ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
