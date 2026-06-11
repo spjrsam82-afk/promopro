@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
-    <meta name="referrer" content="no-referrer">
+    <meta name="referrer" content="origin-when-cross-origin">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro System Ledger</title>
@@ -210,7 +210,7 @@
         }
         .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);}
 
-        /* --- THE NEW ANIMATION OVERLAY --- */
+        /* --- THE ANIMATION OVERLAY --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(10, 15, 30, 0.95);
@@ -264,17 +264,13 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // THE PROXY ENGINE: Forces broken images to load by stripping their security headers
         const PROXY_URL = "https://wsrv.nl/?url=";
 
         const SafeImage = ({ src, alt, className }) => {
-            const [error, setError] = useState(false);
-            if (error || !src) {
-                return <div className="fallback-bg">{alt}</div>;
-            }
-            // Route the image through the proxy to bypass hotlinking protection
-            const proxiedSrc = src.startsWith('http') ? PROXY_URL + encodeURIComponent(src) : src;
-            return <img src={proxiedSrc} alt={alt} className={className} onError={() => setError(true)} />;
+            const [attempts, setAttempts] = useState(0);
+            if (!src || attempts >= 2) return <div className="fallback-bg">{alt}</div>;
+            const proxiedSrc = attempts === 1 ? PROXY_URL + encodeURIComponent(src) : src;
+            return <img src={proxiedSrc} alt={alt} className={className} onError={() => setAttempts(a => a + 1)} />;
         };
 
         const INITIAL_LEDGER = [
@@ -294,16 +290,14 @@
             { id: 14, store: "Vrbo", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Vrbo_logo.svg/800px-Vrbo_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.kqzyfj.com/click-101761790-13394715", fit: "contain" },
             { id: 15, store: "Rexing", category: "Exclusive Node", img: "https://www.rexingusa.com/wp-content/uploads/2019/08/Rexing-Logo-White.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15795156", fit: "contain" },
             { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
-            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain" },
-            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "contain" }
+            { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/21/53/43/21534351-876a-542e-18e3-05c2a121e7d2/AppIcon-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "cover" },
+            { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a4/09/b8/a409b85c-6b3a-5f34-318e-4f058e5a7b8e/AppIcon-0-0-1x_U007emarketing-0-0-0-5-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" }
         ];
 
         function App() {
             const [searchInput, setSearchInput] = useState("");
             const [aiState, setAiState] = useState("idle"); 
             const [dynamicResult, setDynamicResult] = useState(null);
-            
-            // Tracks which codes have been revealed by clicking the button
             const [revealedCodes, setRevealedCodes] = useState({});
 
             const handleVerify = async () => {
@@ -327,19 +321,16 @@
             const handleAction = (e, id, codeText, url) => {
                 e.preventDefault(); 
                 
-                // 1. Instantly reveal the code on the card
                 setRevealedCodes(prev => ({ ...prev, [id]: true }));
 
                 const hasLink = url && url !== "#";
                 const hasCode = codeText && codeText !== "AUTO-ROUTED" && codeText !== "NONE" && codeText !== "WEBSHOP" && codeText !== "PUBLIC";
 
-                // 2. Copy to clipboard
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
                     alert(`System Log: Code '${codeText}' revealed and copied to clipboard. Redirecting...`);
                 }
 
-                // 3. Drop cookie & open tracking link
                 if (hasLink) {
                     window.open(url, "_blank");
                 }
@@ -372,13 +363,14 @@
                         </div>
 
                         <div className="career-context">
-                            <div className="career-title">CAREER CONTEXT</div>
+                            <div className="career-title">SYSTEM STATUS</div>
                             <div className="career-icons">
-                                <span>👷</span> <span>🚜</span> <span className="cs50-icon">CS50</span>
+                                <span>🛡️</span> <span>⚡</span> <span className="cs50-icon">SECURE</span>
                             </div>
                             <div className="career-box">
-                                <strong>CAREER FOCUS:</strong><br/>
-                                Samuel P. Jr. (Foreman & Operator. 23+ Yrs experience in grading & utilities.)
+                                <strong>SYSTEM ADMIN:</strong><br/>
+                                Access Level: Tier 1<br/>
+                                Engine Status: Online & Routing
                             </div>
                         </div>
                     </div>
@@ -413,17 +405,15 @@
                             </div>
                         )}
 
-                        {/* --- ANIMATION WITH HARDCODED RAW GITHUB URL TO PREVENT BREAKING --- */}
                         {aiState === "searching" && (
                             <div className="modal-overlay">
                                 <div className="animation-container">
                                     <div className="css-spinner"></div>
-                                    <SafeImage src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png" className="pulsing-logo" alt="" />
+                                    <SafeImage src="1781102482198.png" className="pulsing-logo" alt="" />
                                 </div>
                             </div>
                         )}
 
-                        {/* --- SEARCH RESULT --- */}
                         {aiState === "result" && dynamicResult && (
                             <div className="modal-overlay">
                                 <div className={`matrix-card theme-${dynamicResult.theme}`} style={{width: '90%', maxWidth: '500px'}}>
