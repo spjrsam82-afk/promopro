@@ -193,7 +193,7 @@
         }
         
         .fallback-bg {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-family: monospace; font-size: 16px; font-weight: bold; text-transform: uppercase;
+            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
         }
 
         .card-footer {
@@ -202,7 +202,8 @@
         .card-info {
             font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6;
         }
-        .highlight { color: #4ade80; }
+        .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
+        .hidden-code { color: #f97316; font-weight: bold; letter-spacing: 2px; }
 
         .status-btn {
             background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s;
@@ -227,7 +228,6 @@
             justify-content: center;
         }
 
-        /* The glowing CSS ring that guarantees an animation even if the image delays */
         .css-spinner {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -264,18 +264,22 @@
     <script type="text/babel">
         const { useState } = React;
 
+        // THE PROXY ENGINE: Forces broken images to load by stripping their security headers
+        const PROXY_URL = "https://wsrv.nl/?url=";
+
         const SafeImage = ({ src, alt, className }) => {
             const [error, setError] = useState(false);
             if (error || !src) {
                 return <div className="fallback-bg">{alt}</div>;
             }
-            return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
+            // Route the image through the proxy to bypass hotlinking protection
+            const proxiedSrc = src.startsWith('http') ? PROXY_URL + encodeURIComponent(src) : src;
+            return <img src={proxiedSrc} alt={alt} className={className} onError={() => setError(true)} />;
         };
 
-        // ALL CLEARBIT DOMAINS REPLACED WITH UNBREAKABLE HD WIKIPEDIA/CDN LINKS
         const INITIAL_LEDGER = [
-            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
-            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
+            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "cover" },
             { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
             { id: 4, store: "GearUP", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
             { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/blog/hero/codm/CODM-S6-SYNTHWAVE-TOUT.jpg", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
@@ -298,6 +302,9 @@
             const [searchInput, setSearchInput] = useState("");
             const [aiState, setAiState] = useState("idle"); 
             const [dynamicResult, setDynamicResult] = useState(null);
+            
+            // Tracks which codes have been revealed by clicking the button
+            const [revealedCodes, setRevealedCodes] = useState({});
 
             const handleVerify = async () => {
                 if (!searchInput.trim()) return;
@@ -317,20 +324,32 @@
                 setAiState("result");
             };
 
-            const handleAction = (e, codeText, url) => {
+            const handleAction = (e, id, codeText, url) => {
                 e.preventDefault(); 
                 
+                // 1. Instantly reveal the code on the card
+                setRevealedCodes(prev => ({ ...prev, [id]: true }));
+
                 const hasLink = url && url !== "#";
                 const hasCode = codeText && codeText !== "AUTO-ROUTED" && codeText !== "NONE" && codeText !== "WEBSHOP" && codeText !== "PUBLIC";
 
+                // 2. Copy to clipboard
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
-                    alert(`System Log: Code '${codeText}' copied to clipboard. Redirecting...`);
+                    alert(`System Log: Code '${codeText}' revealed and copied to clipboard. Redirecting...`);
                 }
 
+                // 3. Drop cookie & open tracking link
                 if (hasLink) {
                     window.open(url, "_blank");
                 }
+            };
+
+            const renderCode = (id, code) => {
+                if (code === "AUTO-ROUTED" || code === "NONE" || code === "PUBLIC" || code === "WEBSHOP") {
+                    return <span className="highlight">'{code}'</span>;
+                }
+                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
             };
 
             return (
@@ -384,22 +403,22 @@
                                         <SafeImage src={p.img} alt={p.store} className={p.fit === "contain" ? "card-banner-contain" : "card-banner"} />
                                         <div className="card-footer">
                                             <div className="card-info">
-                                                <div>code: <span className="highlight">'{p.code}'</span></div>
+                                                <div>code: {renderCode(p.id, p.code)}</div>
                                                 <div>status: <span className="highlight">'{p.status}'</span></div>
                                             </div>
-                                            <button className="status-btn" onClick={(e) => handleAction(e, p.code, p.url)}>{p.btn}</button>
+                                            <button className="status-btn" onClick={(e) => handleAction(e, p.id, p.code, p.url)}>{p.btn}</button>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         )}
 
-                        {/* --- ANIMATION OVERLAY WITH CSS FALLBACK RING --- */}
+                        {/* --- ANIMATION WITH HARDCODED RAW GITHUB URL TO PREVENT BREAKING --- */}
                         {aiState === "searching" && (
                             <div className="modal-overlay">
                                 <div className="animation-container">
                                     <div className="css-spinner"></div>
-                                    <img src="1781102482198.png" className="pulsing-logo" alt="" />
+                                    <SafeImage src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png" className="pulsing-logo" alt="" />
                                 </div>
                             </div>
                         )}
@@ -412,10 +431,10 @@
                                     <SafeImage src={dynamicResult.img} alt={dynamicResult.store} className={dynamicResult.fit === "contain" ? "card-banner-contain" : "card-banner"} />
                                     <div className="card-footer">
                                         <div className="card-info">
-                                            <div>code: <span className="highlight">'{dynamicResult.code}'</span></div>
+                                            <div>code: {renderCode(dynamicResult.id, dynamicResult.code)}</div>
                                             <div>status: <span className="highlight">'{dynamicResult.status}'</span></div>
                                         </div>
-                                        <button className="status-btn" onClick={(e) => handleAction(e, dynamicResult.code, dynamicResult.url)}>{dynamicResult.btn}</button>
+                                        <button className="status-btn" onClick={(e) => handleAction(e, dynamicResult.id, dynamicResult.code, dynamicResult.url)}>{dynamicResult.btn}</button>
                                     </div>
                                 </div>
                                 <button className="close-btn" onClick={() => setAiState("idle")}>X CLOSE ENGINE</button>
