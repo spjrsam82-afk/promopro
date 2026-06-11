@@ -35,7 +35,6 @@
             min-height: 100vh;
         }
 
-        /* --- MOBILE LAYOUT FOR GALAXY A16 --- */
         @media (max-width: 768px) {
             #root { flex-direction: column; }
             .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: column !important; border-right: none !important; border-bottom: 2px solid rgba(139, 92, 246, 0.4) !important; padding: 20px !important; }
@@ -160,7 +159,7 @@
         }
         .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
 
-        /* --- THE GRID & CARDS (Exact match to your picture) --- */
+        /* --- THE GRID & CARDS --- */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -204,13 +203,12 @@
         }
         .highlight { color: #4ade80; }
 
-        /* The small button on the bottom right */
         .status-btn {
             background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 6px 12px; border-radius: 4px; font-family: monospace; font-size: 12px; text-transform: uppercase; cursor: pointer; transition: 0.2s;
         }
         .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);}
 
-        /* --- THE ANIMATION OVERLAY --- */
+        /* --- THE LOGO-ONLY ANIMATION OVERLAY --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(10, 15, 30, 0.95);
@@ -219,15 +217,19 @@
             backdrop-filter: blur(15px);
         }
         
-        @keyframes customSpin { 100% { transform: rotate(360deg); } }
-        .spinning-logo { 
-            width: 140px; height: 140px; 
-            animation: customSpin 4s linear infinite; 
-            filter: drop-shadow(0 0 30px #8b5cf6); 
-            margin-bottom: 30px; object-fit: contain;
+        @keyframes pulseGlow { 
+            0% { transform: scale(1); filter: drop-shadow(0 0 20px #8b5cf6); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 40px #f97316); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 20px #8b5cf6); }
         }
-        .ai-text { color: #8b5cf6; font-weight: 900; letter-spacing: 3px; font-size: 24px; margin-bottom: 12px; text-transform: uppercase; text-shadow: 0 0 15px rgba(139, 92, 246, 0.6); }
-        .ai-subtext { font-family: monospace; color: #94a3b8; font-size: 14px; letter-spacing: 1px; }
+        
+        .pulsing-logo { 
+            width: 160px; 
+            height: 160px; 
+            animation: pulseGlow 2.5s infinite ease-in-out; 
+            object-fit: contain;
+        }
+
         .close-btn { margin-top: 20px; background: transparent; color: #f97316; border: 1px solid #f97316; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
@@ -237,7 +239,6 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Exactly the affiliates from your file. No JustPlay.
         const INITIAL_LEDGER = [
             { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/08/94/39/0894396b-5c8e-5992-0b89-a29d6c1df779/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "ACTIVE", theme: "orange", url: "#", fit: "cover" },
             { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/6d/2c/7e6d2c14-5d51-6c58-8b9a-4f51e04cf5e2/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "cover" },
@@ -353,13 +354,10 @@
                             </div>
                         )}
 
-                        {/* --- THE ANIMATION USING YOUR EXACT REPO FILENAME --- */}
+                        {/* --- STRICTLY JUST THE LOGO, NO TEXT --- */}
                         {aiState === "searching" && (
                             <div className="modal-overlay">
-                                {/* HARDCODED DIRECTLY TO YOUR REPOSITORY FILE TO PREVENT BROKEN LINKS */}
-                                <img src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png" className="spinning-logo" alt="Scanning..." />
-                                <div className="ai-text">AI ENGINE ACTIVE</div>
-                                <div className="ai-subtext">BYPASSING ENCRYPTION & EXTRACTING NODES...</div>
+                                <img src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/1781102482198.png" className="pulsing-logo" alt="Scanning..." />
                             </div>
                         )}
 
