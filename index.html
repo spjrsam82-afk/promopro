@@ -225,13 +225,55 @@
         .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
         .hidden-code { color: #f97316; font-weight: bold; letter-spacing: 2px; }
 
+        /* --- UPGRADED CTA BUTTONS WITH PULSE --- */
         .status-btn {
-            background: transparent; border: 1px solid #4ade80; color: #4ade80; padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.2s;
+            background: rgba(74, 222, 128, 0.1); 
+            border: 1px solid #4ade80; 
+            color: #4ade80; 
+            padding: 8px 14px; 
+            border-radius: 4px; 
+            font-family: monospace; 
+            font-size: 12px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            animation: pulseGreen 2s infinite;
         }
-        .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5); }
-        .status-btn.blue-btn { border-color: #38bdf8; color: #38bdf8; }
-        .status-btn.blue-btn:hover { background: #38bdf8; color: #020617; box-shadow: 0 0 15px rgba(56,189,248,0.5); }
+        
+        .status-btn:hover { 
+            background: #4ade80; 
+            color: #020617; 
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.8); 
+            transform: scale(1.05); 
+        }
+        
+        .status-btn.blue-btn { 
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8; 
+            color: #38bdf8; 
+            animation: pulseBlue 2s infinite; 
+        }
+        
+        .status-btn.blue-btn:hover { 
+            background: #38bdf8; 
+            color: #020617; 
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); 
+        }
 
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        @keyframes pulseBlue {
+            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+        }
+
+        /* Card Close Button */
         .dismiss-btn {
             position: absolute;
             top: 5px;
@@ -351,17 +393,19 @@
             { id: 16, store: "Hotels.com", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hotels.com_logo.svg/800px-Hotels.com_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.dpbolvw.net/click-101761790-13828058", fit: "contain" },
             { id: 17, store: "Idle Outpost", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "WEBSHOP", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "#", fit: "contain" },
             { id: 18, store: "Golf Rival", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "NONE", status: "STANDBY", btn: "PENDING", theme: "green", url: "#", fit: "cover" },
-            
-            /* ADDED YOUR ELECTRONICS EXPRESS LINK ALONG WITH THE OTHER RECENT ONES HERE */
             { id: 19, store: "Electronic Express", category: "Tech & Gear Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Electronics_Express_Logo.png/800px-Electronics_Express_Logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP TECH", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-16967290?url=https%3A%2F%2Fwww.electronicexpress.com%2F%3Fsrsltid%3DAfmBOoqSPIi7f9Fl42xPI2vcC9Qk_1O4FxLQjsXFmof5pR5bKZ4YP5dL", fit: "contain" },
             { id: 20, store: "Partner Link 1", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.anrdoezrs.net/click-101761790-17009262", fit: "contain" },
             { id: 21, store: "Partner Link 2", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.dpbolvw.net/click-101761790-15263926", fit: "contain" },
-
             { id: 22, store: "NEW AFFILIATE 22", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.kqzyfj.com/click-101761790-15727427", fit: "contain" },
             { id: 23, store: "NEW AFFILIATE 23", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-15371308", fit: "contain" },
             { id: 24, store: "NEW AFFILIATE 24", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17045169", fit: "contain" },
             { id: 25, store: "NEW AFFILIATE 25", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17050091", fit: "contain" },
-            { id: 26, store: "NEW AFFILIATE 26", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.dpbolvw.net/click-101761790-17295667", fit: "contain" }
+            { id: 26, store: "NEW AFFILIATE 26", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.dpbolvw.net/click-101761790-17295667", fit: "contain" },
+            { id: 60, store: "NEW AFFILIATE 60", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.anrdoezrs.net/click-101761790-17277121", fit: "contain" },
+            { id: 61, store: "NEW AFFILIATE 61", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-16968256", fit: "contain" },
+            { id: 62, store: "NEW AFFILIATE 62", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17277819", fit: "contain" },
+            { id: 63, store: "NEW AFFILIATE 63", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-17272293", fit: "contain" },
+            { id: 64, store: "NEW AFFILIATE 64", category: "Partner Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://www.kqzyfj.com/click-101761790-17273068", fit: "contain" }
         ];
 
         const GAMIVO_NODES = [
@@ -476,6 +520,19 @@
 
                         {aiState === "idle" && (
                             <>
+                                {/* --- MAIN FEATURED BANNER --- */}
+                                <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto 30px auto' }}>
+                                    <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" rel="noreferrer">
+                                        <img 
+                                            src="https://cdn-cf.gamivo.com/image_mainbanner.jpg?f=536421&n=e409b0d2-620a-43b9-9097-aff688fefa5a.jpg&v=7979565a8b3678d88549990675e68120" 
+                                            alt="GAMIVO Main Event" 
+                                            style={{ width: '100%', borderRadius: '12px', border: '2px solid #8b5cf6', boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)', transition: 'transform 0.3s' }}
+                                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
+                                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                        />
+                                    </a>
+                                </div>
+
                                 <div className="section-label">🏆 Hero Products — Top Picks</div>
                                 <div className="grid">
                                     {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
