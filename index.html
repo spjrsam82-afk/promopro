@@ -6,6 +6,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro System Ledger</title>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YOUR_ID_HERE"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-YOUR_ID_HERE');
+    </script>
+
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -363,6 +372,7 @@
         };
 
         const HERO_NODES = [
+            { id: 50, store: "GameSeal Store", category: "GameSeal Cluster", img: "https://www.dpbolvw.net/image-101761790-17189602", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP GAMESEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17165798?url=https%3A%2F%2Fgameseal.com%2F", fit: "contain" },
             { id: 19, store: "Electronic Express", category: "Featured Tech & Hardware", img: "https://www.anrdoezrs.net/image-101761790-16968254", code: "HARDWARE DEALS", status: "ACTIVE", btn: "SHOP TECH", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-16967290?url=https%3A%2F%2Fwww.electronicexpress.com%2F", fit: "contain" },
             { id: 44, store: "Minecraft: Java & Bedrock", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=456120&n=04217428641305476.jpg&v=f3ca09122632fa209788a830b6bd478f", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET MINECRAFT", theme: "green", url: "https://www.gamivo.com/product/minecraft-java-bedrock-edition?glv=8kuvauuj", fit: "cover" },
             { id: 45, store: "CoD: Zombies Chronicles", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=528189&n=b1e42adc-f2fe-42c3-999a-38cc5d4c5f5a.jpg&v=c7d890fe7c5208b736c06faf572bfb62", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CLASSIC", theme: "blue", url: "https://www.gamivo.com/product/call-of-duty-black-ops-iii-zombies-chronicles?glv=8kuvauuj", fit: "cover" },
@@ -373,7 +383,6 @@
         ];
 
         const CORE_LEDGER = [
-            { id: 50, store: "GameSeal Store", category: "GameSeal Cluster", img: "https://www.dpbolvw.net/image-101761790-17189602", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP GAMESEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17165798?url=https%3A%2F%2Fgameseal.com%2F", fit: "contain" },
             { id: 51, store: "PlayStation Deals", category: "GameSeal Cluster", img: "https://www.tkqlhce.com/image-101761790-17170442", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP PSN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17170442", fit: "cover" },
             { id: 52, store: "Xbox Game Pass", category: "GameSeal Cluster", img: "https://www.kqzyfj.com/image-101761790-17170434", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP XBOX", theme: "green", url: "https://www.kqzyfj.com/click-101761790-17170434", fit: "cover" },
             { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
@@ -437,11 +446,19 @@
                 setAiState("result");
             };
 
-            const handleAction = (e, id, codeText, url) => {
+            const handleAction = (e, id, codeText, url, storeName) => {
                 e.preventDefault();
                 setRevealedCodes(prev => ({ ...prev, [id]: true }));
                 const hasLink = url && url !== "#";
                 const hasCode = codeText && !["AUTO-ROUTED","NONE","WEBSHOP","PUBLIC"].includes(codeText);
+
+                // --- GA4 Custom Tracking Event ---
+                if (typeof window.gtag === 'function') {
+                    window.gtag('event', 'affiliate_click', {
+                        store: storeName,
+                        destination_url: url
+                    });
+                }
 
                 if (hasCode) {
                     navigator.clipboard.writeText(codeText);
@@ -472,7 +489,7 @@
                             <div>code: {renderCode(p.id, p.code)}</div>
                             <div>status: <span className="highlight">'{p.status}'</span></div>
                         </div>
-                        <button className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`} onClick={(e) => handleAction(e, p.id, p.code, p.url)}>
+                        <button className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`} onClick={(e) => handleAction(e, p.id, p.code, p.url, p.store)}>
                             {p.btn}
                         </button>
                     </div>
@@ -585,4 +602,3 @@
     </div>
 </body>
 </html>
-
