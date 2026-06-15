@@ -201,7 +201,7 @@
             gap: 12px;
             position: relative;
             transition: 0.3s;
-            cursor: pointer; /* Makes the whole card show a clicking hand on hover */
+            cursor: pointer;
         }
         .matrix-card:hover { transform: translateY(-3px); }
 
@@ -246,7 +246,7 @@
             font-size: 12px; 
             font-weight: bold; 
             text-transform: uppercase; 
-            cursor: inherit; /* Inherits the pointer from the card */
+            cursor: inherit; 
             transition: all 0.3s ease;
             animation: pulseGreen 2s infinite;
         }
@@ -387,7 +387,8 @@
         ];
 
         const CORE_LEDGER = [
-            { id: 100, store: "Tinify API Dashboard", category: "Developer Node", img: "https://tinypng.com/images/panda-cheering-2.png", code: "TOOL", status: "ACTIVE", btn: "OPEN DASHBOARD", theme: "blue", url: "https://tinify.com/dashboard/api", fit: "contain" },
+            // FIXED TINIFY IMAGE URL
+            { id: 100, store: "Tinify API Dashboard", category: "Developer Node", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60", code: "TOOL", status: "ACTIVE", btn: "OPEN DASHBOARD", theme: "blue", url: "https://tinify.com/dashboard/api", fit: "cover" },
             { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
             { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
             { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
@@ -455,7 +456,6 @@
                 const hasLink = url && url !== "#";
                 const hasCode = codeText && !["AUTO-ROUTED","NONE","WEBSHOP","PUBLIC"].includes(codeText);
 
-                // --- GA4 Custom Tracking Event ---
                 if (typeof window.gtag === 'function') {
                     window.gtag('event', 'affiliate_click', {
                         store: storeName,
@@ -482,7 +482,6 @@
                 return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
             };
 
-            // CLICKABLE CARD UPDATE
             const renderCard = (p) => (
                 <div className={`matrix-card theme-${p.theme}`} key={p.id} onClick={(e) => handleAction(e, p.id, p.code, p.url, p.store)}>
                     <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Dismiss Card">×</button>
@@ -529,12 +528,12 @@
 
                     <div className="main-content">
                         <div className="search-wrapper">
-                            <input className="system-search" placeholder="SYSTEM DATABASE SEARCH // Execute" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
+                            {/* FIXED: Added ID and Name to the input field */}
+                            <input id="system-search" name="system-search" className="system-search" placeholder="SYSTEM DATABASE SEARCH // Execute" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
                         </div>
 
                         {aiState === "idle" && (
                             <>
-                                {/* --- MAIN FEATURED BANNER --- */}
                                 <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto 30px auto', display: 'flex', justifyItems: 'center', justifyContent: 'center' }}>
                                     <img 
                                         src="cookie-wizard.png"
@@ -600,7 +599,7 @@
 
     <div class="promo-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; background: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); border-top: 1px solid #38bdf8;">
         <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" style="display: block; position: relative;">
-            <img src="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/gamivo-footer.png" alt="GAMIVO 3% Off" style="max-height: 75px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png'">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png" alt="GAMIVO 3% Off" style="max-height: 50px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
         </a>
         <button onclick="document.querySelector('.promo-footer').style.display='none'" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; color: #64748b; border: 1px solid #64748b; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">HIDE</button>
     </div>
