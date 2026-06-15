@@ -387,7 +387,6 @@
         ];
 
         const CORE_LEDGER = [
-            // FIXED TINIFY IMAGE URL
             { id: 100, store: "Tinify API Dashboard", category: "Developer Node", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60", code: "TOOL", status: "ACTIVE", btn: "OPEN DASHBOARD", theme: "blue", url: "https://tinify.com/dashboard/api", fit: "cover" },
             { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
             { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
@@ -429,6 +428,8 @@
             const [dynamicResult, setDynamicResult] = useState(null);
             const [revealedCodes, setRevealedCodes] = useState({});
             const [dismissedCards, setDismissedCards] = useState([]);
+            // NEW: Added activeTab state to make the nav menu functional
+            const [activeTab, setActiveTab]         = useState("ALL");
 
             const handleVerify = async () => {
                 if (!searchInput.trim()) return;
@@ -499,6 +500,21 @@
                 </div>
             );
 
+            // NEW: Logic to filter cards based on the active tab
+            const getFilteredCards = () => {
+                let filtered = ALL_ENTRIES;
+                if (activeTab === 'GAMING') {
+                    filtered = ALL_ENTRIES.filter(c => c.category.includes('Gaming') || c.category.includes('Game') || c.category.includes('GAMIVO') || c.category.includes('Key'));
+                } else if (activeTab === 'TECH') {
+                    filtered = ALL_ENTRIES.filter(c => c.category.includes('Tech') || c.category.includes('Developer') || c.category.includes('Technical'));
+                } else if (activeTab === 'LIFESTYLE') {
+                    filtered = ALL_ENTRIES.filter(c => c.category.includes('Travel') || c.category.includes('Beauty') || c.category.includes('Exclusive'));
+                }
+                return filtered.filter(card => !dismissedCards.includes(card.id));
+            };
+
+            const displayedCards = getFilteredCards();
+
             return (
                 <>
                     <div className="overlay-tint"></div>
@@ -508,11 +524,15 @@
                             <span>Promo</span><span style={{color: '#f97316'}}>Pro</span>
                         </div>
                         <div className="nav-matrix-title">NAV-MATRIX</div>
+                        
+                        {/* NEW: Fully functional nav menu that updates React State on click */}
                         <div className="nav-menu">
-                            <div className="nav-item">🏠 HOME</div>
-                            <div className="nav-item active">📄 SYSTEM LEDGER</div>
-                            <div className="nav-item">🎮 GAMING NODES</div>
+                            <div className={`nav-item ${activeTab === 'ALL' ? 'active' : ''}`} onClick={() => {setActiveTab('ALL'); setAiState("idle");}}>🌐 ALL NODES</div>
+                            <div className={`nav-item ${activeTab === 'GAMING' ? 'active' : ''}`} onClick={() => {setActiveTab('GAMING'); setAiState("idle");}}>🎮 GAMING & KEYS</div>
+                            <div className={`nav-item ${activeTab === 'TECH' ? 'active' : ''}`} onClick={() => {setActiveTab('TECH'); setAiState("idle");}}>💻 TECH & TOOLS</div>
+                            <div className={`nav-item ${activeTab === 'LIFESTYLE' ? 'active' : ''}`} onClick={() => {setActiveTab('LIFESTYLE'); setAiState("idle");}}>✈️ LIFESTYLE</div>
                         </div>
+
                         <div className="career-context">
                             <div className="career-title">SYSTEM STATUS</div>
                             <div className="career-icons">
@@ -528,7 +548,6 @@
 
                     <div className="main-content">
                         <div className="search-wrapper">
-                            {/* FIXED: Added ID and Name to the input field */}
                             <input id="system-search" name="system-search" className="system-search" placeholder="SYSTEM DATABASE SEARCH // Execute" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
                         </div>
 
@@ -544,20 +563,32 @@
                                     />
                                 </div>
 
-                                <div className="section-label">🏆 Hero Products — Top Picks</div>
-                                <div className="grid">
-                                    {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                </div>
+                                {/* NEW: Dynamic Rendering based on the Active Tab */}
+                                {activeTab === 'ALL' ? (
+                                    <>
+                                        <div className="section-label">🏆 Hero Products — Top Picks</div>
+                                        <div className="grid">
+                                            {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
 
-                                <div className="section-label">⚡ Core Affiliate Ledger</div>
-                                <div className="grid">
-                                    {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                </div>
+                                        <div className="section-label">⚡ Core Affiliate Ledger</div>
+                                        <div className="grid">
+                                            {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
 
-                                <div className="section-label">🎮 GAMIVO Gaming Hub</div>
-                                <div className="grid">
-                                    {GAMIVO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                </div>
+                                        <div className="section-label">🎮 GAMIVO Gaming Hub</div>
+                                        <div className="grid">
+                                            {GAMIVO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="section-label">⚡ FILTERED RESULTS: {activeTab}</div>
+                                        <div className="grid">
+                                            {displayedCards.map(renderCard)}
+                                        </div>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>
