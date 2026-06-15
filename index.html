@@ -201,6 +201,7 @@
             gap: 12px;
             position: relative;
             transition: 0.3s;
+            cursor: pointer; /* Makes the whole card show a clicking hand on hover */
         }
         .matrix-card:hover { transform: translateY(-3px); }
 
@@ -245,7 +246,7 @@
             font-size: 12px; 
             font-weight: bold; 
             text-transform: uppercase; 
-            cursor: pointer; 
+            cursor: inherit; /* Inherits the pointer from the card */
             transition: all 0.3s ease;
             animation: pulseGreen 2s infinite;
         }
@@ -481,8 +482,9 @@
                 return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
             };
 
+            // CLICKABLE CARD UPDATE
             const renderCard = (p) => (
-                <div className={`matrix-card theme-${p.theme}`} key={p.id}>
+                <div className={`matrix-card theme-${p.theme}`} key={p.id} onClick={(e) => handleAction(e, p.id, p.code, p.url, p.store)}>
                     <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Dismiss Card">×</button>
                     <div className="card-header">{p.store} <span>// {p.category}</span></div>
                     <SafeImage src={p.img} alt={p.store} className={p.fit === "contain" ? "card-banner-contain" : "card-banner"} />
@@ -491,7 +493,7 @@
                             <div>code: {renderCode(p.id, p.code)}</div>
                             <div>status: <span className="highlight">'{p.status}'</span></div>
                         </div>
-                        <button className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`} onClick={(e) => handleAction(e, p.id, p.code, p.url, p.store)}>
+                        <button className={`status-btn${p.theme === "blue" ? " blue-btn" : ""}`}>
                             {p.btn}
                         </button>
                     </div>
