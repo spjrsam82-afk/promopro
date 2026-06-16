@@ -191,6 +191,15 @@
             width: 100%;
         }
 
+        .grid-stacked {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto 40px auto;
+            width: 100%;
+        }
+
         .matrix-card {
             background: rgba(10, 15, 30, 0.6);
             backdrop-filter: blur(10px);
@@ -394,15 +403,16 @@
             );
         };
 
+        // UPDATED: AIRTALK NODES NOW USE THE OFFICIAL LOGO AND 'fit: "contain"'
+        const AIRTALK_NODES = [
+            { id: 23, store: "AirTalk Wireless", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "ENROLL FREE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17276090", fit: "contain" },
+            { id: 24, store: "AirTalk Lifeline", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "contain" },
+            { id: 25, store: "AirTalk California", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "contain" },
+            { id: 26, store: "AirTalk Data Promo", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK DEALS", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17302876", fit: "contain" },
+            { id: 27, store: "AirTalk Special Offer", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK ELIGIBILITY", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-17302872", fit: "contain" }
+        ];
+
         const HERO_NODES = [
-            // AIRTALK NODES MOVED TO THE ABSOLUTE TOP
-            { id: 23, store: "AirTalk Wireless", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "ENROLL FREE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17276090", fit: "cover" },
-            { id: 24, store: "AirTalk Lifeline", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "cover" },
-            { id: 25, store: "AirTalk California", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "cover" },
-            { id: 26, store: "AirTalk Data Promo", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1544228842-82dcff569f10?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK DEALS", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17302876", fit: "cover" },
-            { id: 27, store: "AirTalk Special Offer", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1592899677974-c466c4f1fbfa?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK ELIGIBILITY", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-17302872", fit: "cover" },
-            
-            // ORIGINAL HERO NODES
             { id: 50, store: "GameSeal Store", category: "GameSeal Cluster", img: "https://www.dpbolvw.net/image-101761790-17189602", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP GAMESEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17165798?url=https%3A%2F%2Fgameseal.com%2F", fit: "contain" },
             { id: 51, store: "PlayStation Deals", category: "GameSeal Cluster", img: "https://www.tkqlhce.com/image-101761790-17170442", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP PSN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17170442", fit: "cover" },
             { id: 52, store: "Xbox Game Pass", category: "GameSeal Cluster", img: "https://www.kqzyfj.com/image-101761790-17170434", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP XBOX", theme: "green", url: "https://www.kqzyfj.com/click-101761790-17170434", fit: "cover" },
@@ -449,7 +459,7 @@
             { id: 33, store: "PlayStation Store", category: "GAMIVO Gaming Hub", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/800px-Playstation_logo_colour.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "BROWSE PSN", theme: "blue", url: "https://www.gamivo.com/store/playstation?glv=8kuvauuj", fit: "contain" }
         ];
 
-        const ALL_ENTRIES = [...HERO_NODES, ...CORE_LEDGER, ...GAMIVO_NODES];
+        const ALL_ENTRIES = [...AIRTALK_NODES, ...HERO_NODES, ...CORE_LEDGER, ...GAMIVO_NODES];
 
         function App() {
             const [searchInput, setSearchInput]     = useState("");
@@ -591,6 +601,11 @@
 
                                 {activeTab === 'ALL' ? (
                                     <>
+                                        <div className="section-label" style={{ color: '#f97316' }}>🚨 Free Lifeline Phones & Data 🚨</div>
+                                        <div className="grid-stacked">
+                                            {AIRTALK_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+
                                         <div className="section-label">🏆 Hero Products — Top Picks</div>
                                         <div className="grid">
                                             {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
