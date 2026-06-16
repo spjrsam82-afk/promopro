@@ -403,11 +403,16 @@
             );
         };
 
-        // UPDATED: AIRTALK NODES NOW USE THE OFFICIAL LOGO AND 'fit: "contain"'
+        // CORRECTED: AIRTALK NODES MIXING LOGOS AND ORIGINAL IMAGES
         const AIRTALK_NODES = [
+            // Standard/Generic nodes now use the official logo
             { id: 23, store: "AirTalk Wireless", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "ENROLL FREE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17276090", fit: "contain" },
-            { id: 24, store: "AirTalk Lifeline", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "contain" },
-            { id: 25, store: "AirTalk California", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "contain" },
+            
+            // Specific smartphone nodes keep their descriptive pictures (fit reset to cover)
+            { id: 24, store: "AirTalk Lifeline", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1598327105666-5b89351cb31b?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "cover" },
+            { id: 25, store: "AirTalk California", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "cover" },
+            
+            // Generic promo nodes use the logo
             { id: 26, store: "AirTalk Data Promo", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK DEALS", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17302876", fit: "contain" },
             { id: 27, store: "AirTalk Special Offer", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK ELIGIBILITY", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-17302872", fit: "contain" }
         ];
