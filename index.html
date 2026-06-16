@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro System Ledger</title>
     
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P2PFW0YMB1"></script>
-    <script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P2PFW0YMB1" data-cfasync="false"></script>
+    <script data-cfasync="false">
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -16,9 +16,10 @@
       gtag('config', 'G-P2PFW0YMB1');
     </script>
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" data-cfasync="false"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" data-cfasync="false"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.22.20/babel.min.js" data-cfasync="false"></script>
+    
     <style>
         * { box-sizing: border-box; }
         
@@ -447,7 +448,7 @@
 <body>
     <div id="root"></div>
 
-    <script type="text/babel">
+    <script type="text/babel" data-cfasync="false">
         const { useState } = React;
         const PROXY_URL = "https://wsrv.nl/?url=";
 
@@ -469,19 +470,19 @@
         };
 
         const AIRTALK_NODES = [
-            { id: 23, store: "AirTalk Wireless", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "ENROLL FREE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17276090", fit: "contain" },
-            { id: 24, store: "AirTalk Lifeline", category: "Tech & Lifeline Node", img: "https://d1zcfru032dgn8.cloudfront.net/26252420/banners-en-desktop1780307293.webp", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "contain" },
-            { id: 25, store: "AirTalk California", category: "Tech & Lifeline Node", img: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "cover" },
-            { id: 26, store: "AirTalk Data Promo", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK DEALS", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17302876", fit: "contain" },
-            { id: 27, store: "AirTalk Special Offer", category: "Tech & Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK ELIGIBILITY", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-17302872", fit: "contain" }
+            { id: 23, store: "AirTalk Wireless", category: "Tech and Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "ENROLL FREE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17276090", fit: "contain" },
+            { id: 24, store: "AirTalk Lifeline", category: "Tech and Lifeline Node", img: "https://d1zcfru032dgn8.cloudfront.net/26252420/banners-en-desktop1780307293.webp", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM PHONE", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301643", fit: "contain" },
+            { id: 25, store: "AirTalk California", category: "Tech and Lifeline Node", img: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?auto=format&fit=crop&w=500&q=60", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CA PLAN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17301648", fit: "cover" },
+            { id: 26, store: "AirTalk Data Promo", category: "Tech and Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK DEALS", theme: "blue", url: "https://www.anrdoezrs.net/click-101761790-17302876", fit: "contain" },
+            { id: 27, store: "AirTalk Special Offer", category: "Tech and Lifeline Node", img: "https://airtalkwireless.com/common/AirTalklogo.svg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CHECK ELIGIBILITY", theme: "blue", url: "https://www.kqzyfj.com/click-101761790-17302872", fit: "contain" }
         ];
 
         const HERO_NODES = [
             { id: 50, store: "GameSeal Store", category: "GameSeal Cluster", img: "https://www.dpbolvw.net/image-101761790-17189602", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP GAMESEAL", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17165798?url=https%3A%2F%2Fgameseal.com%2F", fit: "contain" },
             { id: 51, store: "PlayStation Deals", category: "GameSeal Cluster", img: "https://www.tkqlhce.com/image-101761790-17170442", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP PSN", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-17170442", fit: "cover" },
             { id: 52, store: "Xbox Game Pass", category: "GameSeal Cluster", img: "https://www.kqzyfj.com/image-101761790-17170434", code: "AUTO-ROUTED", status: "ACTIVE", btn: "SHOP XBOX", theme: "green", url: "https://www.kqzyfj.com/click-101761790-17170434", fit: "cover" },
-            { id: 19, store: "Electronic Express", category: "Featured Tech & Hardware", img: "https://www.anrdoezrs.net/image-101761790-16968254", code: "HARDWARE DEALS", status: "ACTIVE", btn: "SHOP TECH", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-16967290?url=https%3A%2F%2Fwww.electronicexpress.com%2F", fit: "contain" },
-            { id: 44, store: "Minecraft: Java & Bedrock", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=456120&n=04217428641305476.jpg&v=f3ca09122632fa209788a830b6bd478f", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET MINECRAFT", theme: "green", url: "https://www.gamivo.com/product/minecraft-java-bedrock-edition?glv=8kuvauuj", fit: "cover" },
+            { id: 19, store: "Electronic Express", category: "Featured Tech and Hardware", img: "https://www.anrdoezrs.net/image-101761790-16968254", code: "HARDWARE DEALS", status: "ACTIVE", btn: "SHOP TECH", theme: "blue", url: "https://www.tkqlhce.com/click-101761790-16967290?url=https%3A%2F%2Fwww.electronicexpress.com%2F", fit: "contain" },
+            { id: 44, store: "Minecraft: Java and Bedrock", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=456120&n=04217428641305476.jpg&v=f3ca09122632fa209788a830b6bd478f", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET MINECRAFT", theme: "green", url: "https://www.gamivo.com/product/minecraft-java-bedrock-edition?glv=8kuvauuj", fit: "cover" },
             { id: 45, store: "CoD: Zombies Chronicles", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=528189&n=b1e42adc-f2fe-42c3-999a-38cc5d4c5f5a.jpg&v=c7d890fe7c5208b736c06faf572bfb62", code: "AUTO-ROUTED", status: "ACTIVE", btn: "CLAIM CLASSIC", theme: "blue", url: "https://www.gamivo.com/product/call-of-duty-black-ops-iii-zombies-chronicles?glv=8kuvauuj", fit: "cover" },
             { id: 46, store: "Resident Evil Village", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=490456&n=8661610469183132.jpg&v=0d0e8d49531773f43936b8a99d8ed9fa", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET RE", theme: "orange", url: "https://www.gamivo.com/product/resident-evil-village?glv=8kuvauuj", fit: "cover" },
             { id: 47, store: "Far Cry Anthology", category: "Hero Product Node", img: "https://cdn-cf.gamivo.com/image_gallerygames.jpg?f=393590&n=595071060568088.jpg&v=15b6c959e7583ffdf292a499a9c359d2", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET FAR CRY", theme: "green", url: "https://www.gamivo.com/product/far-cry-anthology-bundle?glv=8kuvauuj", fit: "cover" },
@@ -491,16 +492,16 @@
 
         const CORE_LEDGER = [
             { id: 100, store: "Tinify API Dashboard", category: "Developer Node", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60", code: "TOOL", status: "ACTIVE", btn: "OPEN DASHBOARD", theme: "blue", url: "https://tinify.com/dashboard/api", fit: "cover" },
-            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "contain" },
+            { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "#", fit: "contain" },
             { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
-            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
-            { id: 4, store: "GearUP Booster", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
-            { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Call_of_Duty_Mobile_cover.jpg/220px-Call_of_Duty_Mobile_cover.jpg", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
+            { id: 4, store: "GearUP Booster", category: "Technical Node", img: "https://www.gearupbooster.com/images/index/logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY and CLAIM", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-17235980", fit: "contain" },
+            { id: 5, store: "Call of Duty Mobile", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/3/3f/Call_of_Duty_Mobile_cover.jpg/220px-Call_of_Duty_Mobile_cover.jpg", code: "DCEPZBZKFD", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "#", fit: "cover" },
             { id: 6, store: "Epic Games", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Epic_Games_logo.svg/800px-Epic_Games_logo.svg.png", code: "PUBLIC", status: "ACTIVE", btn: "CLAIM DEAL", theme: "green", url: "https://store.epicgames.com/en-US/free-games", fit: "contain" },
-            { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/2/21/State_of_Survival_logo.png", code: "SOS2026", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/Genshin_Impact_cover_art.jpg/220px-Genshin_Impact_cover_art.jpg", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "cover" },
-            { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Raid_Shadow_Legends_cover.jpg/220px-Raid_Shadow_Legends_cover.jpg", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY & CLAIM", theme: "orange", url: "#", fit: "cover" },
-            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY & CLAIM", theme: "green", url: "#", fit: "contain" },
+            { id: 7, store: "State of Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/2/21/State_of_Survival_logo.png", code: "SOS2026", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 8, store: "Genshin Impact", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0b/Genshin_Impact_cover_art.jpg/220px-Genshin_Impact_cover_art.jpg", code: "NMI20MAJGIBP", status: "ACTIVE", btn: "COPY and CLAIM", theme: "green", url: "#", fit: "cover" },
+            { id: 9, store: "RAID: Shadow Legends", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Raid_Shadow_Legends_cover.jpg/220px-Raid_Shadow_Legends_cover.jpg", code: "RAIDTOGETHER", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "#", fit: "cover" },
+            { id: 10, store: "Roblox", category: "Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Roblox_player_icon_black.svg/800px-Roblox_player_icon_black.svg.png", code: "FREENGNBOI", status: "ACTIVE", btn: "COPY and CLAIM", theme: "green", url: "#", fit: "contain" },
             { id: 11, store: "GameFly", category: "Console Gaming Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/GameFly_logo.svg/800px-GameFly_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-10436224", fit: "contain" },
             { id: 12, store: "Expedia", category: "Travel Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Expedia_logo.svg/800px-Expedia_logo.svg.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "http://www.anrdoezrs.net/click-101761790-10604120", fit: "contain" },
             { id: 13, store: "UNice Hair", category: "Beauty Node", img: "https://www.unice.com/static/version_1/images/logo.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "https://www.tkqlhce.com/click-101761790-15339213", fit: "contain" },
@@ -582,12 +583,12 @@
 
             const renderCode = (id, code) => {
                 if (["AUTO-ROUTED","NONE","PUBLIC","WEBSHOP"].includes(code)) return <span className="highlight">'{code}'</span>;
-                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'••••••••'</span>;
+                return revealedCodes[id] ? <span className="highlight">'{code}'</span> : <span className="hidden-code">'********'</span>;
             };
 
             const renderCard = (p) => (
                 <div className={`matrix-card theme-${p.theme}`} key={p.id} onClick={(e) => handleAction(e, p.id, p.code, p.url, p.store)}>
-                    <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Dismiss Card">×</button>
+                    <button className="dismiss-btn" onClick={(e) => handleDismiss(e, p.id)} title="Dismiss Card">X</button>
                     <div className="card-header">{p.store} <span>// {p.category}</span></div>
                     <SafeImage src={p.img} alt={p.store} className={p.fit === "contain" ? "card-banner-contain" : "card-banner"} />
                     <div className="card-footer">
@@ -628,8 +629,8 @@
                         
                         <div className="nav-menu">
                             <div className={`nav-item ${activeTab === 'ALL' ? 'active' : ''}`} onClick={() => {setActiveTab('ALL'); setAiState("idle");}}>🌐 ALL NODES</div>
-                            <div className={`nav-item ${activeTab === 'GAMING' ? 'active' : ''}`} onClick={() => {setActiveTab('GAMING'); setAiState("idle");}}>🎮 GAMING &amp; KEYS</div>
-                            <div className={`nav-item ${activeTab === 'TECH' ? 'active' : ''}`} onClick={() => {setActiveTab('TECH'); setAiState("idle");}}>💻 TECH &amp; TOOLS</div>
+                            <div className={`nav-item ${activeTab === 'GAMING' ? 'active' : ''}`} onClick={() => {setActiveTab('GAMING'); setAiState("idle");}}>🎮 GAMING and KEYS</div>
+                            <div className={`nav-item ${activeTab === 'TECH' ? 'active' : ''}`} onClick={() => {setActiveTab('TECH'); setAiState("idle");}}>💻 TECH and TOOLS</div>
                             <div className={`nav-item ${activeTab === 'LIFESTYLE' ? 'active' : ''}`} onClick={() => {setActiveTab('LIFESTYLE'); setAiState("idle");}}>✈️ LIFESTYLE</div>
                         </div>
 
@@ -641,7 +642,7 @@
                             <div className="career-box">
                                 <strong>SYSTEM ADMIN:</strong><br/>
                                 Access Level: Tier 1<br/>
-                                Engine Status: Online &amp; Routing
+                                Engine Status: Online and Routing
                             </div>
                         </div>
                     </div>
@@ -665,7 +666,7 @@
 
                                 {activeTab === 'ALL' ? (
                                     <>
-                                        <div className="section-label" style={{ color: '#f97316' }}>🚨 Free Lifeline Phones &amp; Data 🚨</div>
+                                        <div className="section-label" style={{ color: '#f97316' }}>🚨 Free Lifeline Phones and Data 🚨</div>
                                         <div className="grid-stacked">
                                             {AIRTALK_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
                                         </div>
@@ -749,7 +750,7 @@
             PromoPro is an independent affiliate portal and is not affiliated with, endorsed by, or sponsored by any of the listed brands.
         </div>
     </footer>
-    <script>
+    <script data-cfasync="false">
         document.getElementById('footer-year').textContent = new Date().getFullYear();
     </script>
 
