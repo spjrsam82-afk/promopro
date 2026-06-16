@@ -200,7 +200,7 @@
             width: 100%;
         }
 
-        /* UPDATED: Matrix Cards with Sharp Corners and HUD Borders */
+        /* Matrix Cards with Sharp Corners and HUD Borders */
         .matrix-card {
             background-color: rgba(10, 15, 30, 0.6);
             backdrop-filter: blur(10px);
@@ -628,8 +628,8 @@
                         
                         <div className="nav-menu">
                             <div className={`nav-item ${activeTab === 'ALL' ? 'active' : ''}`} onClick={() => {setActiveTab('ALL'); setAiState("idle");}}>🌐 ALL NODES</div>
-                            <div className={`nav-item ${activeTab === 'GAMING' ? 'active' : ''}`} onClick={() => {setActiveTab('GAMING'); setAiState("idle");}}>🎮 GAMING & KEYS</div>
-                            <div className={`nav-item ${activeTab === 'TECH' ? 'active' : ''}`} onClick={() => {setActiveTab('TECH'); setAiState("idle");}}>💻 TECH & TOOLS</div>
+                            <div className={`nav-item ${activeTab === 'GAMING' ? 'active' : ''}`} onClick={() => {setActiveTab('GAMING'); setAiState("idle");}}>🎮 GAMING &amp; KEYS</div>
+                            <div className={`nav-item ${activeTab === 'TECH' ? 'active' : ''}`} onClick={() => {setActiveTab('TECH'); setAiState("idle");}}>💻 TECH &amp; TOOLS</div>
                             <div className={`nav-item ${activeTab === 'LIFESTYLE' ? 'active' : ''}`} onClick={() => {setActiveTab('LIFESTYLE'); setAiState("idle");}}>✈️ LIFESTYLE</div>
                         </div>
 
@@ -641,7 +641,7 @@
                             <div className="career-box">
                                 <strong>SYSTEM ADMIN:</strong><br/>
                                 Access Level: Tier 1<br/>
-                                Engine Status: Online & Routing
+                                Engine Status: Online &amp; Routing
                             </div>
                         </div>
                     </div>
@@ -665,7 +665,7 @@
 
                                 {activeTab === 'ALL' ? (
                                     <>
-                                        <div className="section-label" style={{ color: '#f97316' }}>🚨 Free Lifeline Phones & Data 🚨</div>
+                                        <div className="section-label" style={{ color: '#f97316' }}>🚨 Free Lifeline Phones &amp; Data 🚨</div>
                                         <div className="grid-stacked">
                                             {AIRTALK_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
                                         </div>
