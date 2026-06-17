@@ -170,6 +170,34 @@
         }
         .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
 
+        /* Custom UI Component: Hero Banner */
+        .promo-hero-banner {
+            width: 100%;
+            max-width: 1400px;
+            height: 400px;
+            margin: 0 auto 30px auto;
+            background-color: rgba(10, 15, 30, 0.6);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 12px;
+            border: 2px solid #8b5cf6;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        .promo-hero-banner:hover {
+            transform: scale(1.01);
+        }
+        @media (max-width: 768px) {
+            .promo-hero-banner {
+                height: 150px;
+                margin-bottom: 20px;
+            }
+        }
+
         .section-label {
             width: 100%;
             max-width: 1400px;
@@ -654,15 +682,11 @@
 
                         {aiState === "idle" && (
                             <>
-                                <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto 30px auto', display: 'flex', justifyItems: 'center', justifyContent: 'center' }}>
-                                    <img 
-                                        src="cookie-wizard.png"
-                                        alt="PromoPro Cookie Engine Shield" 
-                                        style={{ width: '100%', maxWidth: '800px', borderRadius: '12px', border: '2px solid #8b5cf6', boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)', transition: 'transform 0.3s' }}
-                                        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
-                                        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                                    />
-                                </div>
+                                {/* YOUR NEW MIRO HERO BANNER GOES HERE */}
+                                <div 
+                                    className="promo-hero-banner" 
+                                    style={{ backgroundImage: `url('INSERT_YOUR_MIRO_IMAGE_URL_HERE.jpg')` }}
+                                ></div>
 
                                 {activeTab === 'ALL' ? (
                                     <>
@@ -733,7 +757,7 @@
             </div>
 
             <div>
-                <div class="footer-section-title">🛡️ Support & Contact</div>
+                <div class="footer-section-title">🛡️ Support and Contact</div>
                 <p>Questions, issues, or partnership inquiries?<br/>
                 Reach us at:<br/>
                 <a class="footer-link" href="mailto:spjrsam82@gmail.com">spjrsam82@gmail.com</a>
