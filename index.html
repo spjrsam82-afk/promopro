@@ -56,8 +56,10 @@
             .nav-item { padding: 8px 16px !important; margin: 0 !important; white-space: nowrap; font-size: 13px !important; flex-shrink: 0; }
             .career-context { display: none; }
             .main-content { padding: 20px 15px !important; }
-            .search-wrapper { width: 100% !important; margin-bottom: 20px !important; }
             .grid { grid-template-columns: 1fr !important; }
+            .cmd-input { padding-right: 16px !important; }
+            .cmd-btn { position: relative !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100%; margin-top: 10px; padding: 12px !important; }
+            .cmd-input-wrapper { flex-direction: column; }
         }
 
         .sidebar {
@@ -154,147 +156,100 @@
             overflow-y: auto;
         }
 
-        .search-wrapper {
-            background: rgba(10, 15, 30, 0.8);
-            border: 2px solid #8b5cf6;
-            border-radius: 8px;
-            padding: 12px 20px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
-            margin: 0 auto 40px auto;
-            display: flex;
+        /* --- NEW AI COMMAND CENTER CSS --- */
+        .command-center {
+            width: 100%; max-width: 1400px; margin: 0 auto 30px auto;
+            border: 1px solid rgba(6, 182, 212, 0.3); background: rgba(0, 0, 0, 0.8);
+            padding: 24px; box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+            backdrop-filter: blur(10px);
         }
-        .system-search {
-            width: 100%; background: transparent; border: none; color: #8b5cf6; font-family: monospace; font-size: 15px; outline: none;
+        .cmd-status {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 12px; font-family: monospace; font-size: 12px;
+            letter-spacing: 2px; color: #22d3ee;
         }
-        .system-search::placeholder { color: rgba(139, 92, 246, 0.6); }
+        .cmd-indicator {
+            width: 8px; height: 8px; border-radius: 50%; background: #10b981;
+            margin-right: 8px; display: inline-block; animation: pulseIndicator 1.5s infinite;
+        }
+        @keyframes pulseIndicator {
+            0% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { opacity: 0.5; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .cmd-input-wrapper {
+            position: relative; display: flex; align-items: center; width: 100%;
+        }
+        .cmd-prompt {
+            position: absolute; left: 16px; font-family: monospace; color: #22d3ee;
+            font-size: 18px; font-weight: bold;
+        }
+        .cmd-input {
+            width: 100%; background: #09090b; border: 1px solid #27272a;
+            padding: 16px 140px 16px 48px; font-family: monospace; color: #22d3ee;
+            font-size: 16px; outline: none; transition: border-color 0.2s;
+        }
+        .cmd-input:focus { border-color: #22d3ee; }
+        .cmd-input::placeholder { color: #52525b; }
+        .cmd-btn {
+            position: absolute; right: 8px; top: 8px; bottom: 8px;
+            padding: 0 24px; background: #083344; border: 1px solid rgba(6, 182, 212, 0.5);
+            color: #22d3ee; font-family: monospace; font-size: 12px; font-weight: bold;
+            letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cmd-btn:hover { background: #06b6d4; color: #000; }
 
-        /* Custom UI Component: Hero Banner */
+        /* --- NEW TACTICAL TERMINAL BARS CSS --- */
+        .tactical-accordion {
+            width: 100%; max-width: 1400px; margin: 0 auto 10px auto;
+            background: #09090b; border: 1px solid #27272a;
+            transition: all 0.15s ease;
+        }
+        .tactical-accordion-header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 20px; background: transparent; border: none; cursor: pointer;
+            font-family: monospace; font-size: 14px; letter-spacing: 1px; color: #d4d4d8;
+            text-transform: uppercase; text-align: left; transition: color 0.2s;
+        }
+        .tactical-accordion-header:hover { color: #fff; }
+        .tactical-toggle { font-size: 12px; color: #71717a; }
+        .tactical-accordion-body {
+            padding: 20px; border-top: 1px solid #18181b; background: rgba(0,0,0,0.4);
+        }
+
         .promo-hero-banner {
-            width: 100%;
-            max-width: 1400px;
-            height: 400px;
-            margin: 0 auto 30px auto;
-            background-color: rgba(10, 15, 30, 0.6);
-            background-size: cover;
-            background-position: center 35%;
-            background-repeat: no-repeat;
-            border-radius: 12px;
-            border: 2px solid #8b5cf6;
+            width: 100%; max-width: 1400px; height: 400px; margin: 0 auto 30px auto;
+            background-color: rgba(10, 15, 30, 0.6); background-size: cover;
+            background-position: center 35%; background-repeat: no-repeat;
+            border-radius: 12px; border: 2px solid #8b5cf6;
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             transition: transform 0.3s;
         }
-        .promo-hero-banner:hover {
-            transform: scale(1.01);
-        }
-        @media (max-width: 768px) {
-            .promo-hero-banner {
-                height: 150px;
-                margin-bottom: 20px;
-            }
-        }
-
-        /* NEW ACCORDION UI CSS */
-        .accordion-hub {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto 25px auto;
-            background: rgba(10, 15, 30, 0.8);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        }
-        .accordion-header {
-            padding: 18px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(90deg, rgba(139,92,246,0.15) 0%, rgba(10,15,30,0) 100%);
-            cursor: pointer;
-            border-bottom: 1px solid transparent;
-        }
-        .accordion-header:hover {
-            background: linear-gradient(90deg, rgba(139,92,246,0.25) 0%, rgba(10,15,30,0) 100%);
-        }
-        .accordion-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .accordion-count {
-            background: rgba(139, 92, 246, 0.2);
-            color: #c4b5fd;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: monospace;
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            margin-left: 10px;
-        }
-        .accordion-icon {
-            color: #f97316;
-            font-size: 16px;
-            transition: transform 0.3s ease;
-        }
-        .accordion-icon.open { transform: rotate(180deg); }
-        .accordion-body {
-            padding: 25px;
-            border-top: 1px solid rgba(139, 92, 246, 0.2);
-            background: rgba(8, 11, 24, 0.6);
-        }
+        .promo-hero-banner:hover { transform: scale(1.01); }
+        @media (max-width: 768px) { .promo-hero-banner { height: 150px; margin-bottom: 20px; } }
 
         .section-label {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto 18px auto;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            color: #8b5cf6;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
-            padding-bottom: 8px;
+            width: 100%; max-width: 1400px; margin: 0 auto 18px auto;
+            font-size: 12px; font-weight: bold; letter-spacing: 3px;
+            color: #8b5cf6; text-transform: uppercase;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3); padding-bottom: 8px;
         }
 
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 25px;
-            width: 100%;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 25px; width: 100%;
         }
-        
-        .main-content > .grid {
-            margin: 0 auto 40px auto;
-            max-width: 1400px;
-        }
+        .main-content > .grid { margin: 0 auto 40px auto; max-width: 1400px; }
 
-        /* Matrix Cards with Sharp Corners and HUD Borders */
         .matrix-card {
-            background-color: rgba(10, 15, 30, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 0px; 
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-            transition: 0.3s;
-            cursor: pointer;
+            background-color: rgba(10, 15, 30, 0.6); backdrop-filter: blur(10px);
+            border-radius: 0px; padding: 15px; display: flex; flex-direction: column;
+            gap: 12px; position: relative; transition: 0.3s; cursor: pointer;
         }
         .matrix-card:hover { transform: translateY(-3px); }
 
-        /* HUD Style: Thin Edges + Thick Corners via Background Gradients */
         .theme-orange { 
             border: 1px solid rgba(249, 115, 22, 0.2); 
             box-shadow: inset 0 0 10px rgba(249, 115, 22, 0.05), 0 0 20px rgba(249, 115, 22, 0.15); 
@@ -308,8 +263,7 @@
                 linear-gradient(to left, #f97316 3px, transparent 3px) 100% 100%,
                 linear-gradient(to top, #f97316 3px, transparent 3px) 100% 100%,
                 rgba(10, 15, 30, 0.6);
-            background-repeat: no-repeat;
-            background-size: 15px 15px;
+            background-repeat: no-repeat; background-size: 15px 15px;
         }
         .theme-green { 
             border: 1px solid rgba(74, 222, 128, 0.2); 
@@ -324,8 +278,7 @@
                 linear-gradient(to left, #4ade80 3px, transparent 3px) 100% 100%,
                 linear-gradient(to top, #4ade80 3px, transparent 3px) 100% 100%,
                 rgba(10, 15, 30, 0.6);
-            background-repeat: no-repeat;
-            background-size: 15px 15px;
+            background-repeat: no-repeat; background-size: 15px 15px;
         }
         .theme-blue { 
             border: 1px solid rgba(56, 189, 248, 0.2); 
@@ -340,8 +293,7 @@
                 linear-gradient(to left, #38bdf8 3px, transparent 3px) 100% 100%,
                 linear-gradient(to top, #38bdf8 3px, transparent 3px) 100% 100%,
                 rgba(10, 15, 30, 0.6);
-            background-repeat: no-repeat;
-            background-size: 15px 15px;
+            background-repeat: no-repeat; background-size: 15px 15px;
         }
 
         .card-header { font-size: 15px; font-weight: bold; color: #ffffff; padding-right: 25px; }
@@ -364,12 +316,8 @@
             100% { text-shadow: 0 0 10px rgba(56, 189, 248, 0.9), 0 0 20px rgba(56, 189, 248, 0.6); color: #f0f9ff; }
         }
 
-        .card-banner {
-            width: 100%; height: 160px; object-fit: cover; border-radius: 0px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
-        }
-        .card-banner-contain {
-            width: 100%; height: 160px; object-fit: contain; border-radius: 0px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1);
-        }
+        .card-banner { width: 100%; height: 160px; object-fit: cover; border-radius: 0px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
+        .card-banner-contain { width: 100%; height: 160px; object-fit: contain; border-radius: 0px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
         
         .fallback-bg {
             width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
@@ -379,98 +327,36 @@
             text-align: center; padding: 10px;
         }
 
-        .card-footer {
-            display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px;
-        }
-        .card-info {
-            font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6;
-        }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
+        .card-info { font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6; }
         .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
         .hidden-code { color: #f97316; font-weight: bold; letter-spacing: 2px; }
 
         .status-btn {
-            background: rgba(74, 222, 128, 0.1); 
-            border: 1px solid #4ade80; 
-            color: #4ade80; 
-            padding: 8px 14px; 
-            border-radius: 4px; 
-            font-family: monospace; 
-            font-size: 12px; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            cursor: inherit; 
-            transition: all 0.3s ease;
+            background: rgba(74, 222, 128, 0.1); border: 1px solid #4ade80; color: #4ade80; 
+            padding: 8px 14px; border-radius: 4px; font-family: monospace; font-size: 12px; 
+            font-weight: bold; text-transform: uppercase; cursor: inherit; transition: all 0.3s ease;
             animation: pulseGreen 2s infinite;
         }
-        
-        .status-btn:hover { 
-            background: #4ade80; 
-            color: #020617; 
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.8); 
-            transform: scale(1.05); 
-        }
-        
-        .status-btn.blue-btn { 
-            background: rgba(56, 189, 248, 0.1);
-            border-color: #38bdf8; 
-            color: #38bdf8; 
-            animation: pulseBlue 2s infinite; 
-        }
-        
-        .status-btn.blue-btn:hover { 
-            background: #38bdf8; 
-            color: #020617; 
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); 
-        }
+        .status-btn:hover { background: #4ade80; color: #020617; box-shadow: 0 0 20px rgba(74, 222, 128, 0.8); transform: scale(1.05); }
+        .status-btn.blue-btn { background: rgba(56, 189, 248, 0.1); border-color: #38bdf8; color: #38bdf8; animation: pulseBlue 2s infinite; }
+        .status-btn.blue-btn:hover { background: #38bdf8; color: #020617; box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); }
 
-        @keyframes pulseGreen {
-            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); }
-            70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
-        }
-
-        @keyframes pulseBlue {
-            0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5); }
-            70% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
-        }
+        @keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); } 70% { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
+        @keyframes pulseBlue { 0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.5); } 70% { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); } 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); } }
 
         .dismiss-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(239, 68, 68, 0.7);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 5;
-            transition: 0.2s;
+            position: absolute; top: 5px; right: 5px; background: rgba(239, 68, 68, 0.7);
+            color: white; border: none; border-radius: 50%; width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            font-size: 14px; font-weight: bold; z-index: 5; transition: 0.2s;
         }
-        .dismiss-btn:hover {
-            background: rgba(239, 68, 68, 1);
-            transform: scale(1.1);
-        }
+        .dismiss-btn:hover { background: rgba(239, 68, 68, 1); transform: scale(1.1); }
 
         .seo-content-block {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 30px 40px;
-            background: rgba(10, 15, 30, 0.6);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 12px;
-            color: #cbd5e1;
-            font-size: 14px;
-            line-height: 1.8;
-            z-index: 5;
-            position: relative;
+            max-width: 1400px; margin: 40px auto; padding: 30px 40px; background: rgba(10, 15, 30, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; color: #cbd5e1;
+            font-size: 14px; line-height: 1.8; z-index: 5; position: relative;
         }
         .seo-content-block h1 { color: #8b5cf6; font-size: 20px; border-bottom: 1px solid rgba(139,92,246,0.3); padding-bottom: 10px; margin-top: 0; text-transform: uppercase; letter-spacing: 1px;}
         .seo-content-block h2 { color: #38bdf8; font-size: 18px; margin-top: 25px; }
@@ -480,41 +366,16 @@
         .seo-content-block li { margin-bottom: 10px; }
 
         .site-footer {
-            width: 100%;
-            background: rgba(8, 11, 24, 0.98);
-            border-top: 1px solid rgba(139, 92, 246, 0.3);
-            padding: 30px 40px;
-            font-family: monospace;
-            font-size: 12px;
-            color: #64748b;
-            line-height: 1.8;
-            z-index: 5;
+            width: 100%; background: rgba(8, 11, 24, 0.98); border-top: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 30px 40px; font-family: monospace; font-size: 12px; color: #64748b; line-height: 1.8; z-index: 5;
         }
-        .footer-grid {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .footer-section-title {
-            color: #8b5cf6;
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            font-size: 11px;
-        }
+        .footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .footer-section-title { color: #8b5cf6; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; font-size: 11px; }
         .footer-link { color: #f97316; text-decoration: none; }
         .footer-link:hover { text-decoration: underline; }
         .footer-bottom {
-            max-width: 1400px;
-            margin: 20px auto 0 auto;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.07);
-            text-align: center;
-            color: #475569;
-            font-size: 11px;
+            max-width: 1400px; margin: 20px auto 0 auto; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.07);
+            text-align: center; color: #475569; font-size: 11px;
         }
     </style>
 </head>
@@ -542,20 +403,23 @@
             );
         };
 
-        const AccordionHub = ({ title, count, icon, children, defaultOpen = false }) => {
+        // NEW TACTICAL TERMINAL COMPONENT
+        const TacticalTerminalBar = ({ id, title, count, children, defaultOpen = false, themeColor = "#10b981" }) => {
             const [isOpen, setIsOpen] = useState(defaultOpen);
             if (!children || (Array.isArray(children) && children.length === 0)) return null;
 
             return (
-                <div className="accordion-hub">
-                    <div className="accordion-header" onClick={() => setIsOpen(!isOpen)}>
-                        <div className="accordion-title">
-                            {icon} {title} <span className="accordion-count">{count} NODES</span>
-                        </div>
-                        <div className={`accordion-icon ${isOpen ? 'open' : ''}`}>▼</div>
-                    </div>
+                <div className="tactical-accordion" style={{ borderLeft: `3px solid ${themeColor}` }}>
+                    <button 
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="tactical-accordion-header"
+                        style={{ color: isOpen ? themeColor : '#d4d4d8' }}
+                    >
+                        <span>[ {id} // {title} ]</span>
+                        <span className="tactical-toggle">{isOpen ? '[-] CLOSE' : '[+] EXPAND'}</span>
+                    </button>
                     {isOpen && (
-                        <div className="accordion-body">
+                        <div className="tactical-accordion-body">
                             <div className="grid">
                                 {children}
                             </div>
@@ -598,8 +462,8 @@
             { id: 49, store: "Halo: Master Chief Collection", category: "Hero Product Node", img: "https://upload.wikimedia.org/wikipedia/en/a/ae/Halo_The_Master_Chief_Collection.jpg", code: "AUTO-ROUTED", status: "ACTIVE", btn: "GET HALO", theme: "blue", url: "https://www.gamivo.com/product/halo-the-master-chief-collection?glv=8kuvauuj", fit: "cover" }
         ];
 
+        /* TINIFY DELETED FROM HERE */
         const CORE_LEDGER = [
-            { id: 100, store: "Tinify API Dashboard", category: "Developer Node", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=500&q=60", code: "TOOL", status: "ACTIVE", btn: "OPEN DASHBOARD", theme: "blue", url: "https://tinify.com/dashboard/api", fit: "cover" },
             { id: 1, store: "Whiteout Survival", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/3/3b/Whiteout_Survival_Cover_Art.jpg", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "#", fit: "contain" },
             { id: 2, store: "Merge Dragons!", category: "Mobile Gaming Node", img: "https://upload.wikimedia.org/wikipedia/en/9/9f/Merge_Dragons_app_icon.png", code: "AUTO-ROUTED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "green", url: "https://www.anrdoezrs.net/click-101761790-15043134", fit: "contain" },
             { id: 3, store: "GAMIVO", category: "Digital Key Node", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/800px-Gamivo_logo.png", code: "wm6xPkX4w", status: "ACTIVE", btn: "COPY and CLAIM", theme: "orange", url: "https://www.kqzyfj.com/click-101761790-17235983", fit: "contain" },
@@ -748,61 +612,42 @@
                     </div>
 
                     <div className="main-content">
-                        <div className="search-wrapper">
-                            <input id="system-search" name="system-search" className="system-search" placeholder="SYSTEM DATABASE SEARCH // Execute" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleVerify()} />
-                        </div>
 
-                        {/* IDLE STATE: Main Matrix Display */}
+                        {/* SECTION 01: HERO BANNER */}
                         {aiState === "idle" && (
-                            <>
-                                <div 
-                                    className="promo-hero-banner" 
-                                    style={{ backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` }}
-                                ></div>
-
-                                {activeTab === 'ALL' ? (
-                                    <>
-                                        <div className="section-label">🏆 Hero Products — Top Picks</div>
-                                        <div className="grid">
-                                            {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                        </div>
-
-                                        <AccordionHub title="AirTalk Lifeline Network" count={activeAirTalk.length} icon="📡" defaultOpen={false}>
-                                            {activeAirTalk.map(renderCard)}
-                                        </AccordionHub>
-
-                                        <AccordionHub title="Electronic Express Hardware Deals" count={activeEExpress.length} icon="💻" defaultOpen={false}>
-                                            {activeEExpress.map(renderCard)}
-                                        </AccordionHub>
-
-                                        <AccordionHub title="GAMIVO Digital Gaming Hub" count={activeGamivo.length} icon="🎮" defaultOpen={false}>
-                                            {activeGamivo.map(renderCard)}
-                                        </AccordionHub>
-
-                                        <div className="section-label">⚡ Core Affiliate Ledger</div>
-                                        <div className="grid">
-                                            {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="section-label">⚡ FILTERED RESULTS: {activeTab}</div>
-                                        <div className="grid">
-                                            {displayedCards.map(renderCard)}
-                                        </div>
-                                    </>
-                                )}
-                            </>
+                            <div 
+                                className="promo-hero-banner" 
+                                style={{ backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` }}
+                            ></div>
                         )}
 
-                        {/* SEARCHING STATE: Processing Screen */}
+                        {/* SECTION 02: AI COMMAND CENTER (Search Bar) */}
+                        <div className="command-center">
+                            <div className="cmd-status">
+                                <div><span className="cmd-indicator"></span>PROMOPRO AI SEARCH ENGINE // ONLINE</div>
+                                <span style={{color: '#64748b'}}>V2.6.SECURE</span>
+                            </div>
+                            <form onSubmit={(e) => { e.preventDefault(); handleVerify(); }} className="cmd-input-wrapper">
+                                <span className="cmd-prompt">$&gt;</span>
+                                <input 
+                                    type="text"
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    placeholder="Enter System Node, Brand, or Coupon Category..."
+                                    className="cmd-input"
+                                />
+                                <button type="submit" className="cmd-btn">Execute Query</button>
+                            </form>
+                        </div>
+
+                        {/* SEARCHING STATE */}
                         {aiState === "searching" && (
                             <div className="fallback-bg" style={{ height: '300px', fontSize: '18px', border: '1px solid #38bdf8', color: '#38bdf8', boxShadow: '0 0 30px rgba(56, 189, 248, 0.2)' }}>
                                 <span style={{ animation: 'pulseBlue 1.5s infinite' }}>⏳ QUERYING SECURE SYSTEM LEDGER...</span>
                             </div>
                         )}
 
-                        {/* RESULT STATE: Found Node */}
+                        {/* RESULT STATE */}
                         {aiState === "result" && dynamicResult && (
                             <>
                                 <div className="section-label" style={{ color: '#4ade80', borderBottomColor: '#4ade80' }}>✅ MATCH CONFIRMED</div>
@@ -816,6 +661,49 @@
                                 >
                                     &lt; RETURN TO MAIN MATRIX
                                 </button>
+                            </>
+                        )}
+
+                        {/* IDLE STATE: Main Content Blocks */}
+                        {aiState === "idle" && (
+                            <>
+                                {activeTab === 'ALL' ? (
+                                    <>
+                                        {/* SECTION 03: TACTICAL TERMINAL BARS */}
+                                        <div style={{ width: '100%', maxWidth: '1400px', margin: '0 auto 40px auto' }}>
+                                            <TacticalTerminalBar id="HUB_01" title="AIRTALK LIFELINE NETWORK" count={activeAirTalk.length} themeColor="#38bdf8" defaultOpen={false}>
+                                                {activeAirTalk.map(renderCard)}
+                                            </TacticalTerminalBar>
+
+                                            <TacticalTerminalBar id="HUB_02" title="ELECTRONIC EXPRESS HARDWARE" count={activeEExpress.length} themeColor="#38bdf8" defaultOpen={false}>
+                                                {activeEExpress.map(renderCard)}
+                                            </TacticalTerminalBar>
+
+                                            <TacticalTerminalBar id="HUB_03" title="GAMIVO DIGITAL GAMING" count={activeGamivo.length} themeColor="#f97316" defaultOpen={false}>
+                                                {activeGamivo.map(renderCard)}
+                                            </TacticalTerminalBar>
+                                        </div>
+
+                                        {/* SECTION 04: HERO PRODUCTS */}
+                                        <div className="section-label">🏆 Hero Products — Top Picks</div>
+                                        <div className="grid">
+                                            {HERO_NODES.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+
+                                        {/* SECTION 05: CORE LEDGER */}
+                                        <div className="section-label">⚡ Core Affiliate Ledger</div>
+                                        <div className="grid">
+                                            {CORE_LEDGER.filter(card => !dismissedCards.includes(card.id)).map(renderCard)}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="section-label">⚡ FILTERED RESULTS: {activeTab}</div>
+                                        <div className="grid">
+                                            {displayedCards.map(renderCard)}
+                                        </div>
+                                    </>
+                                )}
                             </>
                         )}
                     </div>
