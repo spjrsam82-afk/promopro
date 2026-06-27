@@ -228,7 +228,6 @@
         .promo-hero-banner:hover { transform: scale(1.01); }
         @media (max-width: 768px) { .promo-hero-banner { height: 150px; margin-bottom: 20px; } }
 
-        /* New styles for the PromoPro text inside the banner */
         .hero-title {
             font-size: 52px;
             font-weight: 900;
@@ -652,7 +651,6 @@
                     )
                 ),
                 React.createElement("div", { className: "main-content" },
-                    // Search Bar / Command Center placed above the hero banner
                     React.createElement("div", { className: "command-center" },
                         React.createElement("div", { className: "cmd-status" },
                             React.createElement("div", null,
@@ -676,7 +674,6 @@
                             React.createElement("button", { type: "submit", className: "cmd-btn" }, "Execute Query")
                         )
                     ),
-                    // Hero Banner moved below the search bar, with "PromoPro" text overlay added
                     aiState === "idle" && React.createElement("div", {
                         className: "promo-hero-banner",
                         style: { backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` }
@@ -762,10 +759,15 @@
             </div>
 
             <div>
-                <div class="footer-section-title">🛡️ Support and Contact</div>
-                <p>Questions, issues, or partnership inquiries?<br/>
-                Reach us at:<br/>
-                <a class="footer-link" href="mailto:spjrsam82@gmail.com">spjrsam82@gmail.com</a>
+                <div class="footer-section-title">🛡️ Support and Legal</div>
+                <p><strong>Contact Directory:</strong><br/>
+                Support: <a class="footer-link" href="mailto:support@promopro.live">support@promopro.live</a><br/>
+                Partnerships: <a class="footer-link" href="mailto:affiliate@promopro.live">affiliate@promopro.live</a><br/>
+                Executive: <a class="footer-link" href="mailto:ceo@promopro.live">ceo@promopro.live</a>
+                </p>
+                <p style="margin-top: 15px;">
+                    <a class="footer-link" href="/privacy-policy.html">Privacy Policy</a><br/>
+                    <a class="footer-link" href="/terms-of-service.html">Terms of Service</a>
                 </p>
             </div>
 
@@ -791,5 +793,3 @@
     </div>
 </body>
 </html>
-
-
