@@ -501,24 +501,63 @@
             const [dismissedCards, setDismissedCards] = useState([]);
             const [activeTab, setActiveTab]         = useState("ALL");
 
+            const API_URL = "/api/gemini"; 
+
             const handleVerify = async () => {
                 if (!searchInput.trim()) return;
+
                 setAiState("searching");
                 setDynamicResult(null);
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                const searchLower = searchInput.toLowerCase();
-                const match = ALL_ENTRIES.find(item => item.store.toLowerCase().includes(searchLower));
 
-                if (match && !dismissedCards.includes(match.id)) {
-                    setDynamicResult(match);
-                } else {
-                    setDynamicResult({
-                        id: 999, store: searchInput.toUpperCase(), category: "Extracted Node",
-                        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Octicons-mark-github.svg/512px-Octicons-mark-github.svg.png",
-                        code: "VERIFIED", status: "ACTIVE", btn: "AUTO-ROUTED", theme: "orange", url: "#", fit: "contain"
+                try {
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            prompt: searchInput
+                        })
                     });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                         throw new Error(data.error);
+                    }
+
+                    setDynamicResult({
+                        id: 999,
+                        store: searchInput,
+                        category: "PromoPro AI Search",
+                        img: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
+                        code: data.text, 
+                        status: "ONLINE",
+                        btn: "AI RESPONSE",
+                        theme: "blue",
+                        url: "#",
+                        fit: "contain"
+                    });
+
+                    setAiState("result");
+
+                } catch (err) {
+                    console.error("PromoPro API Error:", err);
+                    
+                    setDynamicResult({
+                        id: 999,
+                        store: "Error",
+                        category: err.message || "Failed to execute query.",
+                        img: "",
+                        code: "FAILED",
+                        status: "ERROR",
+                        btn: "TRY AGAIN",
+                        theme: "orange",
+                        url: "#"
+                    });
+
+                    setAiState("result");
                 }
-                setAiState("result");
             };
 
             const handleAction = (e, id, codeText, url, storeName) => {
