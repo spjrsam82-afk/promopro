@@ -1,7 +1,7 @@
 const { useState, useEffect, useMemo } = React;
-const PROXY_URL = "https://wsrv.nl/?url=";
+// AI Optimization: Force Next-Gen WebP format and compress width to save massive bandwidth
+const PROXY_URL = "https://wsrv.nl/?output=webp&w=500&url=";
 
-// 1. SAFE IMAGE COMPONENT
 const SafeImage = function({ src, alt, className }) {
     const [attempts, setAttempts] = useState(0);
     if (!src || attempts >= 2) {
@@ -18,15 +18,15 @@ const SafeImage = function({ src, alt, className }) {
     });
 };
 
-// 2. ACCORDION COMPONENT
 const TacticalTerminalBar = function({ title, children, defaultOpen = false, themeColor = "#10b981" }) {
     const [isOpen, setIsOpen] = useState(defaultOpen);
     if (!children || (Array.isArray(children) && children.length === 0)) return null;
 
-    return React.createElement("div", { className: "tactical-accordion", style: { borderLeft: `3px solid ${themeColor}` } },
+    return React.createElement("section", { className: "tactical-accordion", style: { borderLeft: `3px solid ${themeColor}` } },
         React.createElement("button", {
             onClick: () => setIsOpen(!isOpen),
             className: "tactical-accordion-header",
+            "aria-expanded": isOpen,
             style: { color: isOpen ? themeColor : '#d4d4d8' }
         },
             React.createElement("span", null, title),
@@ -38,7 +38,6 @@ const TacticalTerminalBar = function({ title, children, defaultOpen = false, the
     );
 };
 
-// 3. MATRIX SCANNER COMPONENT
 const MatrixScanner = function() {
     const [lines, setLines] = useState([]);
     useEffect(() => {
@@ -64,7 +63,7 @@ const MatrixScanner = function() {
         return () => clearInterval(interval);
     }, []);
 
-    return React.createElement("div", { className: "matrix-scanner" },
+    return React.createElement("div", { className: "matrix-scanner", "aria-live": "polite" },
         React.createElement("div", { className: "scanline" }),
         React.createElement("div", { className: "progress" }, React.createElement("div", { className: "progress-fill" })),
         lines.map((line, idx) => React.createElement("div", { key: idx, className: "term-line" }, line)),
@@ -72,7 +71,6 @@ const MatrixScanner = function() {
     );
 };
 
-// 4. MAIN APP COMPONENT
 export default function App() {
     const [allEntries, setAllEntries]       = useState([]);
     const [searchInput, setSearchInput]     = useState("");
@@ -221,8 +219,8 @@ export default function App() {
     };
 
     const createPromoCard = (p) => {
-        return React.createElement("div", { className: `matrix-card theme-${p.theme}`, key: p.id, onClick: (e) => handleAction(e, p.id, p.code, p.url, p.store) },
-            React.createElement("button", { className: "dismiss-btn", "aria-label": "Dismiss card", onClick: (e) => handleDismiss(e, p.id), title: "Dismiss Card" }, "X"),
+        return React.createElement("article", { className: `matrix-card theme-${p.theme}`, key: p.id, onClick: (e) => handleAction(e, p.id, p.code, p.url, p.store) },
+            React.createElement("button", { className: "dismiss-btn", "aria-label": `Dismiss ${p.store}`, onClick: (e) => handleDismiss(e, p.id), title: "Dismiss Card" }, "X"),
             React.createElement("div", { className: "card-header" }, p.store, " ", React.createElement("span", null, `// ${p.category}`)),
             React.createElement(SafeImage, { src: p.img, alt: p.store, className: p.fit === "contain" ? "card-banner-contain" : "card-banner" }),
             React.createElement("div", { className: "card-footer" },
@@ -260,10 +258,12 @@ export default function App() {
 
     return React.createElement(React.Fragment, null,
         React.createElement("div", { className: "overlay-tint" }),
-        React.createElement("div", { className: "sidebar" },
+        // SEMANTIC HTML: <aside> instead of <div>
+        React.createElement("aside", { className: "sidebar" },
             React.createElement("div", { className: "sidebar-logo" }, React.createElement("div", { className: "logo-icon" }, "P"), React.createElement("span", null, "Promo"), React.createElement("span", { style: { color: '#f97316' } }, "Pro")),
             React.createElement("div", { className: "nav-matrix-title" }, "NAV-MATRIX"),
-            React.createElement("div", { className: "nav-menu" },
+            // SEMANTIC HTML: <nav> instead of <div>
+            React.createElement("nav", { className: "nav-menu" },
                 React.createElement("div", { className: `nav-item ${activeTab === 'ALL' ? 'active' : ''}`, onClick: () => { setActiveTab('ALL'); setAiState("idle"); } }, "🌐 ALL NODES"),
                 React.createElement("div", { className: `nav-item ${activeTab === 'GAMING' ? 'active' : ''}`, onClick: () => { setActiveTab('GAMING'); setAiState("idle"); } }, "🎮 GAMING and KEYS"),
                 React.createElement("div", { className: `nav-item ${activeTab === 'TECH' ? 'active' : ''}`, onClick: () => { setActiveTab('TECH'); setAiState("idle"); } }, "💻 TECH and TOOLS"),
@@ -275,19 +275,20 @@ export default function App() {
                 React.createElement("div", { className: "career-box" }, React.createElement("strong", null, "SYSTEM ADMIN:"), React.createElement("br", null), "Access Level: Tier 1", React.createElement("br", null), "Engine Status: Online and Routing")
             )
         ),
-        React.createElement("div", { className: "main-content" },
-            React.createElement("div", { className: "command-center" },
+        // SEMANTIC HTML: <main> instead of <div>
+        React.createElement("main", { className: "main-content" },
+            React.createElement("section", { className: "command-center" },
                 React.createElement("div", { className: "cmd-status" },
                     React.createElement("div", null, React.createElement("span", { className: "cmd-indicator" }), "PROMOPRO AI SEARCH ENGINE // ONLINE"),
                     React.createElement("span", { style: { color: '#64748b' } }, "V2.6.SECURE")
                 ),
-                React.createElement("form", { onSubmit: (e) => { e.preventDefault(); handleVerify(); }, className: "cmd-input-wrapper" },
+                React.createElement("form", { onSubmit: (e) => { e.preventDefault(); handleVerify(); }, className: "cmd-input-wrapper", role: "search" },
                     React.createElement("span", { className: "cmd-prompt" }, "$>"),
-                    React.createElement("input", { type: "text", value: searchInput, onChange: (e) => setSearchInput(e.target.value), placeholder: "Search for brands, games, or promo codes... (Press '/' to focus)", className: "cmd-input" }),
+                    React.createElement("input", { type: "text", "aria-label": "Search Promos", value: searchInput, onChange: (e) => setSearchInput(e.target.value), placeholder: "Search for brands, games, or promo codes... (Press '/' to focus)", className: "cmd-input" }),
                     React.createElement("button", { type: "submit", className: "cmd-btn" }, "Execute Query")
                 )
             ),
-            aiState === "idle" && React.createElement("div", { className: "promo-hero-banner", style: { backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` } },
+            aiState === "idle" && React.createElement("header", { className: "promo-hero-banner", style: { backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` } },
                 React.createElement("h1", { className: "hero-title" }, "PromoPro")
             ),
             aiState === "searching" && React.createElement(MatrixScanner, null),
@@ -303,16 +304,16 @@ export default function App() {
                         React.createElement(TacticalTerminalBar, { title: "ELECTRONIC EXPRESS // DISCOUNT PC HARDWARE COMPONENTS ONLINE", themeColor: "#38bdf8" }, activeEExpress.map(createPromoCard)),
                         React.createElement(TacticalTerminalBar, { title: "GAMIVO DIGITAL GAMING // BUY CHEAP PC GAME KEYS ONLINE", themeColor: "#f97316" }, activeGamivo.map(createPromoCard))
                     ),
-                    React.createElement("div", { className: "section-label" }, "🏆 Hero Products — Top Picks"),
+                    React.createElement("h2", { className: "section-label" }, "🏆 Hero Products — Top Picks"),
                     React.createElement("div", { className: "grid" }, activeHero.map(createPromoCard)),
-                    React.createElement("div", { className: "section-label" }, "⚡ Core Affiliate Ledger"),
+                    React.createElement("h2", { className: "section-label" }, "⚡ Core Affiliate Ledger"),
                     React.createElement("div", { className: "grid" }, activeCore.map(createPromoCard))
                 ) : React.createElement(React.Fragment, null,
-                    React.createElement("div", { className: "section-label" }, `⚡ FILTERED RESULTS: ${activeTab}`),
+                    React.createElement("h2", { className: "section-label" }, `⚡ FILTERED RESULTS: ${activeTab}`),
                     React.createElement("div", { className: "grid" }, displayedCards.map(createPromoCard))
                 )
             ),
-            toast && React.createElement("div", { className: "cyber-toast" }, React.createElement("span", null, "✅"), toast)
+            toast && React.createElement("div", { className: "cyber-toast", role: "status" }, React.createElement("span", null, "✅"), toast)
         )
     );
 }
