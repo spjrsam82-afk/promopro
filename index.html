@@ -338,14 +338,6 @@
         .card-banner { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
         .card-banner-contain { width: 100%; height: 160px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
 
-        .fallback-bg {
-            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(249,115,22,0.1));
-            border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
-            color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
-            text-align: center; padding: 10px;
-        }
-
         .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
         .card-info { font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6; }
         .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
@@ -372,7 +364,6 @@
         }
         .dismiss-btn:hover { background: rgba(239, 68, 68, 1); transform: scale(1.1); }
 
-        /* TOAST NOTIFICATION STYLES */
         .cyber-toast {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: rgba(10, 15, 30, 0.95); border: 1px solid #10b981; color: #10b981;
@@ -383,6 +374,51 @@
         }
         @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
         @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+        .matrix-scanner {
+            width: 100%; max-width: 1400px; margin: 0 auto 30px auto; height: 300px;
+            background: rgba(10, 15, 30, 0.9); border: 1px solid #10b981; border-radius: 12px;
+            position: relative; overflow: hidden; padding: 30px;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15), inset 0 0 20px rgba(16, 185, 129, 0.1);
+            display: flex; flex-direction: column; font-family: monospace;
+        }
+        
+        /* NEW: PROGRESS BAR STYLES */
+        .progress {
+            width: 100%; height: 8px; background: #111; border-radius: 6px;
+            overflow: hidden; margin-bottom: 20px; flex-shrink: 0;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .progress-fill {
+            width: 0%; height: 100%; background: #10b981;
+            animation: loading 2.5s linear forwards;
+            box-shadow: 0 0 10px #10b981;
+        }
+        @keyframes loading {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        .scanline {
+            position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: rgba(16, 185, 129, 0.5); box-shadow: 0 0 15px #10b981, 0 0 30px #10b981;
+            animation: scan 2s cubic-bezier(0.4, 0, 0.2, 1) infinite; z-index: 10;
+        }
+        @keyframes scan { 
+            0% { top: -10%; opacity: 0; } 
+            10% { opacity: 1; } 
+            90% { opacity: 1; } 
+            100% { top: 110%; opacity: 0; } 
+        }
+        .term-line { 
+            color: #10b981; font-size: 15px; margin-bottom: 10px; 
+            text-shadow: 0 0 5px rgba(16, 185, 129, 0.5); font-weight: bold; letter-spacing: 1px; 
+        }
+        .term-cursor { 
+            display: inline-block; width: 10px; height: 15px; background: #10b981; 
+            animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 5px; 
+        }
+        @keyframes blink { 50% { opacity: 0; } }
 
         .seo-content-block {
             max-width: 1400px; margin: 40px auto; padding: 30px 40px; background: rgba(10, 15, 30, 0.6);
@@ -414,7 +450,7 @@
     <div id="root"></div>
 
     <script data-cfasync="false">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useMemo } = React;
         const PROXY_URL = "https://wsrv.nl/?url=";
 
         const SafeImage = function({ src, alt, className }) {
@@ -454,8 +490,49 @@
             );
         };
 
+        const MatrixScanner = function() {
+            const [lines, setLines] = useState([]);
+
+            useEffect(() => {
+                // NEW: AI-FOCUSED SEQUENCE
+                const sequence = [
+                    "> Connecting to PromoPro AI...",
+                    "> Understanding your request...",
+                    "> Searching affiliate partners...",
+                    "> Comparing verified offers...",
+                    "> Checking live promotions...",
+                    "> Ranking best results...",
+                    "> Building AI response...",
+                    "> Complete."
+                ];
+                let step = 0;
+                
+                // Calculates timing to fit within the 2.5s loading bar
+                const interval = setInterval(() => {
+                    if (step < sequence.length) {
+                        setLines(prev => [...prev, sequence[step]]);
+                        step++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 300); 
+                return () => clearInterval(interval);
+            }, []);
+
+            return React.createElement("div", { className: "matrix-scanner" },
+                React.createElement("div", { className: "scanline" }),
+                // NEW: INJECTED PROGRESS BAR
+                React.createElement("div", { className: "progress" },
+                    React.createElement("div", { className: "progress-fill" })
+                ),
+                lines.map((line, idx) => React.createElement("div", { key: idx, className: "term-line" }, line)),
+                React.createElement("div", { className: "term-line" },
+                    ">", React.createElement("span", { className: "term-cursor" })
+                )
+            );
+        };
+
         function App() {
-            // STATE MANAGEMENT
             const [allEntries, setAllEntries]       = useState([]);
             const [searchInput, setSearchInput]     = useState("");
             const [aiState, setAiState]             = useState("idle");
@@ -469,18 +546,37 @@
                 return saved ? JSON.parse(saved) : [];
             });
 
-            // FETCH DATA ON LOAD
             useEffect(() => {
                 fetch('data.json')
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) throw new Error("Failed to load JSON data.");
+                        return response.json();
+                    })
                     .then(data => setAllEntries(data))
-                    .catch(error => console.error("Error loading ledger data:", error));
+                    .catch(error => {
+                        console.error("Error loading ledger data:", error);
+                        showToast(`ERROR: FAILED TO MOUNT DATA.JSON`);
+                    });
             }, []);
 
-            // PERSIST DISMISSED CARDS
             useEffect(() => {
                 localStorage.setItem('promo_dismissed', JSON.stringify(dismissedCards));
             }, [dismissedCards]);
+
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                        e.preventDefault();
+                        document.querySelector('.cmd-input').focus();
+                    } 
+                    else if (e.key === 'Escape') {
+                        setSearchInput('');
+                        document.querySelector('.cmd-input').blur();
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, []);
 
             const showToast = (message) => {
                 setToast(message);
@@ -492,7 +588,6 @@
             const handleVerify = async () => {
                 if (!searchInput.trim()) return;
 
-                // INSTANT LOCAL SEARCH CHECK
                 const searchLower = searchInput.toLowerCase();
                 const localMatch = allEntries.find(item => 
                     item.store.toLowerCase().includes(searchLower) || 
@@ -506,8 +601,12 @@
                     return; 
                 }
 
+                // TRIGGER SEARCH STATE
                 setAiState("searching");
                 setDynamicResult(null);
+
+                // NEW: THEATRICAL 2.5 SECOND DELAY FOR ANIMATION
+                await new Promise(resolve => setTimeout(resolve, 2500));
 
                 try {
                     const response = await fetch(API_URL, {
@@ -596,6 +695,7 @@
                 },
                     React.createElement("button", {
                         className: "dismiss-btn",
+                        "aria-label": "Dismiss card",
                         onClick: (e) => handleDismiss(e, p.id),
                         title: "Dismiss Card"
                     }, "X"),
@@ -619,24 +719,30 @@
                 );
             };
 
-            const getFilteredCards = () => {
-                let filtered = allEntries;
-                if (activeTab === 'GAMING') {
-                    filtered = allEntries.filter(c => c.category.includes('Gaming') || c.category.includes('Game') || c.category.includes('GAMIVO') || c.category.includes('Key'));
-                } else if (activeTab === 'TECH') {
-                    filtered = allEntries.filter(c => c.category.includes('Tech') || c.category.includes('Developer') || c.category.includes('Technical') || c.category.includes('Lifeline') || c.category.includes('Hardware'));
-                } else if (activeTab === 'LIFESTYLE') {
-                    filtered = allEntries.filter(c => c.category.includes('Travel') || c.category.includes('Beauty') || c.category.includes('Exclusive'));
-                }
-                return filtered.filter(card => !dismissedCards.includes(card.id));
-            };
+            const { displayedCards, grouped } = useMemo(() => {
+                let filtered = allEntries.filter(card => !dismissedCards.includes(card.id));
+                
+                const groups = filtered.reduce((acc, item) => {
+                    (acc[item.group] = acc[item.group] || []).push(item);
+                    return acc;
+                }, {});
 
-            const displayedCards = getFilteredCards();
-            const activeAirTalk = allEntries.filter(card => card.group === 'AIRTALK' && !dismissedCards.includes(card.id));
-            const activeEExpress = allEntries.filter(card => card.group === 'EEXPRESS' && !dismissedCards.includes(card.id));
-            const activeGamivo = allEntries.filter(card => card.group === 'GAMIVO' && !dismissedCards.includes(card.id));
-            const activeHero = allEntries.filter(card => card.group === 'HERO' && !dismissedCards.includes(card.id));
-            const activeCore = allEntries.filter(card => card.group === 'CORE' && !dismissedCards.includes(card.id));
+                if (activeTab === 'GAMING') {
+                    filtered = filtered.filter(c => c.category.includes('Gaming') || c.category.includes('Game') || c.category.includes('GAMIVO') || c.category.includes('Key'));
+                } else if (activeTab === 'TECH') {
+                    filtered = filtered.filter(c => c.category.includes('Tech') || c.category.includes('Developer') || c.category.includes('Technical') || c.category.includes('Lifeline') || c.category.includes('Hardware'));
+                } else if (activeTab === 'LIFESTYLE') {
+                    filtered = filtered.filter(c => c.category.includes('Travel') || c.category.includes('Beauty') || c.category.includes('Exclusive'));
+                }
+
+                return { displayedCards: filtered, grouped: groups };
+            }, [allEntries, dismissedCards, activeTab]);
+
+            const activeAirTalk = grouped['AIRTALK'] || [];
+            const activeEExpress = grouped['EEXPRESS'] || [];
+            const activeGamivo = grouped['GAMIVO'] || [];
+            const activeHero = grouped['HERO'] || [];
+            const activeCore = grouped['CORE'] || [];
 
             return React.createElement(React.Fragment, null,
                 React.createElement("div", { className: "overlay-tint" }),
@@ -680,7 +786,7 @@
                         ),
                         React.createElement("form", { onSubmit: (e) => { e.preventDefault(); handleVerify(); }, className: "cmd-input-wrapper" },
                             React.createElement("span", { className: "cmd-prompt" }, "$>"),
-                            React.createElement("input", { type: "text", value: searchInput, onChange: (e) => setSearchInput(e.target.value), placeholder: "Search for brands, games, or promo codes...", className: "cmd-input" }),
+                            React.createElement("input", { type: "text", value: searchInput, onChange: (e) => setSearchInput(e.target.value), placeholder: "Search for brands, games, or promo codes... (Press '/' to focus)", className: "cmd-input" }),
                             React.createElement("button", { type: "submit", className: "cmd-btn" }, "Execute Query")
                         )
                     ),
@@ -690,12 +796,9 @@
                     },
                         React.createElement("h1", { className: "hero-title" }, "PromoPro")
                     ),
-                    aiState === "searching" && React.createElement("div", {
-                        className: "fallback-bg",
-                        style: { height: '300px', fontSize: '18px', border: '1px solid #38bdf8', color: '#38bdf8', boxShadow: '0 0 30px rgba(56, 189, 248, 0.2)' }
-                    },
-                        React.createElement("span", { style: { animation: 'pulseBlue 1.5s infinite' } }, "⏳ QUERYING SECURE SYSTEM LEDGER...")
-                    ),
+                    
+                    aiState === "searching" && React.createElement(MatrixScanner, null),
+                    
                     aiState === "result" && dynamicResult && React.createElement(React.Fragment, null,
                         React.createElement("div", { className: "section-label", style: { color: '#4ade80', borderBottomColor: '#4ade80' } }, "✅ MATCH CONFIRMED"),
                         React.createElement("div", { className: "grid" }, renderCard(dynamicResult)),
@@ -792,3 +895,4 @@
     </div>
 </body>
 </html>
+                                    
