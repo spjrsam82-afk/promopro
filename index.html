@@ -13,6 +13,20 @@
     <meta property="og:image" content="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg">
     <meta name="twitter:card" content="summary_large_image">
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PromoPro",
+      "url": "https://promopro.live",
+      "description": "AI-powered verification engine for active gaming, tech, and hardware affiliate deals.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Purcell Tech."
+      }
+    }
+    </script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P2PFW0YMB1" data-cfasync="false"></script>
     <script data-cfasync="false">
       window.dataLayer = window.dataLayer || [];
@@ -221,6 +235,7 @@
             padding: 20px; border-top: 1px solid #18181b; background: rgba(0,0,0,0.4);
         }
 
+        /* NEW: Holographic Hero Banner Overhaul */
         .promo-hero-banner {
             width: 100%; max-width: 1400px; height: 400px; margin: 0 auto 30px auto;
             background-color: rgba(10, 15, 30, 0.6); background-size: cover;
@@ -229,25 +244,38 @@
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.3s;
+            position: relative; 
+            overflow: hidden;   
         }
         .promo-hero-banner:hover { transform: scale(1.01); }
-        @media (max-width: 768px) { .promo-hero-banner { height: 150px; margin-bottom: 20px; } }
-
+        
+        .promo-hero-banner::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                linear-gradient(rgba(139, 92, 246, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: moveGrid 15s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+        
         .hero-title {
-            font-size: 52px;
-            font-weight: 900;
-            letter-spacing: 6px;
-            color: #ffffff;
-            text-transform: uppercase;
+            font-size: 52px; font-weight: 900; letter-spacing: 6px;
+            color: #ffffff; text-transform: uppercase;
             text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(6, 182, 212, 0.6);
-            margin: 0;
-            background: rgba(8, 11, 24, 0.7);
-            padding: 12px 35px;
-            border-radius: 12px;
+            margin: 0; background: rgba(8, 11, 24, 0.7);
+            padding: 12px 35px; border-radius: 12px;
             border: 1px solid rgba(139, 92, 246, 0.4);
             backdrop-filter: blur(8px);
+            z-index: 2; 
         }
-        @media (max-width: 768px) { .hero-title { font-size: 28px; padding: 8px 20px; } }
+        @media (max-width: 768px) { .promo-hero-banner { height: 150px; margin-bottom: 20px; } .hero-title { font-size: 28px; padding: 8px 20px; } }
 
         .section-label {
             width: 100%; max-width: 1400px; margin: 0 auto 18px auto;
@@ -338,6 +366,14 @@
         .card-banner { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1); }
         .card-banner-contain { width: 100%; height: 160px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid rgba(255,255,255,0.1); }
 
+        .fallback-bg {
+            width: 100%; height: 160px; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(249,115,22,0.1));
+            border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+            color: #cbd5e1; font-family: monospace; font-size: 14px; text-transform: uppercase;
+            text-align: center; padding: 10px;
+        }
+
         .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 5px; }
         .card-info { font-family: monospace; font-size: 13px; color: #cbd5e1; line-height: 1.6; }
         .highlight { color: #4ade80; font-weight: bold; letter-spacing: 1px; }
@@ -383,7 +419,6 @@
             display: flex; flex-direction: column; font-family: monospace;
         }
         
-        /* NEW: PROGRESS BAR STYLES */
         .progress {
             width: 100%; height: 8px; background: #111; border-radius: 6px;
             overflow: hidden; margin-bottom: 20px; flex-shrink: 0;
@@ -449,387 +484,10 @@
 <body>
     <div id="root"></div>
 
-    <script data-cfasync="false">
-        const { useState, useEffect, useMemo } = React;
-        const PROXY_URL = "https://wsrv.nl/?url=";
-
-        const SafeImage = function({ src, alt, className }) {
-            const [attempts, setAttempts] = useState(0);
-            if (!src || attempts >= 2) {
-                return React.createElement("div", { className: "fallback-bg" }, `🎮 ${alt}`);
-            }
-            const isAbsolute = src.startsWith('http');
-            const proxiedSrc = (attempts === 1 && isAbsolute) ? PROXY_URL + encodeURIComponent(src) : src;
-            return React.createElement("img", {
-                src: proxiedSrc,
-                alt: alt,
-                className: className,
-                onError: () => setAttempts(a => a + 1)
-            });
-        };
-
-        const TacticalTerminalBar = function({ title, count, children, defaultOpen = false, themeColor = "#10b981" }) {
-            const [isOpen, setIsOpen] = useState(defaultOpen);
-            if (!children || (Array.isArray(children) && children.length === 0)) return null;
-
-            return React.createElement("div", {
-                className: "tactical-accordion",
-                style: { borderLeft: `3px solid ${themeColor}` }
-            },
-                React.createElement("button", {
-                    onClick: () => setIsOpen(!isOpen),
-                    className: "tactical-accordion-header",
-                    style: { color: isOpen ? themeColor : '#d4d4d8' }
-                },
-                    React.createElement("span", null, title),
-                    React.createElement("span", { className: "tactical-toggle" }, isOpen ? '[-] CLOSE' : '[+] EXPAND')
-                ),
-                isOpen && React.createElement("div", { className: "tactical-accordion-body" },
-                    React.createElement("div", { className: "grid" }, children)
-                )
-            );
-        };
-
-        const MatrixScanner = function() {
-            const [lines, setLines] = useState([]);
-
-            useEffect(() => {
-                // NEW: AI-FOCUSED SEQUENCE
-                const sequence = [
-                    "> Connecting to PromoPro AI...",
-                    "> Understanding your request...",
-                    "> Searching affiliate partners...",
-                    "> Comparing verified offers...",
-                    "> Checking live promotions...",
-                    "> Ranking best results...",
-                    "> Building AI response...",
-                    "> Complete."
-                ];
-                let step = 0;
-                
-                // Calculates timing to fit within the 2.5s loading bar
-                const interval = setInterval(() => {
-                    if (step < sequence.length) {
-                        setLines(prev => [...prev, sequence[step]]);
-                        step++;
-                    } else {
-                        clearInterval(interval);
-                    }
-                }, 300); 
-                return () => clearInterval(interval);
-            }, []);
-
-            return React.createElement("div", { className: "matrix-scanner" },
-                React.createElement("div", { className: "scanline" }),
-                // NEW: INJECTED PROGRESS BAR
-                React.createElement("div", { className: "progress" },
-                    React.createElement("div", { className: "progress-fill" })
-                ),
-                lines.map((line, idx) => React.createElement("div", { key: idx, className: "term-line" }, line)),
-                React.createElement("div", { className: "term-line" },
-                    ">", React.createElement("span", { className: "term-cursor" })
-                )
-            );
-        };
-
-        function App() {
-            const [allEntries, setAllEntries]       = useState([]);
-            const [searchInput, setSearchInput]     = useState("");
-            const [aiState, setAiState]             = useState("idle");
-            const [dynamicResult, setDynamicResult] = useState(null);
-            const [revealedCodes, setRevealedCodes] = useState({});
-            const [toast, setToast]                 = useState(null); 
-            const [activeTab, setActiveTab]         = useState("ALL");
-            
-            const [dismissedCards, setDismissedCards] = useState(() => {
-                const saved = localStorage.getItem('promo_dismissed');
-                return saved ? JSON.parse(saved) : [];
-            });
-
-            useEffect(() => {
-                fetch('data.json')
-                    .then(response => {
-                        if (!response.ok) throw new Error("Failed to load JSON data.");
-                        return response.json();
-                    })
-                    .then(data => setAllEntries(data))
-                    .catch(error => {
-                        console.error("Error loading ledger data:", error);
-                        showToast(`ERROR: FAILED TO MOUNT DATA.JSON`);
-                    });
-            }, []);
-
-            useEffect(() => {
-                localStorage.setItem('promo_dismissed', JSON.stringify(dismissedCards));
-            }, [dismissedCards]);
-
-            useEffect(() => {
-                const handleKeyDown = (e) => {
-                    if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
-                        e.preventDefault();
-                        document.querySelector('.cmd-input').focus();
-                    } 
-                    else if (e.key === 'Escape') {
-                        setSearchInput('');
-                        document.querySelector('.cmd-input').blur();
-                    }
-                };
-                window.addEventListener('keydown', handleKeyDown);
-                return () => window.removeEventListener('keydown', handleKeyDown);
-            }, []);
-
-            const showToast = (message) => {
-                setToast(message);
-                setTimeout(() => { setToast(null); }, 3000);
-            };
-
-            const API_URL = "/api/gemini"; 
-
-            const handleVerify = async () => {
-                if (!searchInput.trim()) return;
-
-                const searchLower = searchInput.toLowerCase();
-                const localMatch = allEntries.find(item => 
-                    item.store.toLowerCase().includes(searchLower) || 
-                    item.category.toLowerCase().includes(searchLower)
-                );
-
-                if (localMatch && !dismissedCards.includes(localMatch.id)) {
-                    setDynamicResult(localMatch);
-                    setAiState("result");
-                    showToast(`LOCAL MATCH FOUND: SECURE NODE ROUTED.`);
-                    return; 
-                }
-
-                // TRIGGER SEARCH STATE
-                setAiState("searching");
-                setDynamicResult(null);
-
-                // NEW: THEATRICAL 2.5 SECOND DELAY FOR ANIMATION
-                await new Promise(resolve => setTimeout(resolve, 2500));
-
-                try {
-                    const response = await fetch(API_URL, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ prompt: searchInput })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.error) { throw new Error(data.error); }
-
-                    setDynamicResult({
-                        id: 999,
-                        store: searchInput.toUpperCase(),
-                        category: "PromoPro AI Search",
-                        img: "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
-                        code: data.text, 
-                        status: "ONLINE",
-                        btn: "AI RESPONSE",
-                        theme: "blue",
-                        url: "#",
-                        fit: "contain"
-                    });
-
-                    setAiState("result");
-
-                } catch (err) {
-                    console.error("PromoPro API Error:", err);
-                    setDynamicResult({
-                        id: 999,
-                        store: "Error",
-                        category: err.message || "Failed to execute query.",
-                        img: "",
-                        code: "FAILED",
-                        status: "ERROR",
-                        btn: "TRY AGAIN",
-                        theme: "orange",
-                        url: "#"
-                    });
-                    setAiState("result");
-                }
-            };
-
-            const handleAction = (e, id, codeText, url, storeName) => {
-                e.preventDefault();
-                setRevealedCodes(prev => ({ ...prev, [id]: true }));
-                const hasLink = url && url !== "#";
-                const hasCode = codeText && !["AUTO-ROUTED","NONE","WEBSHOP","PUBLIC"].includes(codeText);
-
-                if (typeof window.gtag === 'function') {
-                    window.gtag('event', 'affiliate_click', { store: storeName, destination_url: url });
-                }
-
-                if (hasCode) {
-                    if (navigator.clipboard && window.isSecureContext) {
-                        navigator.clipboard.writeText(codeText);
-                        showToast(`SYSTEM LOG: CODE '${codeText}' COPIED.`);
-                    } else {
-                        console.log(`Fallback: Code is ${codeText}`);
-                    }
-                }
-                
-                if (hasLink) { window.open(url, "_blank"); }
-            };
-
-            const handleDismiss = (e, id) => {
-                e.stopPropagation();
-                setDismissedCards(prev => [...prev, id]);
-            };
-
-            const renderCode = (id, code) => {
-                if (["AUTO-ROUTED","NONE","PUBLIC","WEBSHOP"].includes(code)) {
-                    return React.createElement("span", { className: "highlight" }, `'${code}'`);
-                }
-                return revealedCodes[id] ? 
-                    React.createElement("span", { className: "highlight" }, `'${code}'`) : 
-                    React.createElement("span", { className: "hidden-code" }, "'********'");
-            };
-
-            const renderCard = (p) => {
-                return React.createElement("div", {
-                    className: `matrix-card theme-${p.theme}`,
-                    key: p.id,
-                    onClick: (e) => handleAction(e, p.id, p.code, p.url, p.store)
-                },
-                    React.createElement("button", {
-                        className: "dismiss-btn",
-                        "aria-label": "Dismiss card",
-                        onClick: (e) => handleDismiss(e, p.id),
-                        title: "Dismiss Card"
-                    }, "X"),
-                    React.createElement("div", { className: "card-header" },
-                        p.store,
-                        " ",
-                        React.createElement("span", null, `// ${p.category}`)
-                    ),
-                    React.createElement(SafeImage, {
-                        src: p.img,
-                        alt: p.store,
-                        className: p.fit === "contain" ? "card-banner-contain" : "card-banner"
-                    }),
-                    React.createElement("div", { className: "card-footer" },
-                        React.createElement("div", { className: "card-info" },
-                            React.createElement("div", null, "code: ", renderCode(p.id, p.code)),
-                            React.createElement("div", null, "status: ", React.createElement("span", { className: "highlight" }, `'${p.status}'`))
-                        ),
-                        React.createElement("button", { className: `status-btn${p.theme === "blue" ? " blue-btn" : ""}` }, p.btn)
-                    )
-                );
-            };
-
-            const { displayedCards, grouped } = useMemo(() => {
-                let filtered = allEntries.filter(card => !dismissedCards.includes(card.id));
-                
-                const groups = filtered.reduce((acc, item) => {
-                    (acc[item.group] = acc[item.group] || []).push(item);
-                    return acc;
-                }, {});
-
-                if (activeTab === 'GAMING') {
-                    filtered = filtered.filter(c => c.category.includes('Gaming') || c.category.includes('Game') || c.category.includes('GAMIVO') || c.category.includes('Key'));
-                } else if (activeTab === 'TECH') {
-                    filtered = filtered.filter(c => c.category.includes('Tech') || c.category.includes('Developer') || c.category.includes('Technical') || c.category.includes('Lifeline') || c.category.includes('Hardware'));
-                } else if (activeTab === 'LIFESTYLE') {
-                    filtered = filtered.filter(c => c.category.includes('Travel') || c.category.includes('Beauty') || c.category.includes('Exclusive'));
-                }
-
-                return { displayedCards: filtered, grouped: groups };
-            }, [allEntries, dismissedCards, activeTab]);
-
-            const activeAirTalk = grouped['AIRTALK'] || [];
-            const activeEExpress = grouped['EEXPRESS'] || [];
-            const activeGamivo = grouped['GAMIVO'] || [];
-            const activeHero = grouped['HERO'] || [];
-            const activeCore = grouped['CORE'] || [];
-
-            return React.createElement(React.Fragment, null,
-                React.createElement("div", { className: "overlay-tint" }),
-                React.createElement("div", { className: "sidebar" },
-                    React.createElement("div", { className: "sidebar-logo" },
-                        React.createElement("div", { className: "logo-icon" }, "P"),
-                        React.createElement("span", null, "Promo"),
-                        React.createElement("span", { style: { color: '#f97316' } }, "Pro")
-                    ),
-                    React.createElement("div", { className: "nav-matrix-title" }, "NAV-MATRIX"),
-                    React.createElement("div", { className: "nav-menu" },
-                        React.createElement("div", { className: `nav-item ${activeTab === 'ALL' ? 'active' : ''}`, onClick: () => { setActiveTab('ALL'); setAiState("idle"); } }, "🌐 ALL NODES"),
-                        React.createElement("div", { className: `nav-item ${activeTab === 'GAMING' ? 'active' : ''}`, onClick: () => { setActiveTab('GAMING'); setAiState("idle"); } }, "🎮 GAMING and KEYS"),
-                        React.createElement("div", { className: `nav-item ${activeTab === 'TECH' ? 'active' : ''}`, onClick: () => { setActiveTab('TECH'); setAiState("idle"); } }, "💻 TECH and TOOLS"),
-                        React.createElement("div", { className: `nav-item ${activeTab === 'LIFESTYLE' ? 'active' : ''}`, onClick: () => { setActiveTab('LIFESTYLE'); setAiState("idle"); } }, "✈️ LIFESTYLE")
-                    ),
-                    React.createElement("div", { className: "career-context" },
-                        React.createElement("div", { className: "career-title" }, "SYSTEM STATUS"),
-                        React.createElement("div", { className: "career-icons" },
-                            React.createElement("span", null, "🛡️"),
-                            React.createElement("span", null, "⚡"),
-                            React.createElement("span", { className: "cs50-icon" }, "SECURE")
-                        ),
-                        React.createElement("div", { className: "career-box" },
-                            React.createElement("strong", null, "SYSTEM ADMIN:"),
-                            React.createElement("br", null),
-                            "Access Level: Tier 1",
-                            React.createElement("br", null),
-                            "Engine Status: Online and Routing"
-                        )
-                    )
-                ),
-                React.createElement("div", { className: "main-content" },
-                    React.createElement("div", { className: "command-center" },
-                        React.createElement("div", { className: "cmd-status" },
-                            React.createElement("div", null,
-                                React.createElement("span", { className: "cmd-indicator" }),
-                                "PROMOPRO AI SEARCH ENGINE // ONLINE"
-                            ),
-                            React.createElement("span", { style: { color: '#64748b' } }, "V2.6.SECURE")
-                        ),
-                        React.createElement("form", { onSubmit: (e) => { e.preventDefault(); handleVerify(); }, className: "cmd-input-wrapper" },
-                            React.createElement("span", { className: "cmd-prompt" }, "$>"),
-                            React.createElement("input", { type: "text", value: searchInput, onChange: (e) => setSearchInput(e.target.value), placeholder: "Search for brands, games, or promo codes... (Press '/' to focus)", className: "cmd-input" }),
-                            React.createElement("button", { type: "submit", className: "cmd-btn" }, "Execute Query")
-                        )
-                    ),
-                    aiState === "idle" && React.createElement("div", {
-                        className: "promo-hero-banner",
-                        style: { backgroundImage: `url('https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg')` }
-                    },
-                        React.createElement("h1", { className: "hero-title" }, "PromoPro")
-                    ),
-                    
-                    aiState === "searching" && React.createElement(MatrixScanner, null),
-                    
-                    aiState === "result" && dynamicResult && React.createElement(React.Fragment, null,
-                        React.createElement("div", { className: "section-label", style: { color: '#4ade80', borderBottomColor: '#4ade80' } }, "✅ MATCH CONFIRMED"),
-                        React.createElement("div", { className: "grid" }, renderCard(dynamicResult)),
-                        React.createElement("button", {
-                            className: "status-btn blue-btn",
-                            style: { marginTop: '20px', padding: '12px 24px', width: 'fit-content', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' },
-                            onClick: () => { setAiState("idle"); setSearchInput(""); }
-                        }, "< RETURN TO MAIN MATRIX")
-                    ),
-                    aiState === "idle" && (
-                        activeTab === 'ALL' ? React.createElement(React.Fragment, null,
-                            React.createElement("div", { style: { width: '100%', maxWidth: '1400px', margin: '0 auto 40px auto' } },
-                                React.createElement(TacticalTerminalBar, { title: "AIRTALK LIFELINE NETWORK & PROMOS", count: activeAirTalk.length, themeColor: "#38bdf8", defaultOpen: false }, activeAirTalk.map(renderCard)),
-                                React.createElement(TacticalTerminalBar, { title: "ELECTRONIC EXPRESS // DISCOUNT PC HARDWARE COMPONENTS ONLINE", count: activeEExpress.length, themeColor: "#38bdf8", defaultOpen: false }, activeEExpress.map(renderCard)),
-                                React.createElement(TacticalTerminalBar, { title: "GAMIVO DIGITAL GAMING // BUY CHEAP PC GAME KEYS ONLINE", count: activeGamivo.length, themeColor: "#f97316", defaultOpen: false }, activeGamivo.map(renderCard))
-                            ),
-                            React.createElement("div", { className: "section-label" }, "🏆 Hero Products — Top Picks"),
-                            React.createElement("div", { className: "grid" }, activeHero.map(renderCard)),
-                            React.createElement("div", { className: "section-label" }, "⚡ Core Affiliate Ledger"),
-                            React.createElement("div", { className: "grid" }, activeCore.map(renderCard))
-                        ) : React.createElement(React.Fragment, null,
-                            React.createElement("div", { className: "section-label" }, `⚡ FILTERED RESULTS: ${activeTab}`),
-                            React.createElement("div", { className: "grid" }, displayedCards.map(renderCard))
-                        )
-                    ),
-                    toast && React.createElement("div", { className: "cyber-toast" }, React.createElement("span", null, "✅"), toast)
-                )
-            );
-        }
-
-        ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    <script type="module">
+        import App from './components/App.js';
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
     </script>
 
     <div class="seo-content-block">
@@ -888,11 +546,11 @@
     </script>
 
     <div class="promo-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; background: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); border-top: 1px solid #38bdf8;">
-        <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" style="display: block; position: relative;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png" alt="GAMIVO 3% Off" style="max-height: 50px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" style="display: block; position: relative;" rel="noopener noreferrer">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png" alt="GAMIVO 3% Off" style="max-height: 50px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
         </a>
         <button onclick="document.querySelector('.promo-footer').style.display='none'" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; color: #64748b; border: 1px solid #64748b; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">HIDE</button>
     </div>
 </body>
 </html>
-                                    
+
