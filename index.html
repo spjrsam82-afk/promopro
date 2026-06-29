@@ -6,6 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>PromoPro System Ledger</title>
+    
+    <meta name="description" content="PromoPro AI-powered verification engine for active gaming, tech, and hardware affiliate deals.">
+    <meta property="og:title" content="PromoPro System Ledger">
+    <meta property="og:description" content="Access verified digital keys, game passes, and tech hardware discounts routed directly to you.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg">
+    <meta name="twitter:card" content="summary_large_image">
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P2PFW0YMB1" data-cfasync="false"></script>
     <script data-cfasync="false">
@@ -367,6 +373,18 @@
         }
         .dismiss-btn:hover { background: rgba(239, 68, 68, 1); transform: scale(1.1); }
 
+        /* NEW TOAST NOTIFICATION STYLES */
+        .cyber-toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 15, 30, 0.95); border: 1px solid #10b981; color: #10b981;
+            padding: 12px 24px; border-radius: 8px; font-family: monospace; font-size: 14px;
+            z-index: 10000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            animation: slideUp 0.3s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+            pointer-events: none; display: flex; align-items: center; gap: 10px;
+        }
+        @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
         .seo-content-block {
             max-width: 1400px; margin: 40px auto; padding: 30px 40px; background: rgba(10, 15, 30, 0.6);
             border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 12px; color: #cbd5e1;
@@ -397,7 +415,7 @@
     <div id="root"></div>
 
     <script data-cfasync="false">
-        const { useState } = React;
+        const { useState, useEffect } = React;
         const PROXY_URL = "https://wsrv.nl/?url=";
 
         const SafeImage = function({ src, alt, className }) {
@@ -498,8 +516,26 @@
             const [aiState, setAiState]             = useState("idle");
             const [dynamicResult, setDynamicResult] = useState(null);
             const [revealedCodes, setRevealedCodes] = useState({});
-            const [dismissedCards, setDismissedCards] = useState([]);
+            const [toast, setToast]                 = useState(null); // NEW TOAST STATE
+            
+            const [dismissedCards, setDismissedCards] = useState(() => {
+                const saved = localStorage.getItem('promo_dismissed');
+                return saved ? JSON.parse(saved) : [];
+            });
             const [activeTab, setActiveTab]         = useState("ALL");
+
+            useEffect(() => {
+                localStorage.setItem('promo_dismissed', JSON.stringify(dismissedCards));
+            }, [dismissedCards]);
+
+            // Helper to trigger the toast
+            const showToast = (message) => {
+                setToast(message);
+                // Auto-clear after 3 seconds
+                setTimeout(() => {
+                    setToast(null);
+                }, 3000);
+            };
 
             const API_URL = "/api/gemini"; 
 
@@ -574,9 +610,15 @@
                 }
 
                 if (hasCode) {
-                    navigator.clipboard.writeText(codeText);
-                    alert(`System Log: Code '${codeText}' revealed and copied to clipboard. Redirecting...`);
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(codeText);
+                        // TRIGGER TOAST INSTEAD OF ALERT
+                        showToast(`SYSTEM LOG: CODE '${codeText}' COPIED.`);
+                    } else {
+                        console.log(`Fallback: Code is ${codeText}`);
+                    }
                 }
+                
                 if (hasLink) {
                     window.open(url, "_blank");
                 }
@@ -761,6 +803,11 @@
                                 displayedCards.map(renderCard)
                             )
                         )
+                    ),
+                    /* RENDER THE TOAST IF STATE IS NOT NULL */
+                    toast && React.createElement("div", { className: "cyber-toast" },
+                        React.createElement("span", null, "✅"),
+                        toast
                     )
                 )
             );
