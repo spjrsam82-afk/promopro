@@ -35,7 +35,7 @@
 
             // FIXED: Target the exact location of the text in Google's API response
             let rawAiText = data.candidates[0].content.parts[0].text;
-            
+
             // SAFETY STRIP: Removes markdown backticks if the AI includes them
             rawAiText = rawAiText.replace(/```json|```/g, '').trim();
 
