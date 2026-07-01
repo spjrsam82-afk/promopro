@@ -32,9 +32,14 @@
             });
 
             const data = await response.json();
+
+            // FIXED: Target the exact location of the text in Google's API response
+            let rawAiText = data.candidates[0].content.parts[0].text;
             
-            // NEW: Parse the AI response as JSON
-            const aiData = JSON.parse(data.text);
+            // SAFETY STRIP: Removes markdown backticks if the AI includes them
+            rawAiText = rawAiText.replace(/```json|```/g, '').trim();
+
+            const aiData = JSON.parse(rawAiText);
 
             setDynamicResult({
                 id: 999,
