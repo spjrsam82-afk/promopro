@@ -4,11 +4,6 @@ const App = () => {
     const [searchInput, setSearchInput] = useState("");
     const [aiState, setAiState] = useState("idle"); 
     const [dynamicResult, setDynamicResult] = useState(null);
-    const [dismissedCards, setDismissedCards] = useState([]);
-
-    const allEntries = [
-        { id: 1, store: "GAMIVO", category: "Global Gaming Marketplace", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png", code: "PROMO-ACTIVE", status: "ONLINE", btn: "CLAIM", theme: "orange", url: "#" }
-    ];
 
     const showToast = (message) => {
         console.log("System Toast:", message);
@@ -18,24 +13,12 @@ const App = () => {
     const handleVerify = async () => {
         if (!searchInput.trim()) return;
 
-        const searchLower = searchInput.toLowerCase();
-        const localMatch = allEntries.find(item => 
-            item.store.toLowerCase().includes(searchLower) || 
-            item.category.toLowerCase().includes(searchLower)
-        );
-
-        if (localMatch && !dismissedCards.includes(localMatch.id)) {
-            setDynamicResult(localMatch);
-            setAiState("result");
-            showToast(`LOCAL MATCH FOUND: SECURE NODE ROUTED.`);
-            return; 
-        }
-
         setAiState("searching");
         setDynamicResult(null);
         await new Promise(resolve => setTimeout(resolve, 2500));
 
-        const API_URL = "YOUR_GEMINI_API_KEY_URL_HERE";
+        // GEMINI API (The Brain)
+        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6IfexuJyq61XMoJOUSJ_cZKkO9xz0SbpsD7KTLZ1rpyeQ";
 
         try {
             const response = await fetch(API_URL, {
@@ -44,39 +27,99 @@ const App = () => {
                 body: JSON.stringify({
                     contents: [{
                         parts: [{
-                            text: `You are PromoPro AI. The user searched for: "${searchInput}". Return ONLY valid JSON: {"title":"","description":"","image_search":""}. Rules: title=brand/product, description=short affiliate response, image_search=best search phrase. Do not include markdown. Only return JSON.`
+                            text: `You are the routing brain for PromoPro. The user searched for: "${searchInput}". 
+                            Analyze their intent and return a strict JSON object identifying the core brand or product category they want.
+                            Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}. 
+                            Example: If they search "I need a cheap Lenovo rig", return {"matched_keyword": "lenovo"}.
+                            Do not include markdown backticks.`
                         }]
                     }]
                 })
             });
 
             const data = await response.json();
-            let rawAiText = data.candidates[0].content.parts[0].text;
-            rawAiText = rawAiText.replace(/```json|```/g, '').trim();
-            const aiData = JSON.parse(rawAiText);
+            
+            const rawAiText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
-            setDynamicResult({
-                id: 999,
-                store: aiData.title,
-                category: aiData.description,
-                img: `https://wsrv.nl/?url=https://source.unsplash.com/random/400x400/?${encodeURIComponent(aiData.image_search)}`,
-                code: "AI-VERIFIED",
-                status: "ONLINE",
-                btn: "CLAIM DEAL",
-                theme: "blue",
-                url: "#",
-                fit: "cover"
+            if (!rawAiText) {
+                throw new Error("Gemini returned no text.");
+            }
+
+            const cleaned = rawAiText.replace(/```json|```/g, "").trim();
+            const aiData = JSON.parse(cleaned);
+
+            // 1. Take the clean keyword Gemini extracted
+            const aiKeyword = aiData.matched_keyword.toLowerCase();
+
+            // 2. LIVE CJ AFFILIATE API AUTOMATION
+            // Paste your actual CJ credentials right here:
+            const CJ_PERSONAL_TOKEN = "2WPMCDUtkwWRKAiQMtBPcQMviQ"; 
+            const CJ_COMPANY_ID = "7968880";
+
+            // This is the strict GraphQL query CJ requires to search their live products
+            const cjQuery = `
+            {
+              shoppingProducts(companyId: "${7968880}", keywords: ["${aiKeyword}"], limit: 1) {
+                resultList {
+                  title
+                  description
+                  clickUrl
+                  imageUrl
+                }
+              }
+            }
+            `;
+
+            // 3. Ping CJ's live database (Using a CORS proxy so it works inside Codespaces testing)
+            const cjResponse = await fetch("https://corsproxy.io/?https://ads.cj.com/graphql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${eyJhbGciOiJIUzI1NiIXVCJ9}`
+                },
+                body: JSON.stringify({ query: cjQuery })
             });
+
+            const cjLive = await cjResponse.json();
+            const liveDeal = cjLive?.data?.shoppingProducts?.resultList?.[0];
+
+            if (liveDeal) {
+                // 4. If CJ finds a live product, automatically build the card
+                setDynamicResult({
+                    id: 999,
+                    store: liveDeal.title.substring(0, 35) + "...", // Keeps long titles from breaking your UI
+                    category: liveDeal.description ? liveDeal.description.substring(0, 100) + "..." : "Live automated deal verified by CJ Affiliate.",
+                    img: liveDeal.imageUrl || `https://picsum.photos/seed/${encodeURIComponent(aiKeyword)}/400/400`,
+                    code: "AUTO-VERIFIED",
+                    status: "LIVE",
+                    btn: "CLAIM DEAL",
+                    theme: "blue",
+                    url: liveDeal.clickUrl // Your actual, monetized CJ tracking link
+                });
+            } else {
+                // 5. Fallback if CJ's live database has zero products for that exact search
+                setDynamicResult({
+                    id: 404,
+                    store: "NO ACTIVE DEALS FOUND",
+                    category: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now. We are actively monitoring networks for new discounts.`,
+                    img: "placeholder",
+                    code: "AUTO-MONITORING",
+                    status: "STANDBY",
+                    btn: "CHECK BACK LATER",
+                    theme: "orange",
+                    url: "#"
+                });
+            }
             setAiState("result");
 
         } catch (err) {
             console.error("PromoPro AI Parsing Error:", err);
             setDynamicResult({
                 id: 999,
-                store: "Error",
-                category: "Failed to parse AI structure.",
+                store: "CONNECTION ERROR",
+                category: "The automated search engine encountered a delay. Please try your search again.",
                 img: "",
-                code: "FAILED",
+                code: "RETRY-SEARCH",
                 status: "ERROR",
                 btn: "TRY AGAIN",
                 theme: "orange",
@@ -89,14 +132,14 @@ const App = () => {
     return (
         <div id="root">
             
-            {/* Sidebar matches your .sidebar CSS */}
+            {/* Sidebar */}
             <div className="sidebar">
                 <div className="sidebar-logo">
                     <div className="logo-icon">P</div>
                     PromoPro
                 </div>
-                <div className="nav-matrix-title">SYSTEM LEDGER</div>
-                <div className="nav-item active">Dashboard</div>
+                <div className="nav-matrix-title">AUTOMATED ENGINE</div>
+                <div className="nav-item active">Live Dashboard</div>
                 <div className="nav-item">Gaming Deals</div>
                 <div className="nav-item">Tech Hardware</div>
                 
@@ -106,17 +149,17 @@ const App = () => {
                 </div>
             </div>
 
-            {/* Main Content matches your .main-content CSS */}
+            {/* Main Content */}
             <div className="main-content">
                 
                 <div className="promo-hero-banner">
-                    <h1 className="hero-title">PROMO MATRIX</h1>
+                    <h1 className="hero-title">AUTOMATED SAVINGS</h1>
                 </div>
 
                 <div className="command-center">
                     <div className="cmd-status">
-                        <span><span className="cmd-indicator"></span>AI SEARCH NODE: ONLINE</span>
-                        <span>v.2.0.4</span>
+                        <span><span className="cmd-indicator"></span>AI VERIFICATION ENGINE: ONLINE</span>
+                        <span>v.3.0.0 (CJ-LIVE)</span>
                     </div>
                     <div className="cmd-input-wrapper">
                         <span className="cmd-prompt">&gt;</span>
@@ -125,9 +168,9 @@ const App = () => {
                             className="cmd-input" 
                             value={searchInput} 
                             onChange={(e) => setSearchInput(e.target.value)} 
-                            placeholder="Initialize query (e.g. 'Xbox', 'Minecraft', 'Gamivo')" 
+                            placeholder="What are you shopping for? (e.g. 'gaming laptop', 'lenovo')" 
                         />
-                        <button className="cmd-btn" onClick={handleVerify}>VERIFY</button>
+                        <button className="cmd-btn" onClick={handleVerify}>AUTO-SEARCH</button>
                     </div>
                 </div>
 
@@ -135,7 +178,7 @@ const App = () => {
                 {aiState === "searching" && (
                     <div className="matrix-scanner">
                         <div className="scanline"></div>
-                        <div className="term-line">&gt; INITIALIZING AI SEARCH PROTOCOL...<span className="term-cursor"></span></div>
+                        <div className="term-line">&gt; AUTOMATICALLY SCANNING AFFILIATE NETWORKS...<span className="term-cursor"></span></div>
                         <div className="progress"><div className="progress-fill"></div></div>
                     </div>
                 )}
@@ -145,17 +188,21 @@ const App = () => {
                     <div className="grid">
                         <div className={`matrix-card theme-${dynamicResult.theme}`}>
                             <div className="card-header">{dynamicResult.store}</div>
-                            {dynamicResult.img ? (
+                            {dynamicResult.img !== "placeholder" ? (
                                 <img src={dynamicResult.img} className={dynamicResult.fit === 'cover' ? 'card-banner' : 'card-banner-contain'} alt={dynamicResult.store} />
                             ) : (
-                                <div className="fallback-bg">NO IMAGE FOUND</div>
+                                <div className="fallback-bg">SEARCH LOGGED</div>
                             )}
                             <div className="card-info">
                                 <p>{dynamicResult.category}</p>
                             </div>
                             <div className="card-footer">
                                 <span className="hidden-code">{dynamicResult.code}</span>
-                                <button className={`status-btn ${dynamicResult.theme === 'blue' ? 'blue-btn' : ''}`}>{dynamicResult.status}</button>
+                                <a href={dynamicResult.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                                    <button className={`status-btn ${dynamicResult.theme === 'blue' ? 'blue-btn' : ''}`}>
+                                        {dynamicResult.btn || "CLAIM DEAL"}
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
