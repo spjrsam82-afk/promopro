@@ -2,427 +2,113 @@
 <html lang="en">
 <head>
     <meta name='impact-site-verification' value='47d48f78-6a3f-4930-9a68-a6a28aa108e1'>
+    <meta name="referrer" content="origin-when-cross-origin">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>PromoPro Matrix</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        * { box-sizing: border-box; }
-        body { background-color: #050b14; color: #ffffff; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; margin: 0; padding: 0; overflow-x: hidden; touch-action: manipulation; }
-        #root { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        .rt-top-nav-wrapper { background-color: #0a192f; border-bottom: 1px solid #1e293b; width: 100%; }
-        .rt-top-nav { display: flex; justify-content: center; align-items: center; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .rt-logo-container { display: flex; flex-direction: column; align-items: center; z-index: 10; }
-        .rt-logo { font-size: 38px; font-weight: 900; letter-spacing: 4px; line-height: 1; text-transform: uppercase; font-family: monospace; color: #ffffff; text-shadow: 0 2px 15px rgba(249, 115, 22, 0.4); }
-        .rt-logo span { color: #f97316; }
-        .ai-badge { color: #f97316; font-size: 13px; font-weight: 800; letter-spacing: 8px; margin-top: 10px; border: 1px solid rgba(249, 115, 22, 0.5); padding: 6px 16px; border-radius: 4px; background: rgba(249, 115, 22, 0.1); text-transform: uppercase; box-shadow: 0 0 15px rgba(249, 115, 22, 0.2); }
-        
-        .pill-container { display: flex; gap: 15px; padding: 25px 15px; width: 100%; justify-content: center; background: #050b14; border-bottom: 1px solid #1e293b; flex-wrap: wrap; }
-        .pill { background: #0a192f; color: #f97316; padding: 10px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; border: 1px solid #f97316; transition: 0.3s; text-align: center; white-space: nowrap; user-select: none; }
-        
-        .pill:hover, .pill.active { 
-            background: #ffffff; 
-            color: #050b14; 
-            transform: translateY(-3px); 
-            border-color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); 
-        }
-        
-        .verify-bar-wrapper { width: 100%; background: #050b14; padding: 30px 15px 10px 15px; }
-        .verify-bar-container { display: flex; flex-direction: column; align-items: center; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .verify-bar { display: flex; width: 100%; max-width: 800px; background-color: #0a192f; border: 1px solid #f97316; border-radius: 8px; overflow: hidden; box-shadow: 0 0 15px rgba(249, 115, 22, 0.1); transition: 0.3s; }
-        
-        .verify-bar:focus-within {
-            border-color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
+    <title>PromoPro System Ledger</title>
+    
+    <meta name="description" content="PromoPro AI-powered verification engine for active gaming, tech, and hardware affiliate deals.">
+    <meta property="og:title" content="PromoPro System Ledger">
+    <meta property="og:description" content="Access verified digital keys, game passes, and tech hardware discounts routed directly to you.">
+    <meta property="og:image" content="https://raw.githubusercontent.com/spjrsam82-afk/promopro/main/promopro-banner-final~2.jpg">
+    <meta name="twitter:card" content="summary_large_image">
 
-        .verify-input { flex: 1; background: transparent; border: none; color: #40e0d0; padding: 15px 20px; font-family: monospace; font-size: 18px !important; outline: none; width: 100%; touch-action: manipulation; }
-        .verify-input::placeholder { color: #64748b; font-size: 16px; }
-        
-        .verify-btn { background-color: #f97316; color: #050b14; border: none; padding: 15px 30px; font-weight: 900; font-family: monospace; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
-        
-        .verify-btn:hover { 
-            background-color: #ffffff; 
-            color: #f97316; 
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-        }
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "PromoPro",
+      "url": "https://promopro.live",
+      "description": "AI-powered verification engine for active gaming, tech, and hardware affiliate deals.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Purcell Tech."
+      }
+    }
+    </script>
 
-        .verify-status { margin-top: 12px; font-family: monospace; font-size: 12px; color: #40e0d0; display: flex; align-items: center; gap: 8px; max-width: 800px; width: 100%; justify-content: flex-start; }
-        .status-dot { width: 8px; height: 8px; background-color: #40e0d0; border-radius: 50%; animation: pulse 1.5s infinite; flex-shrink: 0; }
-        @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } 100% { opacity: 0.5; transform: scale(1); } }
-        
-        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%; }
-        .poster-card { width: 100%; text-decoration: none; color: #ffffff; cursor: pointer; display: flex; flex-direction: column; transition: 0.4s; border: 1px solid #1e293b; border-radius: 12px; padding: 15px; background: #0a192f; }
-        
-        .poster-card:hover { 
-            transform: translateY(-8px); 
-            border-color: #ffffff; 
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); 
-        }
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-P2PFW0YMB1" data-cfasync="false"></script>
+    <script data-cfasync="false">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-P2PFW0YMB1');
+    </script>
 
-        .poster-img-box { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; margin-bottom: 15px; background: #050b14; border: 1px solid #1e293b; display: flex; align-items: center; justify-content: center; }
-        .poster-title { font-size: 22px; font-weight: 900; margin: 0 0 8px 0; color: #39ff14; text-align: center; letter-spacing: 0.5px; text-shadow: 0 0 8px rgba(57, 255, 20, 0.4); }
-        .poster-desc { font-size: 14px; color: #bbf7d0; margin-bottom: 15px; text-align: center; font-weight: 600; line-height: 1.4; flex-grow: 1; }
-        
-        .copy-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 10px; font-weight: bold; font-family: monospace; border-radius: 6px; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
-        
-        .copy-btn:hover { 
-            background: #ffffff; 
-            color: #f97316;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-        }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" data-cfasync="false"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" data-cfasync="false"></script>
 
-        .auto-routed-badge { background: #1e293b; color: #64748b; padding: 10px; text-align: center; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: bold; width: 100%; }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 11, 20, 0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; }
-        .modal-box { background: #0a192f; padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; max-height: 85vh; border: 1px solid #f97316; text-align: center; display: flex; flex-direction: column; box-sizing: border-box; box-shadow: 0 0 30px rgba(249, 115, 22, 0.2); }
-        .modal-scroll-area { overflow-y: auto; flex-grow: 1; padding-right: 10px; scrollbar-width: thin; scrollbar-color: #f97316 #050b14; }
-        .modal-scroll-area::-webkit-scrollbar { width: 6px; }
-        .modal-scroll-area::-webkit-scrollbar-track { background: #050b14; border-radius: 4px; }
-        .modal-scroll-area::-webkit-scrollbar-thumb { background-color: #f97316; border-radius: 4px; }
-        
-        .code-card { background: #050b14; border: 1px solid #1e293b; border-radius: 8px; padding: 15px; margin-bottom: 15px; text-align: center; }
-        .submit-action-btn { width: 100%; background: #f97316; color: #050b14; border: none; padding: 18px; font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; margin-top: 15px; flex-shrink: 0; }
-        .submit-action-btn:hover { background: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-        
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-        .ai-processing { color: #40e0d0; font-family: monospace; font-size: 16px; margin: 20px 0; letter-spacing: 1px; }
-        .ai-terminal-log { color: #64748b; font-family: monospace; font-size: 12px; line-height: 1.8; margin-bottom: 20px; text-align: center; }
-        
-        .ai-result-code { font-size: clamp(16px, 5vw, 24px); color: #39ff14; font-weight: 900; letter-spacing: 2px; margin: 0; text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); font-family: monospace; word-break: break-all; }
-        .ai-result-desc { font-size: 14px; color: #e2e8f0; margin-bottom: 10px; font-weight: bold; }
-        .spacer { height: 100px; }
-
-        .game-node-badge { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #0a192f 0%, #050b14 100%); padding: 10px; box-sizing: border-box; }
-        .game-node-text { font-size: 16px; font-weight: 900; font-family: monospace; letter-spacing: 2px; text-transform: uppercase; text-align: center; color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.6); }
-        .game-node-sub { font-size: 9px; color: #64748b; margin-top: 4px; letter-spacing: 3px; font-family: monospace; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState } = React;
-        
-        const CardMedia = ({ src, label, isGame }) => {
-            if (isGame && label !== "Merge Dragons!") {
-                return (
-                    <div className="game-node-badge">
-                        <div className="game-node-text">{label.replace(/[^\w\s]/gi, '')}</div>
-                        <div className="game-node-sub">AI VERIFIED NODE</div>
-                    </div>
-                );
-            }
-            return <img src={src} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />;
-        };
-
-        const AI_DATABASE = {
-            "state of survival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "whiteout survival": [
-                { code: "wm6xPkX4w", desc: "100 Gems & Resources" },
-                { code: "WOSFAMILY26", desc: "1K Gems & Speedups" },
-                { code: "Happykid61", desc: "Gems & Gold Keys" }
-            ],
-            "golf rival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "merge dragons": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "idle outpost": [{ code: "NO ACTIVE CODES", desc: "Requires External Webshop Login" }],
-            "lords mobile": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "puzzles & survival": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "genshin impact": [
-                { code: "NMI20MAJGIBP", desc: "20 Primogems, 160 Geode" },
-                { code: "YMYD76U85Z1U", desc: "10K Mora & Enhancement Ore" },
-                { code: "MageNicolesPuzzle", desc: "30 Primogems, Food items" }
-            ],
-            "roblox": [
-                { code: "FREENGNBOI", desc: "Nguyen Boi Bundle" },
-                { code: "FREENGNGON", desc: "Nguyen Gon Bundle" },
-                { code: "SPIDERCOLA", desc: "Spider Cola Pet" },
-                { code: "TWEETROBLOX", desc: "The Bird Says Pet" }
-            ],
-            "call of duty mobile": [
-                { code: "DCEPZBZKFD", desc: "Prey & Predator Crate x3" },
-                { code: "DCCKZBZNB5", desc: "Random Rewards" },
-                { code: "DCCJZBZN4J", desc: "Random Rewards" }
-            ],
-            "pubg mobile": [
-                { code: "PUBGMBRAUC", desc: "Brazil Championship Outfit" },
-                { code: "CMCKZBZBAW", desc: "Sea Breeze Mythic Voucher" },
-                { code: "PGMB20", desc: "3,000 Silver Fragments" }
-            ],
-            "clash of clans": [
-                { code: "WHENHOGSFLY!", desc: "Flying Royal Hogs Emote" },
-                { code: "REINABARRIGA", desc: "Snoring Dragon Banner Set" },
-                { code: "ROYALEAFFAIR", desc: "Royale Affair Goblin Emote" }
-            ],
-            "candy crush saga": [{ code: "NO ACTIVE CODES", desc: "King Account Sync Gifts" }],
-            "coin master": [{ code: "NO ACTIVE CODES", desc: "Social Spin Links Only" }],
-            "pokemon go": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "royal match": [{ code: "NO ACTIVE CODES", desc: "In-App Events Only" }],
-            "monopoly go": [{ code: "NO ACTIVE CODES", desc: "Direct Dice Links Only" }],
-            "brawl stars": [
-                { code: "ITSSUSHITIME", desc: "Content Creator Boost" },
-                { code: "SAKURASPIKE!", desc: "Content Creator Boost" },
-                { code: "BOBAPARTYYYY", desc: "Content Creator Boost" }
-            ],
-            "honkai star rail": [
-                { code: "VS3Q5VK9CMFP", desc: "50 Stellar Jade, 10K Credits" },
-                { code: "QS395DJQU4HK", desc: "60 Stellar Jade" },
-                { code: "BladeFitCheck", desc: "3 Traveler's Guide, 2 Cold Joke" }
-            ],
-            "afk arena": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "rise of kingdoms": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "evony": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "clash royale": [
-                { code: "ROYALEAFFAIR", desc: "Royale Affair Goblin emote" },
-                { code: "FIREANDICE!!", desc: "Banner decoration & frame" },
-                { code: "TRUSTYTURRET", desc: "Hero Musketeer emote" }
-            ],
-            "summoners war": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "township": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "gardenscapes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "homescapes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "fishdom": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "empires & puzzles": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "marvel strike force": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "star wars galaxy of heroes": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "raid shadow legends": [
-                { code: "RAIDTOGETHER", desc: "Free Energy & Silver" },
-                { code: "2GTLUCKY2026", desc: "Special June Free Rewards" },
-                { code: "midgamejoke", desc: "50 Battles, 100k Silver" }
-            ],
-            "diablo immortal": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "clash of kings": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "mobile legends": [
-                { code: "HOLAMLBB", desc: "New-player welcome rewards" },
-                { code: "MLBBRISING", desc: "Emblem Fragments & Magic Dust" },
-                { code: "CZBR5822335", desc: "1,000 Diamonds & 10 Scrolls" }
-            ],
-            "garena free fire": [{ code: "NO ACTIVE CODES", desc: "Region-Locked System" }],
-            "asphalt 9": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "subway surfers": [{ code: "NO ACTIVE CODES", desc: "No global codes available for June 2026." }],
-            "among us": [{ code: "NO ACTIVE CODES", desc: "Cosmetic Drops Only" }],
-            "minecraft": [{ code: "NO ACTIVE CODES", desc: "Marketplace Events Only" }]
-        };
-
-        const INITIAL_LEDGER = [
-            { id: 1, store: "⚙️ GearUP", category: "GAMING", desc: "Play Valorant with Lower Ping & No Lag!", url: "https://www.kqzyfj.com/click-101761790-17235983", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 2, store: "⚙️ GearUP", category: "GAMING", desc: "Play Escape from Tarkov with Lower Ping!", url: "https://www.anrdoezrs.net/click-101761790-17235982", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 3, store: "⚙️ GearUP", category: "GAMING", desc: "Play Apex Legends with Lower Ping!", url: "https://www.kqzyfj.com/click-101761790-17235981", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 4, store: "⚙️ GearUP", category: "GAMING", desc: "Play Fortnite with Lower Ping & No Lag!", url: "https://www.anrdoezrs.net/click-101761790-17235980", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 5, store: "⚙️ GearUP", category: "GAMING", desc: "Less Lag, More Fun!", url: "https://www.jdoqocy.com/click-101761790-17235979", img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 6, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$10 Off Orders Over $129 Sitewide", url: "https://www.tkqlhce.com/click-101761790-15339213", img: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 7, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Buy 1 get 1 free at Unice", url: "https://www.dpbolvw.net/click-101761790-15043134", img: "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 8, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "$30 Off Orders Over $299 For Colored Wigs", url: "#", img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 9, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Up To $60 Off", url: "https://www.jdoqocy.com/click-101761790-15509155", img: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 10, store: "💇‍♀️ UNice", category: "BEAUTY", desc: "Extended Fall Promo", url: "https://www.anrdoezrs.net/click-101761790-14566055", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 11, store: "🏡 Vrbo 1", category: "TRAVEL", desc: "Book your perfect beach house!", url: "https://www.kqzyfj.com/click-101761790-13394715", img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 12, store: "🏡 Vrbo 2", category: "TRAVEL", desc: "Find your ideal mountain retreat properties.", url: "https://www.kqzyfj.com/click-101761790-13394716", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 13, store: "🏡 Vrbo 3", category: "TRAVEL", desc: "Discover local city apartments and condo rentals.", url: "https://www.kqzyfj.com/click-101761790-13394717", img: "https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 17, store: "📹 Rexing RH2", category: "EXCLUSIVES", desc: "Exclusive Access: Rexing RH2 Series.", url: "https://www.tkqlhce.com/click-101761790-15795156", img: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 18, store: "📹 Rexing AUX2", category: "EXCLUSIVES", desc: "Direct Terminal Access: Rexing AUX2.", url: "https://www.anrdoezrs.net/click-101761790-15008948", img: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 19, store: "📹 Rexing Premium", category: "EXCLUSIVES", desc: "Secure 1456x180 infrastructure bundle.", url: "https://www.anrdoezrs.net/click-101761790-17226113", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 20, store: "📹 Rexing C2", category: "EXCLUSIVES", desc: "Direct Deployment: Rexing C2 system.", url: "https://www.anrdoezrs.net/click-101761790-17195890", img: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80", isGame: false },
-            
-            { id: 25, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Global lodging network reservations.", url: "https://www.dpbolvw.net/click-101761790-13828058", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 26, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Custom redirect link for specific deals.", url: "https://www.tkqlhce.com/click-101761790-15042852", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 27, store: "🏨 Hotels.com", category: "TRAVEL", desc: "Best Hotel Deals!", url: "https://www.kqzyfj.com/click-101761790-10433860", img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 28, store: "🏨 Hotels.com", category: "TRAVEL", desc: "No cancellation fees on bookings.", url: "https://www.tkqlhce.com/click-101761790-10671873", img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            { id: 39, store: "✈️ Expedia", category: "TRAVEL", desc: "Global Flights & Premium Hotel Reservations", url: "http://www.anrdoezrs.net/click-101761790-10604120", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 40, store: "🏠 Expedia", category: "TRAVEL", desc: "Official Expedia Homepage Deals", url: "https://www.tkqlhce.com/click-101761790-15042831", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 41, store: "🔍 Expedia", category: "TRAVEL", desc: "Special Expedia Travel Deep Link", url: "https://www.kqzyfj.com/click-101761790-10581071", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 42, store: "🏷️ Expedia", category: "TRAVEL", desc: "Expedia Affiliate Banner Deal", url: "https://www.kqzyfj.com/click-101761790-15575438", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=600&q=80", code: "AUTO-ROUTED", isGame: false },
-
-            { id: 50, store: "🎮 GameFly", category: "GAMING", desc: "Rent & Buy Top Console Games", url: "https://www.kqzyfj.com/click-101761790-10436224", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80", isGame: false },
-            { id: 51, store: "🎮 GameFly", category: "GAMING", desc: "30-Day Free Trial - Play More, Pay Less", url: "https://www.tkqlhce.com/click-101761790-10500808", img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80", isGame: false },
-
-            { id: 29, store: "🧟 State of Survival", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "", isGame: true },
-            { id: 30, store: "❄️ Whiteout Survival", category: "GAMING", desc: "100 Gems & Resources", url: "#", img: "", code: "wm6xPkX4w", isGame: true },
-            { id: 31, store: "⛳ Golf Rival", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "", isGame: true },
-            { id: 32, store: "🏕️ Idle Outpost", category: "GAMING", desc: "Requires External Webshop Login", url: "#", img: "", isGame: true },
-            { id: 33, store: "🐉 Merge Dragons!", category: "GAMING", desc: "No global codes available for June 2026.", url: "#", img: "merge-dragons.jpg", isGame: true },
-            { id: 34, store: "🎮 Epic Games", category: "GAMING", desc: "Claim This Week's Free PC Games", url: "https://store.epicgames.com/en-US/free-games", img: "", code: "PUBLIC", isGame: true },
-            { id: 35, store: "⚔️ Genshin Impact", category: "GAMING", desc: "20 Primogems & 160 Geode", url: "#", img: "", code: "NMI20MAJGIBP", isGame: true },
-            { id: 36, store: "🔫 Call of Duty Mobile", category: "GAMING", desc: "Prey & Predator Crate x3", url: "#", img: "", code: "DCEPZBZKFD", isGame: true },
-            { id: 37, store: "🛡️ RAID: Shadow Legends", category: "GAMING", desc: "Free Energy & Silver", url: "#", img: "", code: "RAIDTOGETHER", isGame: true },
-            { id: 38, store: "🧱 Roblox", category: "GAMING", desc: "Nguyen Boi Bundle", url: "#", img: "", code: "FREENGNBOI", isGame: true }
-        ];
-
-        function App() {
-            const [ledger, setLedger] = useState(INITIAL_LEDGER);
-            const [showModal, setShowModal] = useState(false);
-            const [searchInput, setSearchInput] = useState("");
-            const [aiState, setAiState] = useState("idle"); 
-            const [searchResult, setSearchResult] = useState(null);
-            const [activeFilter, setActiveFilter] = useState("ALL");
-
-            const handleVerify = () => {
-                if (!searchInput.trim()) return;
-                
-                if (document.activeElement instanceof HTMLElement) {
-                    document.activeElement.blur();
-                }
-
-                setAiState("searching");
-                setShowModal(true);
-
-                setTimeout(() => {
-                    const query = searchInput.toLowerCase().trim();
-                    const matchKey = Object.keys(AI_DATABASE).find(key => query.includes(key) || key.includes(query));
-                    
-                    if (matchKey) {
-                        setSearchResult({ game: matchKey.toUpperCase(), codes: AI_DATABASE[matchKey] });
-                    } else {
-                        setSearchResult({ game: searchInput.toUpperCase(), codes: [{ code: "NONE FOUND", desc: "No active codes verified by AI Engine at this time." }] });
-                    }
-                    setAiState("result");
-                }, 2500); 
-            };
-
-            const closeModal = () => {
-                setShowModal(false);
-                setAiState("idle");
-                setSearchResult(null);
-                setSearchInput("");
-            };
-
-            const copyCode = (e, codeText) => {
-                e.preventDefault(); 
-                if (codeText && codeText !== "AUTO-ROUTED" && codeText !== "PUBLIC") {
-                    navigator.clipboard.writeText(codeText);
-                    alert(`Copied to clipboard: ${codeText}`);
-                }
-            };
-
-            const displayedLedger = activeFilter === "ALL" 
-                ? ledger 
-                : ledger.filter(item => item.category === activeFilter);
-
-            return (
-                <>
-                    {showModal && (
-                        <div className="modal-overlay">
-                            <div className="modal-box">
-                                {aiState === "searching" && (
-                                    <div className="fade-in">
-                                        <div className="status-dot" style={{width: '24px', height: '24px', margin: '0 auto 20px', boxShadow: '0 0 15px #40e0d0'}}></div>
-                                        <h2 style={{color:'white', margin: '0 0 10px 0'}}>AI ENGINE ACTIVE</h2>
-                                        <div className="ai-processing">SCANNING WEB DATABASES...</div>
-                                        <div className="ai-terminal-log">
-                                            [||||||||||||||||||||] 100%<br/>
-                                            BYPASSING ENCRYPTION...<br/>
-                                            EXTRACTING SECURE NODES...
-                                        </div>
-                                    </div>
-                                )}
-                                {aiState === "result" && searchResult && (
-                                    <div className="modal-scroll-area fade-in">
-                                        <h2 style={{color:'white', marginBottom: '15px', position: 'sticky', top: 0, background: '#0a192f', paddingBottom: '10px', zIndex: 5}}>{searchResult.game}</h2>
-                                        {searchResult.codes.map((c, index) => (
-                                            <div key={index} className="code-card">
-                                                <div className="ai-result-desc">{c.desc}</div>
-                                                <div className="ai-result-code">{c.code}</div>
-                                                <button className="copy-btn" onClick={(e) => copyCode(e, c.code)} style={{marginTop: '15px'}}>COPY CODE</button>
-                                            </div>
-                                        ))}
-                                        <button className="submit-action-btn" onClick={closeModal} style={{position: 'sticky', bottom: 0, zIndex: 5}}>ACKNOWLEDGE & CLOSE</button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="rt-top-nav-wrapper">
-                        <div className="rt-top-nav">
-                            <div className="rt-logo-container">
-                                <div className="rt-logo">Promo<span>Pro</span></div>
-                                <div className="ai-badge">AI-POWERED</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="pill-container">
-                        {["ALL", "EXCLUSIVES", "TRAVEL", "GAMING", "BEAUTY"].map(cat => (
-                            <div 
-                                key={cat} 
-                                className={`pill ${activeFilter === cat ? 'active' : ''}`}
-                                onClick={() => setActiveFilter(cat)}
-                            >
-                                {cat}
-                            </div>
-                        ))}
-                    </div>
-                    
-                    <div className="verify-bar-wrapper">
-                        <div className="verify-bar-container">
-                            <div className="verify-bar">
-                                <input 
-                                    className="verify-input" 
-                                    placeholder=">_ ENTER GAME NAME..." 
-                                    value={searchInput}
-                                    onChange={(e) => setSearchInput(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && handleVerify()}
-                                />
-                                <button className="verify-btn" onClick={handleVerify}>VERIFY</button>
-                            </div>
-                            <div className="verify-status">
-                                <div className="status-dot"></div>
-                                AI VERIFICATION ENGINE STANDBY...
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="media-grid">
-                        {displayedLedger.map(p => (
-                            <a className="poster-card" key={p.id} href={p.url}>
-                                <div className="poster-img-box">
-                                    <CardMedia src={p.img} label={p.store} isGame={p.isGame} />
-                                </div>
-                                <h3 className="poster-title">{p.store}</h3>
-                                <p className="poster-desc">{p.desc}</p>
-                                
-                                <div style={{ marginTop: 'auto' }}>
-                                    {p.code ? (
-                                        p.code === "AUTO-ROUTED" ? (
-                                            <div className="auto-routed-badge">AUTO-ROUTED LINK</div>
-                                        ) : (
-                                            <button className="copy-btn" onClick={(e) => copyCode(e, p.code)}>
-                                                COPY: {p.code}
-                                            </button>
-                                        )
-                                    ) : null}
-                                </div>
-                            </a>
-                        ))}
-                    </div>
-                    <div className="spacer"></div>
-                    
-                    <div style={{ textAlign: 'center', padding: '20px 40px 40px', color: '#64748b', fontSize: '11px', borderTop: '1px solid #1e293b', background: '#0a192f' }}>
-                        <p style={{ maxWidth: '800px', margin: '0 auto 15px auto', fontStyle: 'italic', lineHeight: '1.5' }}>
-                            <strong>FTC Affiliate Disclosure:</strong> PromoPro is an independent verification engine and affiliate publisher. We may earn a commission from qualifying purchases or bookings made through the links on this page at no additional cost to you.
-                        </p>
-                        <div style={{ marginBottom: '10px' }}>&copy; 2026 PromoPro AI Engine. All Rights Reserved.</div>
-                        <div>
-                            <a href="terms.html" style={{ color: '#f97316', textDecoration: 'none', margin: '0 10px', fontWeight: 'bold' }}>Terms of Service</a> | 
-                            <a href="privacy.html" style={{ color: '#f97316', textDecoration: 'none', margin: '0 10px', fontWeight: 'bold' }}>Privacy Policy</a>
-                        </div>
-                        <div style={{ marginTop: '15px' }}>
-                            Support: <a href="mailto:spjrsam82@gmail.com" style={{ color: '#40e0d0', textDecoration: 'none', fontWeight: 'bold' }}>spjrsam82@gmail.com</a>
-                        </div>
-                    </div>
-                </>
-            );
-        }
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    <script type="module">
+        import App from './components/App.js';
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(App));
     </script>
+
+    <article class="seo-content-block">
+        <h1><span>PromoPro: Your Premier AI-Powered Deal Aggregator</span></h1>
+        <p><span>Welcome to PromoPro by Purcell Tech, the definitive AI-driven verification engine for unparalleled savings. Our sophisticated system automatically tracks and verifies the most valuable </span><b><strong>promos</strong></b><span> across the digital marketplace, ensuring you receive immediate access to active deals for gaming, technology, and hardware. We deliver maximum value by intelligently routing users to verified offers.</span></p>
+
+        <h2><span>Gaming Deals and Digital Keys</span></h2>
+        <p><span>Our platform specializes in sourcing the most competitive prices for video games and subscriptions. Whether you are searching for the latest titles or timeless classics, PromoPro is your gateway to significant savings. We provide a curated selection of offers to enhance your gaming library without overspending.</span></p>
+        <ul>
+            <li><b><strong>Digital Game Keys</strong></b><b><strong>:</strong></b><span> Secure instant access to a vast library of titles. When you want to </span><b><strong>buy cheap pc game keys online</strong></b><span>, our system finds the best available prices from trusted vendors.</span></li>
+            <li><b><strong>Xbox Game Pass:</strong></b><span> Find the latest </span><b><strong>discount xbox game pass ultimate code</strong></b><span> to unlock hundreds of high-quality games on console and PC.</span></li>
+            <li><b><strong>Minecraft:</strong></b><span> Get a great price on a </span><b><strong>cheap minecraft java bedrock key</strong></b><span> and start building your world today.</span></li>
+            <li><b><strong>Grand Theft Auto V:</strong></b><span> We locate deals for a </span><b><strong>gta v premium edition digital discount</strong></b><span>, providing access to the full story experience and Grand Theft Auto Online.</span></li>
+            <li><b><strong>PlayStation Network:</strong></b><span> Maximize your console's potential with </span><b><strong>discount playstation network gift cards</strong></b><span>, perfect for purchasing games, add-ons, and more.</span></li>
+        </ul>
+
+        <h2><span>Unbeatable Tech and Hardware Promotions</span></h2>
+        <p><span>Beyond gaming, PromoPro extends its verification capabilities to the tech and hardware sectors. Our AI diligently scans for exclusive offers, ensuring you are equipped with the latest technology at the best possible price. We are committed to finding you superior deals on essential components and gadgets.</span></p>
+
+        <h3><span>Verified Affiliate Offers</span></h3>
+        <p><span>We partner with leading retailers to bring you verified savings. For those seeking a reliable </span><b><strong>electronic express promo code 2026</strong></b><span>, our engine is constantly updated. Furthermore, our system analyzes sources for </span><b><strong>gamivo legit discount codes 2026</strong></b><span> to ensure every offer is authentic and provides genuine value. If you need to upgrade your system, we find where you can get </span><b><strong>discount pc hardware components online</strong></b><span>, making powerful upgrades more affordable.</span></p>
+    </article>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-section-title">⚠️ Affiliate Disclaimer</div>
+                <p>PromoPro contains affiliate links. When you click a link and make a purchase or sign up, we may earn a commission at no extra cost to you. This helps keep the site running and free to use. We only feature products and services we believe provide value.</p>
+            </div>
+
+            <div>
+                <div class="footer-section-title">🛡️ Support and Legal</div>
+                <p><strong>Contact Directory:</strong><br/>
+                Support: <a class="footer-link" href="mailto:support@promopro.live">support@promopro.live</a><br/>
+                Partnerships: <a class="footer-link" href="mailto:affiliate@promopro.live">affiliate@promopro.live</a><br/>
+                Executive: <a class="footer-link" href="mailto:ceo@promopro.live">ceo@promopro.live</a>
+                </p>
+                <p style="margin-top: 15px;">
+                    <a class="footer-link" href="/privacy-policy.html">Privacy Policy</a><br/>
+                    <a class="footer-link" href="/terms-of-service.html">Terms of Service</a>
+                </p>
+            </div>
+
+            <div>
+                <div class="footer-section-title">© Copyright</div>
+                <p>© <span id="footer-year"></span> PromoPro. All rights reserved.<br/>
+                Unauthorized reproduction or distribution of content, codes, or site structure is prohibited. All trademarks and logos belong to their respective owners.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            PromoPro is an independent affiliate portal and is not affiliated with, endorsed by, or sponsored by any of the listed brands.
+        </div>
+    </footer>
+    <script data-cfasync="false">
+        document.getElementById('footer-year').textContent = new Date().getFullYear();
+    </script>
+
+    <aside class="promo-footer" style="position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px 0; background: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); border-top: 1px solid #38bdf8;">
+        <a href="https://www.gamivo.com/?glv=8kuvauuj" target="_blank" rel="noopener noreferrer" style="display: block; position: relative;">
+            <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Gamivo_logo.png/320px-Gamivo_logo.png" alt="GAMIVO 3% Off" style="max-height: 50px; width: auto; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        </a>
+        <button aria-label="Dismiss bottom promotion" onclick="document.querySelector('.promo-footer').style.display='none'" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: transparent; color: #64748b; border: 1px solid #64748b; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">HIDE</button>
+    </aside>
 </body>
 </html>
