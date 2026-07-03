@@ -11,96 +11,49 @@ const App = () => {
     };
 
     const handleVerify = async () => {
-        if (!searchInput.trim()) return;
+        if (!searchInput.trim()) {
+            showToast("Enter something to search.");
+            return;
+        }
 
         setAiState("searching");
         setDynamicResult(null);
-        await new Promise(resolve => setTimeout(resolve, 2500));
-
-        // GEMINI API (The Brain)
-        const API_URL = "
 
         try {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: `You are the routing brain for PromoPro. The user searched for: "${searchInput}". 
-                            Analyze their intent and return a strict JSON object identifying the core brand or product category they want.
-                            Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}. 
-                            Example: If they search "I need a cheap Lenovo rig", return {"matched_keyword": "lenovo"}.
-                            Do not include markdown backticks.`
-                        }]
-                    }]
-                })
-            });
-const response = await fetch("/api/verify", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        search: searchInput
-    })
-});
-
-const liveDeal = await response.json();
- 
-
-            // This is the strict GraphQL query CJ requires to search their live products
-            const cjQuery = `
-            {
-              shoppingProducts(companyId: "${7968880}", keywords: ["${aiKeyword}"], limit: 1) {
-                resultList {
-                  title
-                  description
-                  clickUrl
-                  imageUrl
-                }
-              }
-            }
-            `;
-
-            // 3. Ping CJ's live database (Using a CORS proxy so it works inside Codespaces testing)
-            const cjResponse = await fetch("https://corsproxy.io/?https://ads.cj.com/graphql", {
+            // Securely pinging your backend API instead of exposing keys in the browser
+            const response = await fetch("/api/verify", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${eyJhbGciOiJIUzI1NiIXVCJ9}`
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ query: cjQuery })
+                body: JSON.stringify({
+                    search: searchInput.trim()
+                })
             });
 
-            const cjLive = await cjResponse.json();
-            const liveDeal = cjLive?.data?.shoppingProducts?.resultList?.[0];
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
+            }
+
+            const liveDeal = await response.json();
 
             if (liveDeal.success) {
-                // 4. If CJ finds a live product, automatically build the card
                 setDynamicResult({
-    id: 999,
-    store: liveDeal.title,
-    category: liveDeal.description,
-    img: liveDeal.imageUrl,
-    code: "AUTO-VERIFIED",
-    status: "LIVE",
-    btn: "CLAIM DEAL",
-    theme: "blue",
-    url: liveDeal.clickUrl
-});/${encodeURIComponent(aiKeyword)}/400/400`,
+                    id: Date.now(),
+                    store: liveDeal.title || "Affiliate Deal",
+                    category: liveDeal.description || "Live affiliate deal found.",
+                    img: liveDeal.imageUrl || "placeholder",
                     code: "AUTO-VERIFIED",
                     status: "LIVE",
                     btn: "CLAIM DEAL",
                     theme: "blue",
-                    url: liveDeal.clickUrl // Your actual, monetized CJ tracking link
+                    url: liveDeal.clickUrl || "#"
                 });
             } else {
-                // 5. Fallback if CJ's live database has zero products for that exact search
                 setDynamicResult({
                     id: 404,
                     store: "NO ACTIVE DEALS FOUND",
-                    category: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now. We are actively monitoring networks for new discounts.`,
+                    category: liveDeal.message || `No affiliate deals were found for "${searchInput}".`,
                     img: "placeholder",
                     code: "AUTO-MONITORING",
                     status: "STANDBY",
@@ -109,21 +62,24 @@ const liveDeal = await response.json();
                     url: "#"
                 });
             }
+
             setAiState("result");
 
         } catch (err) {
-            console.error("PromoPro AI Parsing Error:", err);
+            console.error("Verify Error:", err);
+
             setDynamicResult({
-                id: 999,
+                id: 500,
                 store: "CONNECTION ERROR",
-                category: "The automated search engine encountered a delay. Please try your search again.",
-                img: "",
-                code: "RETRY-SEARCH",
+                category: "Unable to reach the PromoPro verification server.",
+                img: "placeholder",
+                code: "SERVER ERROR",
                 status: "ERROR",
                 btn: "TRY AGAIN",
                 theme: "orange",
                 url: "#"
             });
+
             setAiState("result");
         }
     };
@@ -157,8 +113,8 @@ const liveDeal = await response.json();
 
                 <div className="command-center">
                     <div className="cmd-status">
-                        <span><span className="cmd-indicator"></span>AI VERIFICATION ENGINE: ONLINE</span>
-                        <span>v.3.0.0 (CJ-LIVE)</span>
+                        <span><span className="cmd-indicator"></span>API BACKEND NODE: SECURED</span>
+                        <span>v.4.0.0 (SERVERLESS)</span>
                     </div>
                     <div className="cmd-input-wrapper">
                         <span className="cmd-prompt">&gt;</span>
@@ -177,7 +133,7 @@ const liveDeal = await response.json();
                 {aiState === "searching" && (
                     <div className="matrix-scanner">
                         <div className="scanline"></div>
-                        <div className="term-line">&gt; AUTOMATICALLY SCANNING AFFILIATE NETWORKS...<span className="term-cursor"></span></div>
+                        <div className="term-line">&gt; QUERYING SECURE BACKEND API...<span className="term-cursor"></span></div>
                         <div className="progress"><div className="progress-fill"></div></div>
                     </div>
                 )}
