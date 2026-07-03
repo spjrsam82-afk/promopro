@@ -1,73 +1,93 @@
-    const handleVerify = async () => {
-        if (!searchInput.trim()) return;
+export async function onRequestPost(context) {
+    // This grabs the incoming request and your hidden Cloudflare Environment Variables
+    const { request, env } = context;
 
-        const searchLower = searchInput.toLowerCase();
-        const localMatch = allEntries.find(item => 
-            item.store.toLowerCase().includes(searchLower) || 
-            item.category.toLowerCase().includes(searchLower)
-        );
+    try {
+        const body = await request.json();
+        const searchInput = body.search;
 
-        if (localMatch && !dismissedCards.includes(localMatch.id)) {
-            setDynamicResult(localMatch);
-            setAiState("result");
-            showToast(`LOCAL MATCH FOUND: SECURE NODE ROUTED.`);
-            return; 
+        if (!searchInput) {
+            return new Response(JSON.stringify({ success: false, message: "No search term provided." }), { 
+                status: 400, headers: { "Content-Type": "application/json" } 
+            });
         }
 
-        setAiState("searching");
-        setDynamicResult(null);
-        await new Promise(resolve => setTimeout(resolve, 2500));
-
-        try {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: `You are PromoPro AI. The user searched for: "${searchInput}". Return ONLY valid JSON: {"title":"","description":"","image_search":""}. Rules: title=brand/product, description=short affiliate response, image_search=best search phrase. Do not include markdown. Only return JSON.`
-                        }]
+        // 1. PING GEMINI FOR INTENT
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+        const geminiResponse = await fetch(geminiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{
+                        text: `You are the routing brain for PromoPro. The user searched for: "${searchInput}". 
+                        Analyze their intent and return a strict JSON object identifying the core brand or product category they want.
+                        Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}. 
+                        Do not include markdown backticks.`
                     }]
-                })
-            });
+                }]
+            })
+        });
 
-            const data = await response.json();
+        const geminiData = await geminiResponse.json();
+        const rawAiText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        
+        if (!rawAiText) throw new Error("Gemini routing failed.");
+        
+        const cleaned = rawAiText.replace(/```json|```/g, "").trim();
+        const aiData = JSON.parse(cleaned);
+        const aiKeyword = aiData.matched_keyword.toLowerCase();
 
-            // FIXED: Target the exact location of the text in Google's API response
-            let rawAiText = data.candidates[0].content.parts[0].text;
-
-            // SAFETY STRIP: Removes markdown backticks if the AI includes them
-            rawAiText = rawAiText.replace(/```json|```/g, '').trim();
-
-            const aiData = JSON.parse(rawAiText);
-
-            setDynamicResult({
-                id: 999,
-                store: aiData.title,
-                category: aiData.description,
-                img: `https://wsrv.nl/?url=https://source.unsplash.com/random/400x400/?${encodeURIComponent(aiData.image_search)}`,
-                code: "AI-VERIFIED",
-                status: "ONLINE",
-                btn: "CLAIM DEAL",
-                theme: "blue",
-                url: "#",
-                fit: "cover"
-            });
-            setAiState("result");
-
-        } catch (err) {
-            console.error("PromoPro AI Parsing Error:", err);
-            setDynamicResult({
-                id: 999,
-                store: "Error",
-                category: "Failed to parse AI structure.",
-                img: "",
-                code: "FAILED",
-                status: "ERROR",
-                btn: "TRY AGAIN",
-                theme: "orange",
-                url: "#"
-            });
-            setAiState("result");
+        // 2. PING CJ AFFILIATE DIRECTLY 
+        const cjQuery = `
+        {
+          shoppingProducts(companyId: "${env.CJ_COMPANY_ID}", keywords: ["${aiKeyword}"], limit: 1) {
+            resultList {
+              title
+              description
+              clickUrl
+              imageUrl
+            }
+          }
         }
-    };
+        `;
+
+        const cjResponse = await fetch("https://ads.cj.com/graphql", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
+            },
+            body: JSON.stringify({ query: cjQuery })
+        });
+
+        const cjLive = await cjResponse.json();
+        const liveDeal = cjLive?.data?.shoppingProducts?.resultList?.[0];
+
+        // 3. SEND THE DEAL BACK TO APP.JS
+        if (liveDeal) {
+            return new Response(JSON.stringify({
+                success: true,
+                title: liveDeal.title.substring(0, 35) + "...",
+                description: liveDeal.description ? liveDeal.description.substring(0, 100) + "..." : "Live automated deal verified by CJ Affiliate.",
+                imageUrl: liveDeal.imageUrl || `https://picsum.photos/seed/${encodeURIComponent(aiKeyword)}/400/400`,
+                clickUrl: liveDeal.clickUrl
+            }), { 
+                status: 200, headers: { "Content-Type": "application/json" } 
+            });
+        } else {
+            return new Response(JSON.stringify({
+                success: false,
+                message: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now.`
+            }), { 
+                status: 200, headers: { "Content-Type": "application/json" } 
+            });
+        }
+
+    } catch (error) {
+        console.error("Backend Error:", error);
+        return new Response(JSON.stringify({ success: false, message: "Backend verification failed." }), { 
+            status: 500, headers: { "Content-Type": "application/json" } 
+        });
+    }
+}
