@@ -36,25 +36,18 @@ const App = () => {
                     }]
                 })
             });
+const response = await fetch("/api/verify", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        search: searchInput
+    })
+});
 
-            const data = await response.json();
-            
-            const rawAiText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-
-            if (!rawAiText) {
-                throw new Error("Gemini returned no text.");
-            }
-
-            const cleaned = rawAiText.replace(/```json|```/g, "").trim();
-            const aiData = JSON.parse(cleaned);
-
-            // 1. Take the clean keyword Gemini extracted
-            const aiKeyword = aiData.matched_keyword.toLowerCase();
-
-            // 2. LIVE CJ AFFILIATE API AUTOMATION
-            // Paste your actual CJ credentials right here:
-            const CJ_PERSONAL_TOKEN = "2WPMCDUtkwWRKAiQMtBPcQMviQ"; 
-            const CJ_COMPANY_ID = "7968880";
+const liveDeal = await response.json();
+ 
 
             // This is the strict GraphQL query CJ requires to search their live products
             const cjQuery = `
@@ -83,13 +76,19 @@ const App = () => {
             const cjLive = await cjResponse.json();
             const liveDeal = cjLive?.data?.shoppingProducts?.resultList?.[0];
 
-            if (liveDeal) {
+            if (liveDeal.success) {
                 // 4. If CJ finds a live product, automatically build the card
                 setDynamicResult({
-                    id: 999,
-                    store: liveDeal.title.substring(0, 35) + "...", // Keeps long titles from breaking your UI
-                    category: liveDeal.description ? liveDeal.description.substring(0, 100) + "..." : "Live automated deal verified by CJ Affiliate.",
-                    img: liveDeal.imageUrl || `https://picsum.photos/seed/${encodeURIComponent(aiKeyword)}/400/400`,
+    id: 999,
+    store: liveDeal.title,
+    category: liveDeal.description,
+    img: liveDeal.imageUrl,
+    code: "AUTO-VERIFIED",
+    status: "LIVE",
+    btn: "CLAIM DEAL",
+    theme: "blue",
+    url: liveDeal.clickUrl
+});/${encodeURIComponent(aiKeyword)}/400/400`,
                     code: "AUTO-VERIFIED",
                     status: "LIVE",
                     btn: "CLAIM DEAL",
