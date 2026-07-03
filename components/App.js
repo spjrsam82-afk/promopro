@@ -18,7 +18,7 @@ const App = () => {
         await new Promise(resolve => setTimeout(resolve, 2500));
 
         // GEMINI API (The Brain)
-        const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AQ.Ab8RN6IfexuJyq61XMoJOUSJ_cZKkO9xz0SbpsD7KTLZ1rpyeQ";
+        const API_URL = "
 
         try {
             const response = await fetch(API_URL, {
