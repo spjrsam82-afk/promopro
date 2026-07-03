@@ -1,105 +1,208 @@
-export async function onRequest(context) {
-    // Handle the browser handshake (CORS)
-    if (context.request.method === "OPTIONS") {
-        return new Response(null, { 
-            headers: { 
-                "Access-Control-Allow-Origin": "*", 
-                "Access-Control-Allow-Methods": "POST, OPTIONS", 
-                "Access-Control-Allow-Headers": "Content-Type" 
-            } 
-        });
+export async function onRequestPost(context) {
+    const { request, env } = context;
+
+    const corsHeaders = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+    };
+
+    // Handle CORS Preflight Requests (The Handshake)
+    if (request.method === "OPTIONS") {
+        return new Response(null, { headers: corsHeaders });
     }
 
+    // Keep searchInput scoped outside the try block so the error logger can always see it
+    let searchInput = "Unknown";
+
     try {
-        const requestBody = await context.request.json();
-        // Grab the search term, capitalize it for the matrix check, but keep the original for the dynamic search
-        const rawSearch = requestBody.game ? requestBody.game.trim() : "";
-        const gameSearch = rawSearch.toUpperCase();
+        // 1. AUDIT: Validate Environment Variables Up Front
+        const requiredEnv = [
+            "GEMINI_API_KEY",
+            "CJ_COMPANY_ID",
+            "CJ_PERSONAL_TOKEN"
+        ];
 
-        // ==========================================
-        // THE PROMOPRO MASTER AFFILIATE MATRIX
-        // For specific brands and custom deals
-        // ==========================================
-        const affiliateMatrix = {
-            "GAMIVO": {
-                network: "CJ Affiliate",
-                link: "https://www.kqzyfj.com/click-101761790-15538971?url=https%3A%2F%2Fwww.gamivo.com%2F",
-                message: "GAMIVO partner link verified. Shop securely here:"
-            },
-            "ELECTRONIC EXPRESS": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-16967290?url=https%3A%2F%2Fwww.electronicexpress.com%2F", 
-                message: "Electronic Express partner link verified. Shop securely here:"
-            },
-            "REXING": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-17282356?url=https%3A%2F%2Frexing.com%2F",
-                message: "Rexing Dash Cams partner link verified. Shop securely here:"
-            },
-            "GEARUP": {
-                network: "CJ Affiliate",
-                link: "https://www.tkqlhce.com/click-101761790-17290995?url=https%3A%2F%2Fwww.gearupbooster.com%2F",
-                message: "GearUP Booster verified! Use custom code Promo_Pro_GearUP for 10% OFF at checkout. Secure link:"
-            },
-            "NORDVPN": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-14010115?url=https%3A%2F%2Fnordvpn.com%2F",
-                message: "NordVPN protection link verified. Secure your connection here:"
-            },
-            "GAMEFLY": {
-                network: "CJ Affiliate",
-                link: "https://www.kqzyfj.com/click-101761790-10361644",
-                message: "GameFly rental and purchase portal verified. Claim your deal here:"
-            },
-            "EXPEDIA": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-11552045?url=https%3A%2F%2Fwww.expedia.com%2F",
-                message: "Expedia travel portal verified. Book your next trip securely here:"
-            },
-            "VRBO": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-11553823?url=https%3A%2F%2Fwww.vrbo.com%2F",
-                message: "Vrbo vacation rentals link verified. Find your stay securely here:"
-            },
-            "HOTELS.COM": {
-                network: "CJ Affiliate",
-                link: "https://www.anrdoezrs.net/click-101761790-13828058?url=https%3A%2F%2Fwww.hotels.com%2F",
-                message: "Hotels.com booking link verified. Find your ideal room securely here:"
-            },
-            "UNICE": {
-                network: "CJ Affiliate",
-                link: "https://www.jdoqocy.com/click-101761790-14566055?url=https%3A%2F%2Fwww.unice.com%2F",
-                message: "UNice Hair partner link verified. Shop premium hair and wigs securely here:"
+        for (const key of requiredEnv) {
+            if (!env[key]) {
+                throw new Error(`Missing environment variable: ${key}`);
             }
-        };
+        }
 
-        const match = affiliateMatrix[gameSearch];
-
-        if (match) {
-            // If they typed a specific brand from your list above, send them there
-            return Response.json({ 
-                response: `AI Engine Verified [${match.network}]: ${match.message} ${match.link}` 
+        // 2. AUDIT: Validate the Request Body
+        let body;
+        try {
+            body = await request.json();
+        } catch {
+            return new Response(JSON.stringify({
+                success: false,
+                message: "Invalid JSON request."
+            }), {
+                status: 400, headers: corsHeaders
             });
-        } else if (rawSearch.length > 0) {
-            // ==========================================
-            // THE AUTOMATIC GAMIVO GAME CATCHER
-            // ==========================================
-            // If it's not in the list, assume it's a game search.
-            // This automatically builds a GAMIVO search link wrapped in your CJ tracker!
-            
-            const gamivoSearchUrl = `https://www.gamivo.com/search/${encodeURIComponent(rawSearch)}`;
-            const dynamicTrackerLink = `https://www.kqzyfj.com/click-101761790-15538971?url=${encodeURIComponent(gamivoSearchUrl)}`;
+        }
 
-            return Response.json({ 
-                response: `AI Engine Verified [CJ Affiliate]: Hunting GAMIVO marketplace for '${rawSearch}'. Check for deals and keys securely here: ${dynamicTrackerLink}` 
+        searchInput = body.search?.trim();
+
+        if (!searchInput) {
+            return new Response(JSON.stringify({ success: false, message: "No search term provided." }), {
+                status: 400, headers: corsHeaders
+            });
+        }
+
+        const safeSearch = searchInput.replace(/"/g, '\\"');
+
+        // PING GEMINI FOR INTENT
+        const geminiController = new AbortController();
+        const geminiTimeout = setTimeout(() => geminiController.abort(), 15000);
+        let geminiResponse;
+
+        try {
+            // UPGRADE: Removed the key from the URL string
+            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+
+            geminiResponse = await fetch(geminiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // UPGRADE: Securely passing the key via the official Google header
+                    "x-goog-api-key": env.GEMINI_API_KEY
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: `You are the routing brain for PromoPro. The user searched for: "${safeSearch}". 
+Analyze their intent and return a strict JSON object identifying the core brand or product category they want.
+Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}. 
+Do not include markdown backticks.`
+                        }]
+                    }]
+                }),
+                signal: geminiController.signal
+            });
+        } finally {
+            clearTimeout(geminiTimeout);
+        }
+
+        if (!geminiResponse.ok) {
+            throw new Error(`Gemini request failed with status: ${geminiResponse.status}`);
+        }
+
+        const geminiData = await geminiResponse.json();
+        const rawAiText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
+        if (!rawAiText) throw new Error("Gemini routing failed to return text.");
+
+        const cleaned = rawAiText.replace(/```json|```/g, "").trim();
+
+        let aiData = {};
+        try {
+            aiData = JSON.parse(cleaned);
+        } catch {
+            console.warn("Gemini returned invalid JSON. Falling back to original search input.");
+        }
+
+        const aiKeyword = (aiData.matched_keyword || searchInput).toLowerCase();
+
+        // PING CJ AFFILIATE DIRECTLY
+        const cjController = new AbortController();
+        const cjTimeout = setTimeout(() => cjController.abort(), 15000);
+        let cjResponse;
+
+        try {
+            const cjQuery = `
+{
+  shoppingProducts(companyId: "${env.CJ_COMPANY_ID}", keywords: ["${aiKeyword}"], limit: 1) {
+    resultList {
+      title
+      description
+      clickUrl
+      imageUrl
+    }
+  }
+}
+`;
+
+            cjResponse = await fetch("https://ads.cj.com/graphql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
+                },
+                body: JSON.stringify({ query: cjQuery }),
+                signal: cjController.signal
+            });
+        } finally {
+            clearTimeout(cjTimeout);
+        }
+
+        if (!cjResponse.ok) {
+            throw new Error(`CJ Affiliate HTTP request failed with status: ${cjResponse.status}`);
+        }
+
+        const cjLive = await cjResponse.json();
+
+        if (cjLive.errors) {
+            throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
+        }
+
+        // 3. AUDIT: Check that the CJ response has the expected shape
+        if (!Array.isArray(cjLive?.data?.shoppingProducts?.resultList)) {
+            throw new Error("Unexpected response structure from CJ Affiliate.");
+        }
+
+        const liveDeal = cjLive.data.shoppingProducts.resultList[0];
+
+        // SEND THE DEAL BACK TO APP.JS
+        if (liveDeal) {
+            const finalImage = liveDeal.imageUrl && liveDeal.imageUrl.startsWith("http")
+                ? liveDeal.imageUrl
+                : `https://placehold.co/400x400/png?text=${encodeURIComponent(aiKeyword)}`;
+
+            const safeTitle = liveDeal.title || "Affiliate Deal";
+
+            return new Response(JSON.stringify({
+                success: true,
+                keyword: aiKeyword,
+                title: safeTitle.length > 35
+                    ? safeTitle.substring(0, 35) + "..."
+                    : safeTitle,
+                description: liveDeal.description
+                    ? (liveDeal.description.length > 100 ? liveDeal.description.substring(0, 100) + "..." : liveDeal.description)
+                    : "Live automated deal verified by CJ Affiliate.",
+                imageUrl: finalImage,
+                clickUrl: liveDeal.clickUrl || "#",
+                buttonText: "CLAIM DEAL"
+            }), {
+                status: 200, headers: corsHeaders
             });
         } else {
-            return Response.json({ 
-                response: "Please enter a valid game or retailer to search." 
+            return new Response(JSON.stringify({
+                success: false,
+                message: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now.`
+            }), {
+                status: 200, headers: corsHeaders
             });
         }
 
     } catch (error) {
-        return Response.json({ response: "Backend error: " + error.message }, { status: 500 });
+        // 4. AUDIT: Log useful information without exposing secrets
+        console.error("Backend Error:", {
+            search: searchInput,
+            message: error.message
+        });
+
+        let errorMessage = error.message || "Backend verification failed.";
+        if (error.name === 'AbortError') {
+            errorMessage = "API connection timed out. Please try again.";
+        }
+
+        return new Response(JSON.stringify({
+            success: false,
+            message: errorMessage
+        }), {
+            status: 500, headers: corsHeaders
+        });
     }
 }
