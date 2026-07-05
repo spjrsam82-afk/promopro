@@ -35,18 +35,19 @@
       gtag('config', 'G-P2PFW0YMB1');
     </script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" data-cfasync="false"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" data-cfasync="false"></script>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="module">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js" data-cfasync="false"></script>
+
+    <script type="text/babel" data-type="module" data-presets="react">
         import App from './components/App.js';
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(App));
+        root.render(<App />);
     </script>
 
     <article class="seo-content-block">
