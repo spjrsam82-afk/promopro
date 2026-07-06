@@ -74,10 +74,13 @@ export async function onRequestPost(context) {
                         parts: [{
                             text: `You are the routing brain for PromoPro. The user searched for: "${safeSearch}". 
 Analyze their intent and return a strict JSON object identifying the core brand or product category they want.
-Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}. 
-Do not include markdown backticks.`
+Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                         }]
-                    }]
+                    }],
+                    // UPGRADE: Force strict JSON output natively
+                    generationConfig: {
+                        responseMimeType: "application/json"
+                    }
                 }),
                 signal: geminiController.signal
             });
@@ -94,11 +97,10 @@ Do not include markdown backticks.`
 
         if (!rawAiText) throw new Error("Gemini routing failed to return text.");
 
-        const cleaned = rawAiText.replace(/```json|```/g, "").trim();
-
+        // UPGRADE: Regex cleaner removed as generationConfig guarantees strict JSON string
         let aiData = {};
         try {
-            aiData = JSON.parse(cleaned);
+            aiData = JSON.parse(rawAiText.trim());
         } catch {
             console.warn("Gemini returned invalid JSON. Falling back to original search input.");
         }
