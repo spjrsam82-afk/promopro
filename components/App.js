@@ -122,7 +122,9 @@ const App = () => {
                             type="text" 
                             className="cmd-input" 
                             value={searchInput} 
-                            onChange={(e) => setSearchInput(e.target.value)} 
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            // UPGRADE: Trigger search when the user hits the Enter key
+                            onKeyDown={(e) => e.key === 'Enter' && handleVerify()} 
                             placeholder="What are you shopping for? (e.g. 'gaming laptop', 'lenovo')" 
                         />
                         <button className="cmd-btn" onClick={handleVerify}>AUTO-SEARCH</button>
