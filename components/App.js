@@ -35,7 +35,16 @@ const App = () => {
                 throw new Error(`Server returned ${response.status}`);
             }
 
-            const liveDeal = await response.json();
+            // UPGRADE: Debugging raw text response to catch hidden server errors
+            const text = await response.text();
+            console.log("Server response:", text);
+
+            let liveDeal;
+            try {
+                liveDeal = JSON.parse(text);
+            } catch (e) {
+                throw new Error("API did not return valid JSON:\n" + text);
+            }
 
             if (liveDeal.success) {
                 setDynamicResult({
@@ -123,7 +132,6 @@ const App = () => {
                             className="cmd-input" 
                             value={searchInput} 
                             onChange={(e) => setSearchInput(e.target.value)}
-                            // UPGRADE: Trigger search when the user hits the Enter key
                             onKeyDown={(e) => e.key === 'Enter' && handleVerify()} 
                             placeholder="What are you shopping for? (e.g. 'gaming laptop', 'lenovo')" 
                         />
