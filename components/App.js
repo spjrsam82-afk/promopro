@@ -75,14 +75,14 @@ const App = () => {
             setAiState("result");
 
         } catch (err) {
-            console.error("Verify Error:", err);
+            console.error(err);
 
             setDynamicResult({
                 id: 500,
-                store: "CONNECTION ERROR",
-                category: "Unable to reach the PromoPro verification server.",
+                store: "SERVER RESPONSE",
+                category: err.message,
                 img: "placeholder",
-                code: "SERVER ERROR",
+                code: "DEBUG",
                 status: "ERROR",
                 btn: "TRY AGAIN",
                 theme: "orange",
