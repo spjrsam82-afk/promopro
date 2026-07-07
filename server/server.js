@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Routes
-app.get('/', (req, res) => {
-  res.send('Server is running!');
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-module.exports = app;
-=======
 // server/server.js
 // Minimal Express server for PromoPro AI (placeholder)
 // - Serves static frontend from the public/ directory
@@ -56,9 +32,6 @@ app.post('/api/validate', async (req, res) => {
     return res.status(400).json({ error: 'Missing or invalid `code` in request body' });
   }
 
-  // TODO: Integrate PromoPro's live discovery/verification engine here.
-  // This placeholder simulates asynchronous validation and returns a recommended response shape.
-
   // Simulated result (always returns invalid in this placeholder)
   const validationResult = {
     code: code.trim(),
@@ -66,7 +39,6 @@ app.post('/api/validate', async (req, res) => {
     reason: 'placeholder-validation-not-implemented',
     testedAt: new Date().toISOString(),
     metadata: {
-      // Example metadata fields you might populate later
       channel: context.channel || 'unknown',
       storefront: context.storefront || null,
       cartTotal: context.cart ? context.cart.total : null,
@@ -91,4 +63,3 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`PromoPro server listening on port ${PORT}`);
 });
->>>>>>> 1a4c0361ee5d51a12af631bb20ed5050984b7689
