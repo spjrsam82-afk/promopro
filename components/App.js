@@ -94,7 +94,7 @@ const App = () => {
     };
 
     return (
-        <div id="root">
+        <div className="app">
             
             {/* Sidebar */}
             <div className="sidebar">
@@ -178,4 +178,6 @@ const App = () => {
         </div>
     );
 };
+
+export default App;
 
