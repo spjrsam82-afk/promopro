@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const App = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -96,22 +97,7 @@ const App = () => {
     return (
         <div className="app">
             
-            {/* Sidebar */}
-            <div className="sidebar">
-                <div className="sidebar-logo">
-                    <div className="logo-icon">P</div>
-                    PromoPro
-                </div>
-                <div className="nav-matrix-title">AUTOMATED ENGINE</div>
-                <div className="nav-item active">Live Dashboard</div>
-                <div className="nav-item">Gaming Deals</div>
-                <div className="nav-item">Tech Hardware</div>
-                
-                <div className="career-context">
-                    <div className="career-title">Creator Profile</div>
-                    <div className="career-box">Built by a self-taught full-stack developer transitioning from 23 years in infrastructure.</div>
-                </div>
-            </div>
+            <Sidebar />
 
             {/* Main Content */}
             <div className="main-content">
@@ -180,4 +166,3 @@ const App = () => {
 };
 
 export default App;
-
