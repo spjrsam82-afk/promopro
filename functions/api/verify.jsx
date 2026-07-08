@@ -116,10 +116,13 @@ const aiKeyword = (aiData.matched_keyword || searchInput)
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
 
-        try {
-            const cjQuery = `
-{
-  shoppingProducts(companyId: "${env.CJ_COMPANY_ID}", keywords: ["${aiKeyword}"], limit: 1) {
+        try const query = `
+query ($companyId: String!, $keywords: [String!]!) {
+  shoppingProducts(
+    companyId: $companyId,
+    keywords: $keywords,
+    limit: 1
+  ) {
     resultList {
       title
       description
@@ -130,22 +133,23 @@ const aiKeyword = (aiData.matched_keyword || searchInput)
 }
 `;
 
-            cjResponse = await fetch("https://ads.cj.com/graphql", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
-                },
-                body: JSON.stringify({ query: cjQuery }),
-                signal: cjController.signal
-            });
-        } finally {
-            clearTimeout(cjTimeout);
-        }
+const body = {
+    query,
+    variables: {
+        companyId: env.CJ_COMPANY_ID,
+        keywords: [aiKeyword]
+    }
+};
 
-        if (!cjResponse.ok) {
-            throw new Error(`CJ Affiliate HTTP request failed with status: ${cjResponse.status}`);
-        }
+cjResponse = await fetch("https://ads.cj.com/graphql", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
+    },
+    body: JSON.stringify(body),
+    signal: cjController.signal
+});
 
         const cjLive = await cjResponse.json();
 
