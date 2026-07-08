@@ -52,8 +52,8 @@ export async function onRequestPost(context) {
         }
 
         const safeSearch = searchInput
-  .replace(/\\/g, "\\\\")
-  .replace(/"/g, '\\"');
+            .replace(/\\/g, "\\\\")
+            .replace(/"/g, '\\"');
 
         // PING GEMINI FOR INTENT
         const geminiController = new AbortController();
@@ -107,94 +107,98 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
             console.warn("Gemini returned invalid JSON. Falling back to original search input.");
         }
 
-const aiKeyword = (aiData.matched_keyword || searchInput)
-    .trim()
-    .toLowerCase();
+        const aiKeyword = (aiData.matched_keyword || searchInput)
+            .trim()
+            .toLowerCase();
 
         // PING CJ AFFILIATE DIRECTLY
         const cjController = new AbortController();
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
     
-try {
-  const query = `
-query ($companyId: String!, $keywords: [String!]!) {
-  shoppingProducts(
-    companyId: $companyId,
-    keywords: $keywords,
-    limit: 1
-  ) {
-    resultList {
-      title
-      description
-      clickUrl
-      imageUrl
-    }
-  }
-}
-`;
+        try {
+            const query = `
+            query ($companyId: String!, $keywords: [String!]!) {
+              shoppingProducts(
+                companyId: $companyId,
+                keywords: $keywords,
+                limit: 1
+              ) {
+                resultList {
+                  title
+                  description
+                  clickUrl
+                  imageUrl
+                }
+              }
+            }
+            `;
 
-const body = {
-    query,
-    variables: {
-        companyId: env.CJ_COMPANY_ID,
-        keywords: [aiKeyword]
-    }
-};
+            const body = {
+                query,
+                variables: {
+                    companyId: env.CJ_COMPANY_ID,
+                    keywords: [aiKeyword]
+                }
+            };
 
-cjResponse = await fetch("https://ads.cj.com/graphql", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
-    },
-    body: JSON.stringify(body),
-    signal: cjController.signal
-});
-
-        const cjLive = await cjResponse.json();
-
-        if (cjLive.errors) {
-            throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
-        }
-
-        // 3. AUDIT: Check that the CJ response has the expected shape
-        if (!Array.isArray(cjLive?.data?.shoppingProducts?.resultList)) {
-            throw new Error("Unexpected response structure from CJ Affiliate.");
-        }
-
-        const liveDeal = cjLive.data.shoppingProducts.resultList[0];
-
-        // SEND THE DEAL BACK TO APP.JSX
-        if (liveDeal) {
-            const finalImage = liveDeal.imageUrl && liveDeal.imageUrl.startsWith("http")
-                ? liveDeal.imageUrl
-                : `https://placehold.co/400x400/png?text=${encodeURIComponent(aiKeyword)}`;
-
-            const safeTitle = liveDeal.title || "Affiliate Deal";
-
-            return new Response(JSON.stringify({
-                success: true,
-                keyword: aiKeyword,
-                title: safeTitle.length > 35
-                    ? safeTitle.substring(0, 35) + "..."
-                    : safeTitle,
-                description: liveDeal.description
-                    ? (liveDeal.description.length > 100 ? liveDeal.description.substring(0, 100) + "..." : liveDeal.description)
-                    : "Live automated deal verified by CJ Affiliate.",
-                imageUrl: finalImage,
-                clickUrl: liveDeal.clickUrl || "#",
-                buttonText: "CLAIM DEAL"
-            }), {
-                status: 200, headers: corsHeaders
+            cjResponse = await fetch("https://ads.cj.com/graphql", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${env.CJ_PERSONAL_TOKEN}`
+                },
+                body: JSON.stringify(body),
+                signal: cjController.signal
             });
-        } else {
-            return new Response(JSON.stringify({
-                success: false,
-                message: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now.`
-            }), {
-                status: 200, headers: corsHeaders
-            });
+
+            const cjLive = await cjResponse.json();
+
+            if (cjLive.errors) {
+                throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
+            }
+
+            // 3. AUDIT: Check that the CJ response has the expected shape
+            if (!Array.isArray(cjLive?.data?.shoppingProducts?.resultList)) {
+                throw new Error("Unexpected response structure from CJ Affiliate.");
+            }
+
+            const liveDeal = cjLive.data.shoppingProducts.resultList[0];
+
+            // SEND THE DEAL BACK TO APP.JSX
+            if (liveDeal) {
+                const finalImage = liveDeal.imageUrl && liveDeal.imageUrl.startsWith("http")
+                    ? liveDeal.imageUrl
+                    : `https://placehold.co/400x400/png?text=${encodeURIComponent(aiKeyword)}`;
+
+                const safeTitle = liveDeal.title || "Affiliate Deal";
+
+                return new Response(JSON.stringify({
+                    success: true,
+                    keyword: aiKeyword,
+                    title: safeTitle.length > 35
+                        ? safeTitle.substring(0, 35) + "..."
+                        : safeTitle,
+                    description: liveDeal.description
+                        ? (liveDeal.description.length > 100 ? liveDeal.description.substring(0, 100) + "..." : liveDeal.description)
+                        : "Live automated deal verified by CJ Affiliate.",
+                    imageUrl: finalImage,
+                    clickUrl: liveDeal.clickUrl || "#",
+                    buttonText: "CLAIM DEAL"
+                }), {
+                    status: 200, headers: corsHeaders
+                });
+            } else {
+                return new Response(JSON.stringify({
+                    success: false,
+                    message: `Our automated engine couldn't find live promotions for "${aiKeyword}" right now.`
+                }), {
+                    status: 200, headers: corsHeaders
+                });
+            }
+
+        } finally {
+            clearTimeout(cjTimeout);
         }
 
     } catch (error) {
@@ -217,3 +221,4 @@ cjResponse = await fetch("https://ads.cj.com/graphql", {
         });
     }
 }
+
