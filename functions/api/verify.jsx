@@ -51,7 +51,9 @@ export async function onRequestPost(context) {
             });
         }
 
-        const safeSearch = searchInput.replace(/"/g, '\\"');
+        const safeSearch = searchInput
+  .replace(/\\/g, "\\\\")
+  .replace(/"/g, '\\"');
 
         // PING GEMINI FOR INTENT
         const geminiController = new AbortController();
