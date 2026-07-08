@@ -156,7 +156,7 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
 
         const liveDeal = cjLive.data.shoppingProducts.resultList[0];
 
-        // SEND THE DEAL BACK TO APP.JS
+        // SEND THE DEAL BACK TO APP.JSX
         if (liveDeal) {
             const finalImage = liveDeal.imageUrl && liveDeal.imageUrl.startsWith("http")
                 ? liveDeal.imageUrl
