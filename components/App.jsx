@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SeoContent from "./components/SeoContent";
 import Footer from "./components/Footer";
-import PromoFooter from "./components/App.jsx/PromoFooter";
+import PromoFooter from "./components/PromoFooter";
 
 function App() {
   return (
