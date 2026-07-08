@@ -107,7 +107,9 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
             console.warn("Gemini returned invalid JSON. Falling back to original search input.");
         }
 
-        const aiKeyword = (aiData.matched_keyword || searchInput).toLowerCase();
+const aiKeyword = (aiData.matched_keyword || searchInput)
+    .trim()
+    .toLowerCase();
 
         // PING CJ AFFILIATE DIRECTLY
         const cjController = new AbortController();
