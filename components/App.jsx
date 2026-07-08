@@ -13,7 +13,7 @@ function App() {
       {/* your other content here */}
 
       <promofooter />
-      <footer />
+      <Footer />
     </>
   );
 }
