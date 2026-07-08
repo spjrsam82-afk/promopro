@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import SeoContent from "./SeoContent";
+import Footer from "./Footer";
+import PromoFooter from "./PromoFooter";
 
 const App = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -161,6 +164,10 @@ const App = () => {
                 
             </div>
             <div className="overlay-tint"></div>
+
+            <SeoContent />
+            <Footer />
+            <PromoFooter />
         </div>
     );
 };
