@@ -115,8 +115,9 @@ const aiKeyword = (aiData.matched_keyword || searchInput)
         const cjController = new AbortController();
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
-
-        try const query = `
+    
+try {
+  const query = `
 query ($companyId: String!, $keywords: [String!]!) {
   shoppingProducts(
     companyId: $companyId,
