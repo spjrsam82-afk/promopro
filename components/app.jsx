@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import SeoContent from "./components/seocontent";
-import Footer from "./components/footer";
-import PromoFooter from "./components/promofooter";
+import React from "react";
+import SeoContent from "./seocontent";
+import Footer from "./footer";
+import PromoFooter from "./promofooter";";
 
 function App() {
   return (
