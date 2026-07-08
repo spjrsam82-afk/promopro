@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import seoContent from "./components/seocontent";
-import footer from "./components/footer";
-import promofooter from "./components/promofooter";
+import SeoContent from "./components/seocontent";
+import Footer from "./components/footer";
+import PromoFooter from "./components/promofooter";
 
 function App() {
   return (
     <>
-      <seocontent />
+      <SeoContent />
       
       <h1 style={{color:"white"}}>TEST APP IS WORKING</h1>
 
       {/* your other content here */}
 
-      <promofooter />
+      <PromoFooter />
       <Footer />
     </>
   );
