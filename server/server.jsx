@@ -1,4 +1,4 @@
-// server/server.js
+// server/server.jsx
 // Minimal Express server for PromoPro AI (placeholder)
 // - Serves static frontend from the public/ directory
 // - Provides a placeholder /api/validate endpoint for promo code validation
