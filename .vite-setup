@@ -1,0 +1,4 @@
+# PromoPro - SPA Routing Configuration
+This file enables SPA (Single Page Application) routing on Cloudflare Pages.
+All requests to non-existent paths are redirected to index.html with a 200 status,
+allowing React Router to handle client-side navigation.
