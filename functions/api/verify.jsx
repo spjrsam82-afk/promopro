@@ -115,7 +115,7 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         const cjController = new AbortController();
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
-    
+
         try {
             const query = `
             query ($companyId: String!, $keywords: [String!]!) {
@@ -142,7 +142,8 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 }
             };
 
-            cjResponse = await fetch("https://ads.cj.com/graphql", {
+            // FIX: Correct CJ Affiliate GraphQL endpoint (was https://ads.cj.com/graphql)
+            cjResponse = await fetch("https://ads.api.cj.com/query", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -221,4 +222,3 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         });
     }
 }
-
