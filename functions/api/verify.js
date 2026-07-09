@@ -13,6 +13,20 @@ export async function onRequestPost(context) {
         return new Response(null, { headers: corsHeaders });
     }
 
+    // --- CONTENT-TYPE GUARDRAIL ---
+    const contentType = request.headers.get("content-type") || "";
+
+    if (!contentType.includes("application/json")) {
+        return new Response(JSON.stringify({
+            success: false,
+            message: "Content-Type must be application/json."
+        }), {
+            status: 415,
+            headers: corsHeaders
+        });
+    }
+    // ------------------------------
+
     // Keep searchInput scoped outside the try block so the error logger can always see it
     let searchInput = "Unknown";
 
@@ -142,7 +156,7 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 }
             };
 
-            // FIX: Correct CJ Affiliate GraphQL endpoint (was https://ads.cj.com/graphql)
+            // UPGRADE: Directly hitting the modern GraphQL Query endpoint
             cjResponse = await fetch("https://ads.api.cj.com/query", {
                 method: "POST",
                 headers: {
@@ -153,7 +167,13 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 signal: cjController.signal
             });
 
+            // --- HTTP CIRCUIT BREAKER ---
+            if (!cjResponse.ok) {
+                throw new Error(`CJ Affiliate HTTP request failed with status: ${cjResponse.status}`);
+            }
+
             const cjLive = await cjResponse.json();
+            // ----------------------------
 
             if (cjLive.errors) {
                 throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
@@ -214,11 +234,13 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
             errorMessage = "API connection timed out. Please try again.";
         }
 
+        // PERFECT UPGRADE: Proper 504 Timeout vs 500 Server Error
         return new Response(JSON.stringify({
             success: false,
             message: errorMessage
         }), {
-            status: 500, headers: corsHeaders
+            status: error.name === 'AbortError' ? 504 : 500,
+            headers: corsHeaders
         });
     }
 }
