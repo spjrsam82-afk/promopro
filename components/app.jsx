@@ -74,11 +74,11 @@ const App = () => {
     };
 
     return (
-        /* APPLIED TARGET 1: flexWrap added to prevent mobile squish */
+        /* Outer shell with flex wrap intact */
         <div className="app-shell" style={{ display: 'flex', flexWrap: 'wrap', minHeight: '100vh', width: '100%' }}>
             
-            {/* Sidebar */}
-            <div className="sidebar">
+            {/* APPLIED TARGET: Sidebar shrink-to-fit fix for mobile */ }
+            <div className="sidebar" style={{ flex: '1 1 250px', height: 'fit-content', paddingBottom: '20px' }}>
                 <div className="sidebar-logo">
                     <div className="logo-icon">P</div>
                     PromoPro
@@ -94,7 +94,7 @@ const App = () => {
                 </div>
             </div>
 
-            {/* APPLIED TARGET 2: flex properties updated to force a minimum width and wrap cleanly */}
+            {/* Main content wrapper with flex-basis intact */}
             <div className="main-content" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', paddingBottom: '70px' }}>
                 
                 <div className="promo-hero-banner">
@@ -137,7 +137,7 @@ const App = () => {
                     </div>
                 )}
 
-                {/* Results Grid (Hidden until API returns data) */}
+                {/* Results Grid */}
                 {aiState === "result" && dynamicResult && (
                     <div className="grid">
                         <div className={`matrix-card theme-${dynamicResult.theme}`}>
@@ -206,4 +206,4 @@ const App = () => {
 };
 
 export default App;
-           
+
