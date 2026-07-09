@@ -74,7 +74,8 @@ const App = () => {
     };
 
     return (
-        <div className="app-shell" style={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+        /* APPLIED TARGET 1: flexWrap added to prevent mobile squish */
+        <div className="app-shell" style={{ display: 'flex', flexWrap: 'wrap', minHeight: '100vh', width: '100%' }}>
             
             {/* Sidebar */}
             <div className="sidebar">
@@ -93,8 +94,8 @@ const App = () => {
                 </div>
             </div>
 
-            {/* Main Content */}
-            <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: '70px' }}>
+            {/* APPLIED TARGET 2: flex properties updated to force a minimum width and wrap cleanly */}
+            <div className="main-content" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', paddingBottom: '70px' }}>
                 
                 <div className="promo-hero-banner">
                     <h1 className="hero-title">AUTOMATED SAVINGS</h1>
@@ -119,7 +120,6 @@ const App = () => {
                 </div>
 
                 {/* --- DIAGNOSTIC TEST CARD --- */}
-                {/* This forces a card onto the screen to prove CSS and React are working */}
                 <div className="grid">
                     <div className="matrix-card theme-blue">
                         <div className="card-header">TEST CARD</div>
@@ -206,4 +206,4 @@ const App = () => {
 };
 
 export default App;
-
+           
