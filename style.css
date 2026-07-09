@@ -7,10 +7,7 @@ body {
     font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
     margin: 0; 
     padding: 0; 
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 100px; 
 }
 
 .overlay-tint {
@@ -19,20 +16,36 @@ body {
     z-index: -1;
 }
 
+/* FIX: Allow root to grow naturally without forcing a rigid row */
 #root { 
     width: 100%;
+    min-height: 100vh;
     display: flex; 
-    flex-direction: row; 
+    flex-direction: column; 
+}
+
+/* FIX: Define the app-shell layout properly for desktop */
+.app-shell {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
     flex: 1;
 }
 
 @media (max-width: 768px) {
-    #root { flex-direction: column; }
-    .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: column !important; border-right: none !important; border-bottom: 2px solid rgba(139, 92, 246, 0.4) !important; padding: 20px !important; }
+    /* FIX: Force app-shell to stack on mobile, overriding React inline styles */
+    .app-shell { flex-direction: column !important; flex-wrap: nowrap !important; }
+    
+    /* FIX: Let sidebar shrink to content */
+    .sidebar { width: 100% !important; height: auto !important; position: relative !important; flex-direction: column !important; border-right: none !important; border-bottom: 2px solid rgba(139, 92, 246, 0.4) !important; padding: 20px !important; z-index: 10; }
+    
     .nav-menu { display: flex; gap: 10px; width: 100%; overflow-x: auto; padding-top: 15px; margin-bottom: 15px;}
     .nav-item { padding: 8px 16px !important; margin: 0 !important; white-space: nowrap; font-size: 13px !important; flex-shrink: 0; }
     .career-context { display: none; }
-    .main-content { padding: 20px 15px !important; }
+    
+    /* FIX: Prevent main-content from collapsing to 0 height */
+    .main-content { padding: 20px 15px 100px 15px !important; overflow: visible !important; width: 100% !important; flex: 1 1 auto !important; }
+    
     .grid { grid-template-columns: 1fr !important; }
     .cmd-input { padding-right: 16px !important; }
     .cmd-btn { position: relative !important; right: 0 !important; top: 0 !important; bottom: 0 !important; width: 100%; margin-top: 10px; padding: 12px !important; }
@@ -132,7 +145,6 @@ body {
     padding: 40px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
 .command-center {
