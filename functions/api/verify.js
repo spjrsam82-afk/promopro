@@ -75,8 +75,8 @@ export async function onRequestPost(context) {
         let geminiResponse;
 
         try {
-            // THE FIX: Corrected the model endpoint to 1.5-flash
-            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+            // THE FIX: Upgraded directly to the live 3.5-flash endpoint
+            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent";
 
             geminiResponse = await fetch(geminiUrl, {
                 method: "POST",
