@@ -63,15 +63,18 @@ export async function onRequestPost(context) {
             .replace(/\\/g, "\\\\")
             .replace(/"/g, '\\"');
 
-        const geminiController = new AbortController();
-        const geminiTimeout = setTimeout(() => geminiController.abort(), 15000);
-        let geminiResponse;
+        // DEFAULT FALLBACK: Set the keyword to the raw input immediately
+        let aiKeyword = safeSearch.toLowerCase();
 
+        // --- ISOLATED AI CONTAINMENT ZONE ---
         try {
-            // THE FIX: Reverting back to the REAL model: gemini-1.5-flash
+            const geminiController = new AbortController();
+            // Drop timeout to 8 seconds so users aren't waiting forever if Google is lagging
+            const geminiTimeout = setTimeout(() => geminiController.abort(), 8000); 
+
             const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
-            geminiResponse = await fetch(geminiUrl, {
+            const geminiResponse = await fetch(geminiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -91,30 +94,29 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 }),
                 signal: geminiController.signal
             });
-        } finally {
+            
             clearTimeout(geminiTimeout);
+
+            // If Gemini is happy, update the keyword. If it throws a 429, we skip this block.
+            if (geminiResponse.ok) {
+                const geminiData = await geminiResponse.json();
+                const rawAiText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+                
+                if (rawAiText) {
+                    const aiData = JSON.parse(rawAiText.trim());
+                    if (aiData.matched_keyword) {
+                        aiKeyword = aiData.matched_keyword.trim().toLowerCase();
+                    }
+                }
+            } else {
+                console.warn(`AI Engine Offline (Status ${geminiResponse.status}). Engaging manual bypass.`);
+            }
+        } catch (aiError) {
+            console.warn(`AI Connection Failed (${aiError.message}). Engaging manual bypass.`);
         }
+        // ------------------------------------
 
-        if (!geminiResponse.ok) {
-            throw new Error(`Gemini request failed with status: ${geminiResponse.status}`);
-        }
-
-        const geminiData = await geminiResponse.json();
-        const rawAiText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-
-        if (!rawAiText) throw new Error("Gemini routing failed to return text.");
-
-        let aiData = {};
-        try {
-            aiData = JSON.parse(rawAiText.trim());
-        } catch {
-            console.warn("Gemini returned invalid JSON. Falling back to original search input.");
-        }
-
-        const aiKeyword = (aiData.matched_keyword || searchInput)
-            .trim()
-            .toLowerCase();
-
+        // PING CJ AFFILIATE DIRECTLY
         const cjController = new AbortController();
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
@@ -226,4 +228,3 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         });
     }
 }
-
