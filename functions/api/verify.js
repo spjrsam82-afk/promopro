@@ -8,12 +8,10 @@ export async function onRequestPost(context) {
         "Access-Control-Allow-Headers": "Content-Type"
     };
 
-    // Handle CORS Preflight Requests (The Handshake)
     if (request.method === "OPTIONS") {
         return new Response(null, { headers: corsHeaders });
     }
 
-    // --- CONTENT-TYPE GUARDRAIL ---
     const contentType = request.headers.get("content-type") || "";
 
     if (!contentType.includes("application/json")) {
@@ -25,13 +23,10 @@ export async function onRequestPost(context) {
             headers: corsHeaders
         });
     }
-    // ------------------------------
 
-    // Keep searchInput scoped outside the try block so the error logger can always see it
     let searchInput = "Unknown";
 
     try {
-        // 1. AUDIT: Validate Environment Variables Up Front
         const requiredEnv = [
             "GEMINI_API_KEY",
             "CJ_COMPANY_ID",
@@ -44,7 +39,6 @@ export async function onRequestPost(context) {
             }
         }
 
-        // 2. AUDIT: Validate the Request Body
         let body;
         try {
             body = await request.json();
@@ -69,14 +63,13 @@ export async function onRequestPost(context) {
             .replace(/\\/g, "\\\\")
             .replace(/"/g, '\\"');
 
-        // PING GEMINI FOR INTENT
         const geminiController = new AbortController();
         const geminiTimeout = setTimeout(() => geminiController.abort(), 15000);
         let geminiResponse;
 
         try {
-            // THE FIX: Upgraded directly to the live 3.5-flash endpoint
-            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent";
+            // THE FIX: Reverting back to the REAL model: gemini-1.5-flash
+            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
             geminiResponse = await fetch(geminiUrl, {
                 method: "POST",
@@ -122,7 +115,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
             .trim()
             .toLowerCase();
 
-        // PING CJ AFFILIATE DIRECTLY
         const cjController = new AbortController();
         const cjTimeout = setTimeout(() => cjController.abort(), 15000);
         let cjResponse;
@@ -163,13 +155,11 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 signal: cjController.signal
             });
 
-            // --- HTTP CIRCUIT BREAKER ---
             if (!cjResponse.ok) {
                 throw new Error(`CJ Affiliate HTTP request failed with status: ${cjResponse.status}`);
             }
 
             const cjLive = await cjResponse.json();
-            // ----------------------------
 
             if (cjLive.errors) {
                 throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
@@ -181,7 +171,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
 
             const liveDeal = cjLive.data.shoppingProducts.resultList[0];
 
-            // SEND THE DEAL BACK TO APP.JSX
             if (liveDeal) {
                 const finalImage = liveDeal.imageUrl && liveDeal.imageUrl.startsWith("http")
                     ? liveDeal.imageUrl
@@ -237,3 +226,4 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         });
     }
 }
+
