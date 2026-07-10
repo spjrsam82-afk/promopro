@@ -26,31 +26,31 @@ const App = () => {
                 body: JSON.stringify({ search: searchInput.trim() })
             });
 
-            if (!response.ok) throw new Error(`Server returned ${response.status}`);
+            // Parse the JSON immediately so we can read the backend's error message
+            const data = await response.json().catch(() => ({}));
 
-            const liveDeal = await response.json();
-
-            if (liveDeal.success) {
+            if (response.ok && data.success) {
                 setDynamicResult({
                     id: Date.now(),
-                    store: liveDeal.title || "Affiliate Deal",
-                    category: liveDeal.description || "Live affiliate deal found.",
-                    img: liveDeal.imageUrl || "placeholder",
+                    store: data.title || "Affiliate Deal",
+                    category: data.description || "Live affiliate deal found.",
+                    img: data.imageUrl || "placeholder",
                     code: "AUTO-VERIFIED",
                     status: "LIVE",
-                    btn: "CLAIM DEAL",
+                    btn: data.buttonText || "CLAIM DEAL",
                     theme: "blue",
-                    url: liveDeal.clickUrl || "#"
+                    url: data.clickUrl || "#"
                 });
             } else {
+                // If it fails, print the EXACT backend error directly to the orange card
                 setDynamicResult({
-                    id: 404,
-                    store: "NO ACTIVE DEALS FOUND",
-                    category: liveDeal.message || `No affiliate deals were found for "${searchInput}".`,
+                    id: response.status,
+                    store: "SYSTEM DIAGNOSTIC",
+                    category: data.message || `Server Error ${response.status}: No message provided.`,
                     img: "placeholder",
-                    code: "AUTO-MONITORING",
-                    status: "STANDBY",
-                    btn: "CHECK BACK LATER",
+                    code: "ERROR LOG",
+                    status: "FAILED",
+                    btn: "REVIEW ERROR",
                     theme: "orange",
                     url: "#"
                 });
@@ -60,10 +60,10 @@ const App = () => {
             console.error("Verify Error:", err);
             setDynamicResult({
                 id: 500,
-                store: "CONNECTION ERROR",
-                category: "Unable to reach the PromoPro verification server.",
+                store: "NETWORK CRASH",
+                category: err.message || "Failed to fetch. Check your connection or route.",
                 img: "placeholder",
-                code: "SERVER ERROR",
+                code: "OFFLINE",
                 status: "ERROR",
                 btn: "TRY AGAIN",
                 theme: "orange",
@@ -74,10 +74,8 @@ const App = () => {
     };
 
     return (
-        /* Outer shell with flex wrap intact */
         <div className="app-shell" style={{ display: 'flex', flexWrap: 'wrap', minHeight: '100vh', width: '100%' }}>
             
-            {/* APPLIED TARGET: Sidebar shrink-to-fit fix for mobile */ }
             <div className="sidebar" style={{ flex: '1 1 250px', height: 'fit-content', paddingBottom: '20px' }}>
                 <div className="sidebar-logo">
                     <div className="logo-icon">P</div>
@@ -90,11 +88,10 @@ const App = () => {
                 
                 <div className="career-context">
                     <div className="career-title">Creator Profile</div>
-                    <div className="career-box">Built by a self-taught full-stack developer transitioning from 23 years in infrastructure.</div>
+                    <div className="career-box">Built by a self-taught full-stack developer transitioning from 20 years operating heavy machinery and leading infrastructure crews.</div>
                 </div>
             </div>
 
-            {/* Main content wrapper with flex-basis intact */}
             <div className="main-content" style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', paddingBottom: '70px' }}>
                 
                 <div className="promo-hero-banner">
@@ -119,16 +116,13 @@ const App = () => {
                     </div>
                 </div>
 
-                {/* --- DIAGNOSTIC TEST CARD --- */}
                 <div className="grid">
                     <div className="matrix-card theme-blue">
                         <div className="card-header">TEST CARD</div>
                         <div className="card-info"><p>If you see this, render works. The issue is with the API data flow.</p></div>
                     </div>
                 </div>
-                {/* ----------------------------- */}
 
-                {/* Matrix Scanner Animation */}
                 {aiState === "searching" && (
                     <div className="matrix-scanner">
                         <div className="scanline"></div>
@@ -137,7 +131,6 @@ const App = () => {
                     </div>
                 )}
 
-                {/* Results Grid */}
                 {aiState === "result" && dynamicResult && (
                     <div className="grid">
                         <div className={`matrix-card theme-${dynamicResult.theme}`}>
@@ -162,7 +155,6 @@ const App = () => {
                     </div>
                 )}
 
-                {/* Fully Restored SEO Content Block */}
                 <article className="seo-content-block" style={{ marginTop: '40px', padding: '20px', color: '#cbd5e1' }}>
                     <h1><span style={{ color: '#38bdf8' }}>PromoPro: Your Premier AI-Powered Deal Aggregator</span></h1>
                     <p>Welcome to PromoPro by Purcell Tech, the definitive AI-driven verification engine for unparalleled savings. Our sophisticated system automatically tracks and verifies the most valuable promos across the digital marketplace, ensuring you receive immediate access to active deals for gaming, technology, and hardware. We deliver maximum value by intelligently routing users to verified offers.</p>
