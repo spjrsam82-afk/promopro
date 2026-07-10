@@ -75,14 +75,13 @@ export async function onRequestPost(context) {
         let geminiResponse;
 
         try {
-            // UPGRADE: Removed the key from the URL string
-            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+            // THE FIX: Corrected the model endpoint to 1.5-flash
+            const geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
 
             geminiResponse = await fetch(geminiUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    // UPGRADE: Securely passing the key via the official Google header
                     "x-goog-api-key": env.GEMINI_API_KEY
                 },
                 body: JSON.stringify({
@@ -93,7 +92,6 @@ Analyze their intent and return a strict JSON object identifying the core brand 
 Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                         }]
                     }],
-                    // UPGRADE: Force strict JSON output natively
                     generationConfig: {
                         responseMimeType: "application/json"
                     }
@@ -113,7 +111,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
 
         if (!rawAiText) throw new Error("Gemini routing failed to return text.");
 
-        // UPGRADE: Regex cleaner removed as generationConfig guarantees strict JSON string
         let aiData = {};
         try {
             aiData = JSON.parse(rawAiText.trim());
@@ -156,7 +153,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 }
             };
 
-            // UPGRADE: Directly hitting the modern GraphQL Query endpoint
             cjResponse = await fetch("https://ads.api.cj.com/query", {
                 method: "POST",
                 headers: {
@@ -179,7 +175,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
                 throw new Error(cjLive.errors[0]?.message || "CJ GraphQL returned an error.");
             }
 
-            // 3. AUDIT: Check that the CJ response has the expected shape
             if (!Array.isArray(cjLive?.data?.shoppingProducts?.resultList)) {
                 throw new Error("Unexpected response structure from CJ Affiliate.");
             }
@@ -223,7 +218,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         }
 
     } catch (error) {
-        // 4. AUDIT: Log useful information without exposing secrets
         console.error("Backend Error:", {
             search: searchInput,
             message: error.message
@@ -234,7 +228,6 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
             errorMessage = "API connection timed out. Please try again.";
         }
 
-        // PERFECT UPGRADE: Proper 504 Timeout vs 500 Server Error
         return new Response(JSON.stringify({
             success: false,
             message: errorMessage
@@ -244,4 +237,3 @@ Return ONLY valid JSON format: {"matched_keyword": "brand_or_product_here"}.`
         });
     }
 }
-
